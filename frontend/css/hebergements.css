@@ -19,11 +19,13 @@ body {
 .navbar {
   height: 105px;
   padding: 0 6%;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
 
   background: rgba(255, 255, 255, 0.93);
+
   backdrop-filter: blur(12px);
 
   box-shadow: 0 4px 20px rgba(69, 139, 202, 0.12);
@@ -98,6 +100,7 @@ nav a:hover {
 
 .heart-icon {
   color: #e64b5d;
+  font-size: 38px !important;
 }
 
 /* HERO */
@@ -249,6 +252,8 @@ nav a:hover {
   box-shadow: 0 14px 32px rgba(69, 139, 202, 0.14);
 
   transition: 0.35s;
+
+  position: relative;
 }
 
 .hebergement-card:hover {
@@ -257,12 +262,79 @@ nav a:hover {
   box-shadow: 0 28px 55px rgba(69, 139, 202, 0.22);
 }
 
+/* OVERLAY */
+
+.hebergement-card::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    to top,
+    rgba(23,55,94,0.35),
+    transparent
+  );
+
+  opacity: 0;
+
+  transition: 0.3s;
+
+  z-index: 1;
+}
+
+.hebergement-card:hover::before {
+  opacity: 1;
+}
+
+/* COEUR */
+
+.hebergement-card::after {
+  content: "♥";
+
+  position: absolute;
+  top: 18px;
+  right: 18px;
+
+  width: 48px;
+  height: 48px;
+
+  border-radius: 50%;
+
+  background: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #e64b5d;
+
+  font-size: 24px;
+
+  opacity: 0;
+
+  transform: translateY(-10px);
+
+  transition: 0.3s;
+
+  z-index: 3;
+}
+
+.hebergement-card:hover::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* IMAGE */
+
 .hebergement-card img {
   width: 100%;
   height: 260px;
   object-fit: cover;
 
-  transition: 0.4s;
+  display: block;
+
+  transition: 0.45s;
 }
 
 .hebergement-card:hover img {
@@ -273,6 +345,9 @@ nav a:hover {
 
 .hebergement-content {
   padding: 28px;
+
+  position: relative;
+  z-index: 2;
 }
 
 .hebergement-type {
