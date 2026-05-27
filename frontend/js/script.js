@@ -792,7 +792,18 @@ const activities = [
     vibe: "🎨 Culture • photo • indoor",
     description: "Une activité simple, visuelle et sympa à faire entre deux sorties en ville."
   },
-  {
+ 
+{
+  name: "Visite d’Oia",
+  image: "oia.png",
+  destination: "Santorin",
+  category: "Culture",
+  price: 30,
+  duration: "2h",
+  vibe: "🏛️ Culture • sunset • photos",
+  description: "Découvre les ruelles blanches d’Oia, les vues iconiques et les spots parfaits pour les photos."
+},
+ {
     name: "Rooftop sunset",
     image: "rooftop.png",
     destination: "Marrakech",
@@ -801,7 +812,138 @@ const activities = [
     duration: "Soirée",
     vibe: "🌅 Sunset • chill • photos",
     description: "Un rooftop stylé pour profiter du coucher de soleil et finir la journée en beauté."
-  }
+  },
+{
+  name: "Dégustation locale",
+  image: "degustation-locale.png",
+  destination: "Santorin",
+  category: "Gastronomie",
+  price: 45,
+  duration: "1h30",
+  vibe: "🍽️ Food • local • chill",
+  description: "Une pause gourmande pour goûter les spécialités locales et profiter d’un moment simple avec ta team."
+},
+{
+  name: "Croisière sunset",
+  image: "croisiere-sunset.png",
+  destination: "Santorin",
+  category: "Détente",
+  price: 80,
+  duration: "3h",
+  vibe: "🌅 Sunset • mer • premium",
+  description: "Une croisière au coucher du soleil pour finir la journée avec une vraie vibe carte postale."
+},
+{
+  name: "Temple Senso-ji",
+  image: "sensoji.png",
+  destination: "Tokyo",
+  category: "Culture",
+  price: 20,
+  duration: "1h30",
+  vibe: "🏮 Culture • Japon • découverte",
+  description: "Explore un temple iconique de Tokyo et plonge dans une ambiance traditionnelle au cœur de la ville."
+},
+{
+  name: "Ski",
+  image: "ski.png",
+  destination: "Chamonix",
+  category: "Sport",
+  price: 75,
+  duration: "Journée",
+  vibe: "⛷️ Sport • neige • montagne",
+  description: "Une journée ski pour profiter des pistes, de la montagne et d’un bon mood sportif avec ta team."
+},
+{
+  name: "Shibuya by night",
+  image: "shibuya-night.png",
+  destination: "Tokyo",
+  category: "Nightlife",
+  price: 35,
+  duration: "2h",
+  vibe: "🌃 Néons • ville • nightlife",
+  description: "Découvre Shibuya de nuit, ses lumières, son énergie et ses spots parfaits pour sortir entre amis."
+},
+{
+  name: "Excursion dans les souks",
+  image: "souk.png",
+  destination: "Marrakech",
+  category: "Culture",
+  price: 25,
+  duration: "2h",
+  vibe: "🧺 Souks • culture • couleurs",
+  description: "Balade dans les souks, entre artisanat, épices, ruelles vivantes et ambiance marocaine."
+},
+{
+  name: "Tyrolienne jungle",
+  image: "tyrolienne-jungle.png",
+  destination: "Costa Rica",
+  category: "Aventure",
+  price: 70,
+  duration: "2h",
+  vibe: "🌿 Jungle • adrénaline • fun",
+  description: "Traverse la jungle en tyrolienne pour une activité pleine de sensations et parfaite pour les groupes."
+},
+{
+  name: "Dîner marocain",
+  image: "diner-marocain.png",
+  destination: "Marrakech",
+  category: "Gastronomie",
+  price: 40,
+  duration: "Soirée",
+  vibe: "🍽️ Food • ambiance • partage",
+  description: "Un dîner marocain convivial avec plats traditionnels, ambiance chaleureuse et vraie vibe locale."
+},
+{
+  name: "Algarve",
+  image: "algarve.png",
+  destination: "Road Trip Portugal",
+  category: "Plage",
+  price: 35,
+  duration: "Journée",
+  vibe: "🌊 Plage • road trip • soleil",
+  description: "Cap sur l’Algarve pour profiter des plages, falaises et spots parfaits pendant le road trip."
+},
+{
+  name: "Randonnée volcan",
+  image: "randonnee-volcan.png",
+  destination: "Costa Rica",
+  category: "Nature",
+  price: 45,
+  duration: "4h",
+  vibe: "🌋 Nature • marche • aventure",
+  description: "Une randonnée autour d’un volcan pour profiter de paysages impressionnants et d’une vraie pause nature."
+},
+
+{
+  name: "Balade désert",
+  image: "desert.png",
+  destination: "Marrakech",
+  category: "Aventure",
+  price: 65,
+  duration: "Demi-journée",
+  vibe: "🐪 Désert • aventure • golden hour",
+  description: "Une sortie dans le désert pour vivre un moment dépaysant, entre paysages dorés et souvenirs de groupe."
+},
+{
+  name: "Spa montagne",
+  image: "spa-montagne.png",
+  destination: "Chamonix",
+  category: "Détente",
+  price: 60,
+  duration: "2h",
+  vibe: "🧖 Détente • montagne • chill",
+  description: "Après l’effort, place au chill : spa, calme et vue montagne pour recharger tout le groupe."
+},
+{
+  name: "Lisbonne",
+  image: "lisbonne.png",
+  destination: "Road Trip Portugal",
+  category: "Culture",
+  price: 30,
+  duration: "Journée",
+  vibe: "🚋 Ville • culture • food",
+  description: "Découvre Lisbonne entre ruelles, tramways, points de vue et pauses gourmandes."
+},
 ];
 
 function renderActivitiesFeed() {
