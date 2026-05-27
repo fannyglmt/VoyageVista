@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoyageVista — Connexion</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/authentification.css">
+</head>
+
+<body class="auth-body">
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="brand">
+      <a href="index.html">
+        <img src="assets/images/logo-voyagevista.png" alt="VoyageVista">
+      </a>
+    </div>
+    <nav>
+      <a href="index.html">Accueil</a>
+      <a href="destination.html">Destinations</a>
+      <a href="activites.html">Activités</a>
+    </nav>
+    <div class="nav-icons">
+      <span class="heart-icon">♥</span>
+      <span>🔔</span>
+      <span>👤</span>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="auth-main">
+
+    <!-- Panneau gauche : illustration -->
+    <div class="auth-panel-left">
+      <div class="auth-panel-content">
+        <p class="auth-tag">EXPLORE • SWIPE • TRAVEL</p>
+        <h2>Bienvenue<br>de retour ✈️</h2>
+        <p class="auth-panel-sub">Reprends là où tu t'es arrêté(e). Ton prochain voyage t'attend.</p>
+        <div class="auth-bubbles">
+          <div class="bubble">🌊 Destinations</div>
+          <div class="bubble">🌴 Activités</div>
+          <div class="bubble">👥 Groupes</div>
+          <div class="bubble">💼 Panier</div>
+        </div>
+      </div>
+      <div class="auth-panel-overlay"></div>
+    </div>
+
+    <!-- Panneau droit : formulaire -->
+    <div class="auth-panel-right">
+      <div class="auth-form-wrap">
+
+        <div class="auth-form-header">
+          <h1>Connexion</h1>
+          <p>Pas encore de compte ? <a href="register.html">Créer un compte</a></p>
+        </div>
+
+        <!-- Alertes gérées en JS selon l'URL ?error= -->
+        <div id="auth-alert-container"></div>
+
+        <form class="auth-form" method="POST" action="../backend/login.php" id="loginForm">
+
+          <div class="form-group">
+            <label for="email">Adresse email</label>
+            <div class="input-wrap">
+              <span class="input-icon">✉️</span>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="ton@email.com"
+                required
+                autocomplete="email"
+              >
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Mot de passe</label>
+            <div class="input-wrap">
+              <span class="input-icon">🔒</span>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="••••••••"
+                required
+                autocomplete="current-password"
+              >
+              <button type="button" class="toggle-pw" id="togglePw" aria-label="Afficher le mot de passe">👁</button>
+            </div>
+          </div>
+
+          <div class="form-options">
+            <label class="checkbox-label">
+              <input type="checkbox" name="remember" id="remember">
+              <span class="checkbox-custom"></span>
+              Se souvenir de moi
+            </label>
+            <a href="#" class="forgot-link">Mot de passe oublié ?</a>
+          </div>
+
+          <button type="submit" name="login" class="btn-auth">
+            <span class="btn-text">Se connecter</span>
+            <span class="btn-plane">✈</span>
+          </button>
+
+        </form>
+
+        <div class="auth-divider"><span>ou</span></div>
+
+        <div class="auth-footer">
+          <p>En continuant, tu acceptes les <a href="#">Conditions d'utilisation</a> et la <a href="#">Politique de confidentialité</a> de VoyageVista.</p>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+<script src="js/authentification.js"></script>
+
+</body>
+</html>

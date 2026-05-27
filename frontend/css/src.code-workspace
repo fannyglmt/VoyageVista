@@ -1,0 +1,32 @@
+{
+	"folders": [
+		{
+			"path": "../../../../OneDrive/Bureau/ECE/Projet elec - Digiwake/Code Digiwake/Code Digiwake/src"
+		},
+		{
+			"name": "ESP32",
+			"path": "../../../../OneDrive/Documents/PlatformIO/Projects/ESP32"
+		},
+		{
+			"name": "DRAWBOT moteurs2",
+			"path": "../../../../OneDrive/Documents/PlatformIO/Projects/DRAWBOT moteurs2"
+		},
+		{
+			"name": "Test Wifi",
+			"path": "../../../../OneDrive/Documents/PlatformIO/Projects/Test Wifi"
+		},
+		{
+			"name": "Drawbot soutenance 1",
+			"path": "../../../../OneDrive/Documents/PlatformIO/Projects/Drawbot soutenance 1"
+		},
+		{
+			"name": "Drawbot soutenance 2",
+			"path": "../../../../OneDrive/Documents/PlatformIO/Projects/Drawbot soutenance 2"
+		},
+		{
+			"name": "VoyageVista",
+			"path": "../.."
+		}
+	],
+	"settings": {}
+}
