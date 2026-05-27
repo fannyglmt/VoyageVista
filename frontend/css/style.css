@@ -522,6 +522,8 @@ footer {
 }
 /* SPLASH SCREEN */
 
+/* SPLASH SCREEN */
+
 #splash-screen {
   position: fixed;
   inset: 0;
@@ -540,21 +542,22 @@ footer {
 }
 
 .splash-content {
-  text-align: center;
+  width: 900px;
+  max-width: 90vw;
+  height: 520px;
   position: relative;
 }
 
 .logo-bounce-wrap {
   position: absolute;
-  left:50%;
-  top:36%;
-  transform: translate(-50%,-50%);
-  animation: logoMoveRight 1.2s ease forwards;
-  animation-delay: 2.2s;
+  left: 50%;
+  top: 130px;
+  transform: translateX(-50%);
+  animation: logoIntro 3.2s ease forwards;
 }
 
 .splash-logo {
-  width: 190px;
+  width: 180px;
   animation: logoBounce 2.1s ease-in-out forwards;
   filter: drop-shadow(0 18px 25px rgba(74, 104, 166, 0.22));
 }
@@ -564,47 +567,33 @@ footer {
   height: 18px;
   background: rgba(74, 104, 166, 0.22);
   border-radius: 50%;
-  margin: 18px auto 0;
+  margin: 16px auto 0;
   animation: shadowBounce 2.1s ease-in-out forwards;
 }
 
 .splash-title-img {
-  width: 720px;
-  max-width: 90vw;
-
-  opacity: 0;
-  transform: translateX(-70px);
-
-  animation: titleEnter 1.2s ease forwards;
-  animation-delay: 2.8s;
-
-  filter: drop-shadow(0 12px 20px rgba(74, 104, 166, 0.22));
-
   position: absolute;
   left: 50%;
-  top: 38%;
-  transform: translate(-50%, -50%);
-}
-
-.splash-slogan {
-  margin-top: 8px;
-  font-size: 20px;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: #f39b5f;
+  top: 90px;
+  width: 620px;
+  max-width: 85vw;
+  transform: translateX(-50%);
   opacity: 0;
-  animation: fadeUpSplash 0.8s ease forwards;
-  animation-delay: 3.2s;
+  animation: titleEnter 1.2s ease forwards;
+  animation-delay: 2.4s;
+  filter: drop-shadow(0 12px 20px rgba(74, 104, 166, 0.22));
 }
 
 .plane-loader {
-  width: 420px;
+  position: absolute;
+  left: 50%;
+  top: 310px;
+  transform: translateX(-50%);
+  width: 620px;
   height: 60px;
-  margin: 55px auto 0;
-  position: relative;
   opacity: 0;
   animation: fadeUpSplash 0.7s ease forwards;
-  animation-delay: 3.4s;
+  animation-delay: 3.2s;
 }
 
 .plane-line {
@@ -624,7 +613,7 @@ footer {
   inset: 0;
   background: white;
   animation: lineReveal 3s ease forwards;
-  animation-delay: 3.6s;
+  animation-delay: 3.4s;
 }
 
 .plane {
@@ -635,10 +624,42 @@ footer {
   color: #4a68a6;
   transform: rotate(8deg);
   animation: planeFly 3s ease forwards;
-  animation-delay: 3.6s;
+  animation-delay: 3.4s;
+}
+
+.splash-slogan {
+  position: absolute;
+  left: 50%;
+  top: 390px;
+  transform: translateX(-50%);
+  font-size: 20px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: #f39b5f;
+  opacity: 0;
+  animation: fadeUpSplash 0.8s ease forwards;
+  animation-delay: 3.7s;
+  white-space: nowrap;
 }
 
 /* ANIMATIONS SPLASH */
+
+@keyframes logoIntro {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%);
+  }
+
+  70% {
+    opacity: 1;
+    transform: translateX(-50%);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.7);
+  }
+}
 
 @keyframes logoBounce {
   0% {
@@ -704,37 +725,27 @@ footer {
   }
 }
 
-@keyframes logoMoveRight {
-  from {
-    transform: translate(-50%,50%);
-  }
-
-  to {
-    transform: translateX(-360px, -50%);
-  }
-}
-
 @keyframes titleEnter {
   from {
     opacity: 0;
-    transform: translate(-60%, -50%);
+    transform: translateX(-70%);
   }
 
   to {
     opacity: 1;
-    transform: translate(-20%,-50%);
+    transform: translateX(-50%);
   }
 }
 
 @keyframes fadeUpSplash {
   from {
     opacity: 0;
-    transform: translateY(18px);
+    transform: translate(-50%, 18px);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate(-50%, 0);
   }
 }
 

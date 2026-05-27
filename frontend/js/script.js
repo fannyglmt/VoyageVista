@@ -5,7 +5,7 @@ window.addEventListener("load", () => {
 
   setTimeout(() => {
     splash.classList.add("hidden");
-  }, 7500);
+  }, 7800);
 });
 
 const cards = document.querySelectorAll(".trend-card");
