@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Destinations - VoyageVista</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+<header class="navbar">
+  <div class="brand">
+    <img src="assets/images/logo-voyagevista.png" alt="Logo VoyageVista">
+  </div>
+
+  <nav>
+    <a href="index.html">Accueil</a>
+    <a href="destination.html" class="active">Destinations</a>
+    <a href="activites.html">Activités</a>
+    <a href="#">Favoris</a>
+  </nav>
+
+  <div class="nav-icons">
+    <span class="heart-icon">♥</span>
+    <span>🔔</span>
+    <span>👤</span>
+  </div>
+</header>
+
+<main class="destinations-page">
+
+  <section class="destinations-hero">
+    <p class="tag">SWIPE • MATCH • TRAVEL</p>
+    <h1>Trouve la destination qui matche avec ta team</h1>
+    <p>Swipe les destinations, filtre selon ton mood et construis ton prochain voyage de groupe.</p>
+
+    <div class="destination-search">
+      <input type="text" id="searchInput" placeholder="Rechercher une destination..." />
+    </div>
+  </section>
+
+  <section class="swipe-section">
+    <div class="swipe-card" id="swipeCard"></div>
+
+    <div class="swipe-actions">
+      <button class="pass-btn" id="passBtn">✕</button>
+      <button class="like-btn" id="likeBtn">♥</button>
+    </div>
+
+    <p class="swipe-counter" id="swipeCounter"></p>
+  </section>
+
+  <section class="filters-section">
+    <h2>Catalogue des destinations</h2>
+
+    <div class="filters-grid">
+      <select id="categoryFilter">
+        <option value="all">Toutes les catégories</option>
+        <option value="Aventure">Aventure</option>
+        <option value="Nightlife">Nightlife</option>
+        <option value="Plage">Plage</option>
+        <option value="Gastronomie">Gastronomie</option>
+        <option value="Culture">Culture</option>
+        <option value="Nature">Nature</option>
+        <option value="Sport">Sport</option>
+        <option value="Détente">Détente</option>
+        <option value="Road Trip">Road Trip</option>
+      </select>
+
+      <select id="regionFilter">
+        <option value="all">Toutes les régions</option>
+        <option value="Europe">Europe</option>
+        <option value="Asie">Asie</option>
+        <option value="Afrique">Afrique</option>
+        <option value="Amérique">Amérique</option>
+      </select>
+
+      <select id="budgetFilter">
+        <option value="all">Tous les budgets</option>
+        <option value="€">€</option>
+        <option value="€€">€€</option>
+        <option value="€€€">€€€</option>
+      </select>
+
+      <select id="groupFilter">
+        <option value="all">Nombre de voyageurs</option>
+        <option value="2-4">2-4 personnes</option>
+        <option value="5-8">5-8 personnes</option>
+        <option value="9+">9+ personnes</option>
+      </select>
+
+      <select id="sortFilter">
+        <option value="popular">Destinations populaires</option>
+        <option value="trend">Destinations tendances</option>
+        <option value="priceAsc">Prix croissant</option>
+        <option value="priceDesc">Prix décroissant</option>
+        <option value="rating">Meilleures notes</option>
+        <option value="groups">Adaptées aux groupes</option>
+        <option value="new">Nouveautés</option>
+      </select>
+    </div>
+  </section>
+
+  <section class="catalogue-grid" id="catalogueGrid"></section>
+
+</main>
+
+<script src="js/script.js"></script>
+</body>
+</html>
