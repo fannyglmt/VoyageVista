@@ -711,3 +711,188 @@ function renderDestinationDetail() {
 }
 
 renderDestinationDetail();
+const activities = [
+  {
+    name: "Cours de surf",
+    image: "surf.png",
+    destination: "Bali",
+    category: "Sport",
+    price: 45,
+    duration: "2h",
+    vibe: "🌊 Sport • fun • plage",
+    description: "Apprends à surfer avec ta team sur une plage incroyable. Parfait pour commencer le voyage avec de l’énergie."
+  },
+  {
+    name: "Balade en bateau",
+    image: "boat.png",
+    destination: "Ibiza",
+    category: "Détente",
+    price: 65,
+    duration: "3h",
+    vibe: "🛥️ Mer • chill • sunset",
+    description: "Une sortie en bateau pour profiter de la mer, du soleil et des meilleurs spots photo."
+  },
+  {
+    name: "Visite de temple",
+    image: "temple.png",
+    destination: "Bali",
+    category: "Culture",
+    price: 25,
+    duration: "1h30",
+    vibe: "🏛️ Culture • découverte",
+    description: "Découvre un lieu iconique, calme et magnifique pour ajouter une vraie touche culturelle au séjour."
+  },
+  {
+    name: "Food tour",
+    image: "food-tour.png",
+    destination: "Tokyo",
+    category: "Gastronomie",
+    price: 55,
+    duration: "2h",
+    vibe: "🍜 Food • ville • découverte",
+    description: "Teste les meilleurs spots food locaux et découvre la ville à travers ses saveurs."
+  },
+  {
+    name: "Beach party",
+    image: "beach-party.png",
+    destination: "Ibiza",
+    category: "Nightlife",
+    price: 70,
+    duration: "Soirée",
+    vibe: "🎉 Nightlife • plage • musique",
+    description: "Ambiance festive, musique et coucher de soleil : l’activité parfaite pour une team qui veut kiffer."
+  },
+  {
+    name: "Randonnée nature",
+    image: "hiking.png",
+    destination: "Chamonix",
+    category: "Nature",
+    price: 30,
+    duration: "4h",
+    vibe: "🥾 Nature • aventure",
+    description: "Un moment en pleine nature pour respirer, marcher et profiter de paysages incroyables."
+  },
+  {
+    name: "Spa chill",
+    image: "spa.png",
+    destination: "Santorin",
+    category: "Détente",
+    price: 80,
+    duration: "2h",
+    vibe: "🧘 Détente • bien-être",
+    description: "Pause détente obligatoire : spa, calme et recharge totale avant de repartir explorer."
+  },
+  {
+    name: "Musée immersif",
+    image: "museum.png",
+    destination: "Barcelone",
+    category: "Culture",
+    price: 20,
+    duration: "1h",
+    vibe: "🎨 Culture • photo • indoor",
+    description: "Une activité simple, visuelle et sympa à faire entre deux sorties en ville."
+  },
+  {
+    name: "Rooftop sunset",
+    image: "rooftop.png",
+    destination: "Marrakech",
+    category: "Détente",
+    price: 35,
+    duration: "Soirée",
+    vibe: "🌅 Sunset • chill • photos",
+    description: "Un rooftop stylé pour profiter du coucher de soleil et finir la journée en beauté."
+  }
+];
+
+function renderActivitiesFeed() {
+  const feed = document.getElementById("activityFeed");
+  if (!feed) return;
+
+  feed.innerHTML = activities.map(activity => `
+    <article class="activity-post">
+      <img src="assets/images/${activity.image}" alt="${activity.name}">
+
+      <div class="activity-post-content">
+        <p class="tag">${activity.vibe}</p>
+        <h2>${activity.name}</h2>
+        <p>${activity.description}</p>
+
+        <div class="activity-info">
+          <span>📍 ${activity.destination}</span>
+          <span>⏱️ ${activity.duration}</span>
+          <span>💸 ${activity.price}€</span>
+        </div>
+
+        <div class="activity-actions">
+          <a href="activite-detail.html?activite=${encodeURIComponent(activity.name)}">
+            Voir l’activité
+          </a>
+          <button>♥</button>
+        </div>
+      </div>
+    </article>
+  `).join("");
+}
+
+function renderActivityDetail() {
+  const page = document.getElementById("activityDetailPage");
+  if (!page) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const name = params.get("activite") || "Cours de surf";
+
+  const activity = activities.find(a =>
+    a.name.toLowerCase() === name.toLowerCase()
+  );
+
+  if (!activity) {
+    window.location.href = "404.html";
+    return;
+  }
+
+  page.innerHTML = `
+    <section class="activity-detail-hero">
+      <img src="assets/images/${activity.image}" alt="${activity.name}">
+
+      <div class="activity-detail-content">
+        <p class="tag">${activity.vibe}</p>
+        <h1>${activity.name}</h1>
+        <p>${activity.description}</p>
+
+        <div class="activity-info">
+          <span>📍 ${activity.destination}</span>
+          <span>⏱️ ${activity.duration}</span>
+          <span>💸 ${activity.price}€</span>
+        </div>
+
+        <button class="add-cart-btn">Ajouter au panier voyage</button>
+      </div>
+    </section>
+
+    <section class="activity-detail-boxes">
+      <div class="activity-detail-box">
+        <h3>Pourquoi on valide ?</h3>
+        <p>Parce que c’est simple à réserver, visuel, fun et parfait pour créer des souvenirs de groupe.</p>
+      </div>
+
+      <div class="activity-detail-box">
+        <h3>Pour qui ?</h3>
+        <p>Idéal pour les groupes qui veulent ajouter une vraie vibe au voyage sans se prendre la tête.</p>
+      </div>
+
+      <div class="activity-detail-box">
+        <h3>À prévoir</h3>
+        <p>Réserve à l’avance, prépare ton téléphone pour les photos et viens avec une bonne énergie.</p>
+      </div>
+    </section>
+
+    <section class="activity-detail-cta">
+      <h2>Ok… cette activité part dans le moodboard du voyage ✨</h2>
+      <a href="activites.html" class="detail-link">Retour aux activités</a>
+      <a href="destination.html" class="detail-link">Voir les destinations</a>
+    </section>
+  `;
+}
+
+renderActivitiesFeed();
+renderActivityDetail();
