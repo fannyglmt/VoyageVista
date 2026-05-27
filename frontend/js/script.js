@@ -896,3 +896,212 @@ function renderActivityDetail() {
 
 renderActivitiesFeed();
 renderActivityDetail();
+const hebergements = [
+
+  {
+    name: "Bali Paradise Resort",
+    image: "hotel1.jpg",
+    location: "Bali, Indonésie",
+    type: "Resort Luxe",
+    price: 320,
+    rating: 4.9,
+
+    description:
+      "Un resort tropical premium avec piscine privée, spa et vue jungle.",
+
+    equipments: [
+      "Piscine privée",
+      "Spa",
+      "Wifi ultra rapide",
+      "Petit déjeuner inclus",
+      "Vue jungle"
+    ],
+
+    reviews: [
+      "Le plus bel hôtel du voyage 😭",
+      "Sunsets incroyables depuis la piscine.",
+      "Expérience ultra relaxante."
+    ]
+  },
+
+  {
+    name: "Maldives Escape",
+    image: "hotel2.jpg",
+    location: "Maldives",
+    type: "Villa Premium",
+    price: 540,
+    rating: 5.0,
+
+    description:
+      "Villa au-dessus de l’eau turquoise avec expérience VIP.",
+
+    equipments: [
+      "Villa sur l’eau",
+      "Room service",
+      "Spa",
+      "Excursions privées",
+      "Vue océan"
+    ],
+
+    reviews: [
+      "On avait l’impression d’être dans Pinterest 😭",
+      "Le luxe absolu.",
+      "Meilleur spot honeymoon."
+    ]
+  },
+
+  {
+    name: "Santorini Skyline",
+    image: "hotel3.jpg",
+    location: "Santorin, Grèce",
+    type: "Hôtel Design",
+    price: 280,
+    rating: 4.8,
+
+    description:
+      "Architecture minimaliste avec vue coucher de soleil.",
+
+    equipments: [
+      "Infinity pool",
+      "Vue mer",
+      "Petit déjeuner",
+      "Rooftop",
+      "Spa"
+    ],
+
+    reviews: [
+      "Les couchers de soleil sont irréels.",
+      "Design incroyable.",
+      "Ambiance très chill."
+    ]
+  }
+
+];
+
+function renderHebergementDetail() {
+
+  const page =
+    document.getElementById("hebergementDetailPage");
+
+  if (!page) return;
+
+  const params =
+    new URLSearchParams(window.location.search);
+
+  const name =
+    params.get("hebergement") ||
+    "Bali Paradise Resort";
+
+  const hotel =
+    hebergements.find(
+      h => h.name.toLowerCase() === name.toLowerCase()
+    );
+
+  if (!hotel) {
+    window.location.href = "404.html";
+    return;
+  }
+
+  page.innerHTML = `
+
+    <section class="hebergement-detail-hero">
+
+      <img
+        src="assets/images/${hotel.image}"
+        alt="${hotel.name}"
+      >
+
+      <div class="detail-overlay">
+
+        <p class="tag">
+          HÉBERGEMENT MATCHÉ ✨
+        </p>
+
+        <h1>
+          ${hotel.name}
+        </h1>
+
+        <p>
+          ${hotel.description}
+        </p>
+
+        <div class="detail-meta">
+
+          <span>
+            📍 ${hotel.location}
+          </span>
+
+          <span>
+            ⭐ ${hotel.rating}
+          </span>
+
+          <span>
+            ${hotel.price}€ / nuit
+          </span>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="hebergement-detail-content">
+
+      <div class="detail-main-card">
+
+        <h2>
+          Équipements premium
+        </h2>
+
+        <div class="equipments-grid">
+
+          ${hotel.equipments.map(eq => `
+            <div class="equipment-card">
+              ✨ ${eq}
+            </div>
+          `).join("")}
+
+        </div>
+
+        <h2>
+          Avis voyageurs
+        </h2>
+
+        <div class="reviews-grid">
+
+          ${hotel.reviews.map(review => `
+            <div class="review-card">
+              "${review}"
+            </div>
+          `).join("")}
+
+        </div>
+
+      </div>
+
+      <div class="booking-card">
+
+        <h3>
+          Réserver maintenant
+        </h3>
+
+        <p class="booking-price">
+          ${hotel.price}€
+          <span>/ nuit</span>
+        </p>
+
+        <button class="booking-btn">
+          Réserver ✈
+        </button>
+
+        <a href="transports.html" class="transport-btn">
+          Continuer vers les transports
+        </a>
+
+      </div>
+
+    </section>
+  `;
+}
+
+renderHebergementDetail();
