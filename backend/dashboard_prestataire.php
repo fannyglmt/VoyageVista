@@ -1,15 +1,18 @@
 <?php
-header('Content-Type: application/json');
-require_once '../config/db.php';
-
-// Suppose qu'on reçoit l'ID du prestataire connecté
-$id_prestataire = $_GET['id_prestataire'] ?? null;
-
-if ($id_prestataire) {
-    $stmt = $pdo->prepare("SELECT * FROM services WHERE id_prestataire = ?");
-    $stmt->execute([$id_prestataire]);
-    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
-} else {
-    echo json_encode(['error' => 'ID prestataire requis']);
-}
+require_once 'configuration.php';
+// Supposons que l'ID du prestataire soit en session
+$pid = $_SESSION['user_id']; 
+$services = $pdo->prepare("SELECT * FROM services WHERE prestataire_id = ?");
+$services->execute([$pid]);
+$data = $services->fetchAll();
 ?>
+<!DOCTYPE html>
+<html>
+<body>
+    <h1>Mon Dashboard Prestataire</h1>
+    <p>Liste de mes services :</p>
+    <ul>
+        <?php foreach ($data as $s) { echo "<li>" . htmlspecialchars($s['nom']) . "</li>"; } ?>
+    </ul>
+</body>
+</html>

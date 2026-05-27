@@ -1,16 +1,22 @@
 <?php
-header('Content-Type: application/json');
-require_once '../config/db.php';
-
-$method = $_SERVER['REQUEST_METHOD'];
-
-if ($method === 'GET') {
-    $stmt = $pdo->query("SELECT id, username, email, role FROM utilisateurs");
-    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
-} elseif ($method === 'PUT') {
-    $data = json_decode(file_get_contents("php://input"), true);
-    $stmt = $pdo->prepare("UPDATE utilisateurs SET role = ? WHERE id = ?");
-    $stmt->execute([$data['role'], $data['id']]);
-    echo json_encode(['message' => 'Rôle mis à jour']);
+require_once 'configuration.php';
+if (isset($_GET['delete'])) {
+    $stmt = $pdo->prepare("DELETE FROM utilisateurs WHERE id = ?");
+    $stmt->execute([$_GET['delete']]);
 }
+$users = $pdo->query("SELECT * FROM utilisateurs")->fetchAll();
 ?>
+<!DOCTYPE html>
+<html>
+<body>
+    <h1>Gestion des Utilisateurs</h1>
+    <table border="1">
+        <?php foreach ($users as $u) { ?>
+        <tr>
+            <td><?php echo htmlspecialchars($u['username']); ?></td>
+            <td><a href="?delete=<?php echo $u['id']; ?>">Supprimer</a></td>
+        </tr>
+        <?php } ?>
+    </table>
+</body>
+</html>

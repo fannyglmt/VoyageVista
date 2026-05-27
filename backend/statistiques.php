@@ -1,9 +1,15 @@
 <?php
-header('Content-Type: application/json');
-require_once '../config/db.php';
-
-// Exemple de requête pour les réservations par mois
-$stmt = $pdo->query("SELECT DATE_FORMAT(date_reservation, '%Y-%m') as mois, COUNT(*) as nb 
-                     FROM reservations GROUP BY mois");
-echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+require_once 'configuration.php';
+$stats = $pdo->query("SELECT DATE_FORMAT(date_creation, '%Y-%m') as mois, COUNT(*) as nb FROM reservations GROUP BY mois")->fetchAll();
 ?>
+<!DOCTYPE html>
+<html>
+<body>
+    <h1>Statistiques Plateforme</h1>
+    <ul>
+        <?php foreach ($stats as $s) { ?>
+            <li>Mois : <?php echo $s['mois']; ?> - Réservations : <?php echo $s['nb']; ?></li>
+        <?php } ?>
+    </ul>
+</body>
+</html>
