@@ -307,3 +307,27 @@
   }
 
 }
+.detail-navigation{
+  display:flex;
+  gap:20px;
+  margin-top:30px;
+}
+
+.back-btn,
+.manage-btn{
+  padding:14px 24px;
+  border-radius:30px;
+  text-decoration:none;
+  font-weight:700;
+}
+
+.back-btn{
+  background:white;
+  color:#4a68a6;
+  border:2px solid #c5defa;
+}
+
+.manage-btn{
+  background:linear-gradient(135deg,#79a9df,#f3b27d);
+  color:white;
+}
