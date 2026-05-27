@@ -976,3 +976,8 @@ footer {
     width: 330px;
   }
 }
+.access-icon {
+  font-size: 72px;
+  margin: 10px 0 30px;
+  filter: drop-shadow(0 12px 20px rgba(74, 104, 166, 0.2));
+}
