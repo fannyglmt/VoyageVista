@@ -695,8 +695,8 @@ function renderDestinationDetail() {
 
       <div class="next-step-grid">
         <a href="activites.html">🎉 Choisir les activités</a>
-        <a href="#">🏨 Choisir l’hébergement</a>
-        <a href="#">✈ Choisir le transport</a>
+        <a href="hebergements.html">🏨 Choisir l’hébergement</a>
+        <a href="transports.html">✈ Choisir le transport</a>
       </div>
 
       <p class="back-catalogue-text">
@@ -905,6 +905,17 @@ function renderHebergementDetail() {
           <span>/ nuit</span>
         </p>
 
+        <div class="detail-navigation">
+
+  <a href="hebergements.html" class="back-btn">
+    ← Retour aux hébergements
+  </a>
+
+  <a href="gestion-hebergements.html" class="manage-btn">
+    ⚙ Gérer cet hébergement
+  </a>
+
+</div>
         <button class="booking-btn">
           Réserver ✈
         </button>
