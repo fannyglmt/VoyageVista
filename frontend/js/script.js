@@ -166,53 +166,55 @@ function createBadges(categories) {
 }
 
 function renderSwipeCard() {
+
   if (!swipeCard) return;
 
   if (swipeIndex >= destinations.length) {
-   swipeCard.innerHTML = `
-  <div style="
-    width:100%;
-    height:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:60px;
-  ">
 
-    <div style="
-      max-width:700px;
-      text-align:center;
-    ">
-
-      <h2 style="
-        font-size:58px;
-        color:#4a68a6;
-        margin-bottom:25px;
-        line-height:1.1;
+    swipeCard.innerHTML = `
+      <div style="
+        width:100%;
+        height:100%;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        padding:60px;
       ">
-        Tu as vu toutes les destinations ✨
-      </h2>
 
-      <p style="
-        font-size:24px;
-        color:#5b6f8f;
-        margin-bottom:40px;
-        line-height:1.5;
-      ">
-        Continue avec le catalogue pour filtrer, comparer et choisir le voyage parfait.
-      </p>
+        <div style="
+          max-width:700px;
+          text-align:center;
+        ">
 
-      <a href="#catalogueGrid" class="detail-link" style="
-        padding:18px 45px;
-        font-size:20px;
-      ">
-        Voir le catalogue
-      </a>
+          <h2 style="
+            font-size:58px;
+            color:#4a68a6;
+            margin-bottom:25px;
+            line-height:1.1;
+          ">
+            Tu as vu toutes les destinations ✨
+          </h2>
 
-    </div>
+          <p style="
+            font-size:24px;
+            color:#5b6f8f;
+            margin-bottom:40px;
+            line-height:1.5;
+          ">
+            Continue avec le catalogue pour filtrer, comparer et choisir le voyage parfait.
+          </p>
 
-  </div>
-`;
+          <a href="#catalogueGrid" class="detail-link" style="
+            padding:18px 45px;
+            font-size:20px;
+          ">
+            Voir le catalogue
+          </a>
+
+        </div>
+
+      </div>
+    `;
 
     swipeCounter.textContent = "Fin du swipe";
     return;
@@ -222,31 +224,55 @@ function renderSwipeCard() {
 
   swipeCard.innerHTML = `
     <img src="assets/images/${dest.image}" alt="${dest.name}" class="swipe-img">
+
     <div class="swipe-content">
+
       <h2>${dest.name}</h2>
+
       <p class="swipe-description">${dest.description}</p>
-      <div class="badges">${createBadges(dest.categories)}</div>
+
+      <div class="badges">
+        ${createBadges(dest.categories)}
+      </div>
+
       <div class="destination-meta">
         <span>${dest.budget} • dès ${dest.price}€</span>
         <span>👥 ${dest.group}</span>
         <span>⭐ ${dest.rating}</span>
       </div>
-      <a href="détail-de-destination.html" class="detail-link">Voir les détails</a>
+
+      <a href="destination-detail.html?destination=${encodeURIComponent(dest.name)}" class="detail-link">
+        Voir les détails
+      </a>
+
     </div>
   `;
 
-  swipeCounter.textContent = `${swipeIndex + 1} / ${destinations.length}`;
+  swipeCounter.textContent =
+    `${swipeIndex + 1} / ${destinations.length}`;
 }
 
 function nextSwipe(direction) {
+
   if (!swipeCard) return;
 
-  swipeCard.classList.add(direction === "like" ? "swipe-right" : "swipe-left");
+  swipeCard.classList.add(
+    direction === "like"
+      ? "swipe-right"
+      : "swipe-left"
+  );
 
   setTimeout(() => {
+
     swipeIndex++;
-    swipeCard.classList.remove("swipe-right", "swipe-left");
+
+    swipeCard.classList.remove(
+      "swipe-right",
+      "swipe-left"
+    );
+
     renderSwipeCard();
+
   }, 430);
 }
 
@@ -259,28 +285,49 @@ if (likeBtn) {
 }
 
 function renderCatalogue(list) {
+
   if (!catalogueGrid) return;
 
   if (list.length === 0) {
-    catalogueGrid.innerHTML = `<div class="empty-message">Aucune destination ne matche avec ces filtres 😭</div>`;
+
+    catalogueGrid.innerHTML = `
+      <div class="empty-message">
+        Aucune destination ne matche avec ces filtres 😭
+      </div>
+    `;
+
     return;
   }
 
   catalogueGrid.innerHTML = list.map(dest => `
     <article class="catalogue-card">
+
       <button class="fav-btn">♥</button>
+
       <img src="assets/images/${dest.image}" alt="${dest.name}">
+
       <div class="catalogue-content">
+
         <h3>${dest.name}</h3>
+
         <p>${dest.description}</p>
-        <div class="badges">${createBadges(dest.categories.slice(0, 3))}</div>
-        <div class="destination-meta">
-         <span>${dest.budget} • ${dest.price}€</span>
-<span>👥 ${dest.group}</span>
-<span>⭐ ${dest.rating}</span>
+
+        <div class="badges">
+          ${createBadges(dest.categories.slice(0, 3))}
         </div>
-        <a href="détail-de-destination.html" class="detail-link">Voir les détails</a>
+
+        <div class="destination-meta">
+          <span>${dest.budget} • ${dest.price}€</span>
+          <span>👥 ${dest.group}</span>
+          <span>⭐ ${dest.rating}</span>
+        </div>
+
+        <a href="destination-detail.html?destination=${encodeURIComponent(dest.name)}" class="detail-link">
+          Voir les détails
+        </a>
+
       </div>
+
     </article>
   `).join("");
 
@@ -292,36 +339,92 @@ function renderCatalogue(list) {
 }
 
 function applyFilters() {
-  const search = document.getElementById("searchInput")?.value.toLowerCase() || "";
-  const category = document.getElementById("categoryFilter")?.value || "all";
-  const region = document.getElementById("regionFilter")?.value || "all";
-  const budget = document.getElementById("budgetFilter")?.value || "all";
-  const group = document.getElementById("groupFilter")?.value || "all";
-  const sort = document.getElementById("sortFilter")?.value || "popular";
+
+  const search =
+    document.getElementById("searchInput")?.value.toLowerCase() || "";
+
+  const category =
+    document.getElementById("categoryFilter")?.value || "all";
+
+  const region =
+    document.getElementById("regionFilter")?.value || "all";
+
+  const budget =
+    document.getElementById("budgetFilter")?.value || "all";
+
+  const group =
+    document.getElementById("groupFilter")?.value || "all";
+
+  const sort =
+    document.getElementById("sortFilter")?.value || "popular";
 
   let filtered = destinations.filter(dest => {
-    const matchSearch = dest.name.toLowerCase().includes(search);
-    const matchCategory = category === "all" || dest.categories.includes(category);
-    const matchRegion = region === "all" || dest.region === region;
-    const matchBudget = budget === "all" || dest.budget === budget;
-    const matchGroup = group === "all" || dest.group === group;
 
-    return matchSearch && matchCategory && matchRegion && matchBudget && matchGroup;
+    const matchSearch =
+      dest.name.toLowerCase().includes(search);
+
+    const matchCategory =
+      category === "all" ||
+      dest.categories.includes(category);
+
+    const matchRegion =
+      region === "all" ||
+      dest.region === region;
+
+    const matchBudget =
+      budget === "all" ||
+      dest.budget === budget;
+
+    const matchGroup =
+      group === "all" ||
+      dest.group === group;
+
+    return (
+      matchSearch &&
+      matchCategory &&
+      matchRegion &&
+      matchBudget &&
+      matchGroup
+    );
   });
 
-  if (sort === "priceAsc") filtered.sort((a, b) => a.price - b.price);
-  if (sort === "priceDesc") filtered.sort((a, b) => b.price - a.price);
-  if (sort === "rating") filtered.sort((a, b) => b.rating - a.rating);
-  if (sort === "popular") filtered.sort((a, b) => b.popular - a.popular);
-  if (sort === "trend") filtered.sort((a, b) => b.trend - a.trend);
-  if (sort === "groups") filtered.sort((a, b) => (b.group === "9+") - (a.group === "9+"));
-  if (sort === "new") filtered.sort((a, b) => b.isNew - a.isNew);
+  if (sort === "priceAsc")
+    filtered.sort((a, b) => a.price - b.price);
+
+  if (sort === "priceDesc")
+    filtered.sort((a, b) => b.price - a.price);
+
+  if (sort === "rating")
+    filtered.sort((a, b) => b.rating - a.rating);
+
+  if (sort === "popular")
+    filtered.sort((a, b) => b.popular - a.popular);
+
+  if (sort === "trend")
+    filtered.sort((a, b) => b.trend - a.trend);
+
+  if (sort === "groups")
+    filtered.sort((a, b) =>
+      (b.group === "9+") - (a.group === "9+")
+    );
+
+  if (sort === "new")
+    filtered.sort((a, b) => b.isNew - a.isNew);
 
   renderCatalogue(filtered);
 }
 
-["searchInput", "categoryFilter", "regionFilter", "budgetFilter", "groupFilter", "sortFilter"].forEach(id => {
+[
+  "searchInput",
+  "categoryFilter",
+  "regionFilter",
+  "budgetFilter",
+  "groupFilter",
+  "sortFilter"
+].forEach(id => {
+
   const element = document.getElementById(id);
+
   if (element) {
     element.addEventListener("input", applyFilters);
     element.addEventListener("change", applyFilters);
@@ -330,22 +433,281 @@ function applyFilters() {
 
 renderSwipeCard();
 renderCatalogue(destinations);
-const searchInput = document.getElementById("searchInput");
 
-if (searchInput) {
-  searchInput.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
-      const value = searchInput.value.trim().toLowerCase();
+const destinationSearchInput =
+  document.getElementById("searchInput");
 
-      const foundDestination = destinations.find(dest =>
-        dest.name.toLowerCase() === value
-      );
+const searchBtn =
+  document.getElementById("searchBtn");
 
-      if (foundDestination) {
-        window.location.href = "détail-de-destination.html";
-      } else {
-        window.location.href = "404.html";
-      }
-    }
-  });
+function searchDestination() {
+
+  if (!destinationSearchInput) return;
+
+  const searchValue =
+    destinationSearchInput.value.trim().toLowerCase();
+
+  const foundDestination =
+  destinations.find((dest) =>
+    dest.name.toLowerCase().includes(searchValue)
+  );
+
+  if (foundDestination) {
+
+    window.location.href =
+      `destination-detail.html?destination=${encodeURIComponent(foundDestination.name)}`;
+
+  } else {
+
+    window.location.href = "404.html";
+
+  }
 }
+
+if (destinationSearchInput) {
+
+  destinationSearchInput.addEventListener(
+    "keydown",
+    (event) => {
+
+      if (event.key === "Enter") {
+        searchDestination();
+      }
+
+    }
+  );
+}
+
+if (searchBtn) {
+  searchBtn.addEventListener(
+    "click",
+    searchDestination
+  );
+}
+
+const detailExtras = {
+
+  "Bali": {
+    transport: "Vol Paris → Denpasar",
+    hebergement: "Villa partagée avec piscine",
+    mood: "Chill, plage, surf et sunsets",
+    activities: [
+      "Cours de surf",
+      "Temple d’Uluwatu",
+      "Sunset beach club"
+    ]
+  },
+
+  "Ibiza": {
+    transport: "Vol Paris → Ibiza",
+    hebergement: "Appartement proche plage",
+    mood: "Nightlife, mer et soirées",
+    activities: [
+      "Beach party",
+      "Balade bateau",
+      "Soirée club"
+    ]
+  },
+
+  "Santorin": {
+    transport: "Vol Paris → Santorin",
+    hebergement: "Hôtel vue mer",
+    mood: "Photos, sunset et détente",
+    activities: [
+      "Croisière sunset",
+      "Visite d’Oia",
+      "Dégustation locale"
+    ]
+  },
+
+  "Tokyo": {
+    transport: "Vol Paris → Tokyo",
+    hebergement: "Hôtel central à Shibuya",
+    mood: "Culture, food et néons",
+    activities: [
+      "Shibuya by night",
+      "Temple Senso-ji",
+      "Street food tour"
+    ]
+  },
+
+  "Marrakech": {
+    transport: "Vol Paris → Marrakech",
+    hebergement: "Riad traditionnel",
+    mood: "Culture, souks et désert",
+    activities: [
+      "Balade dans les souks",
+      "Excursion désert",
+      "Dîner marocain"
+    ]
+  },
+
+  "Costa Rica": {
+    transport: "Vol Paris → San José",
+    hebergement: "Eco-lodge en pleine nature",
+    mood: "Aventure, jungle et surf",
+    activities: [
+      "Surf",
+      "Randonnée volcan",
+      "Tyrolienne jungle"
+    ]
+  },
+
+  "Barcelone": {
+    transport: "Train ou vol Paris → Barcelone",
+    hebergement: "Appartement de groupe",
+    mood: "Tapas, plage et nightlife",
+    activities: [
+      "Tour tapas",
+      "Plage Barceloneta",
+      "Soirée rooftop"
+    ]
+  },
+
+  "Chamonix": {
+    transport: "Train Paris → Chamonix",
+    hebergement: "Chalet de groupe",
+    mood: "Montagne, sport et nature",
+    activities: [
+      "Randonnée",
+      "Ski",
+      "Spa montagne"
+    ]
+  },
+
+  "Road Trip Portugal": {
+    transport: "Van ou voiture de location",
+    hebergement: "Auberges + logements étapes",
+    mood: "Road trip, plage et liberté",
+    activities: [
+      "Lisbonne",
+      "Algarve",
+      "Food tour portugais"
+    ]
+  }
+};
+
+function renderDestinationDetail() {
+
+  const page =
+    document.getElementById("destinationDetailPage");
+
+  if (!page) return;
+
+  const params =
+    new URLSearchParams(window.location.search);
+
+  const name =
+    params.get("destination") || "Bali";
+
+  const dest =
+    destinations.find(
+      d => d.name.toLowerCase() === name.toLowerCase()
+    );
+
+  if (!dest) {
+    window.location.href = "404.html";
+    return;
+  }
+
+  const extra = detailExtras[dest.name];
+
+  page.innerHTML = `
+    <section class="detail-hero">
+
+      <img src="assets/images/${dest.image}" alt="${dest.name}">
+
+      <div class="detail-overlay">
+
+        <p class="tag">DESTINATION MATCHÉE</p>
+
+        <h1>${dest.name}</h1>
+
+        <p>${dest.description}</p>
+
+        <div class="badges">
+          ${createBadges(dest.categories)}
+        </div>
+
+        <div class="detail-meta">
+          <span>${dest.budget} • dès ${dest.price}€</span>
+          <span>👥 ${dest.group}</span>
+          <span>⭐ ${dest.rating}</span>
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="detail-content">
+
+      <div class="detail-main-card">
+
+        <h2>Pourquoi ça matche avec ta team ?</h2>
+
+        <p>${extra.mood}</p>
+
+        <div class="detail-options">
+
+          <div>
+            <h3>✈ Transport conseillé</h3>
+            <p>${extra.transport}</p>
+          </div>
+
+          <div>
+            <h3>🏨 Hébergement conseillé</h3>
+            <p>${extra.hebergement}</p>
+          </div>
+
+          <div>
+            <h3>💸 Budget estimé</h3>
+            <p>À partir de ${dest.price}€ par personne</p>
+          </div>
+
+        </div>
+
+        <button class="add-cart-btn">
+          Ajouter au panier voyage
+        </button>
+
+      </div>
+
+      <div class="detail-side-card">
+
+        <h2>Activités à ne pas rater</h2>
+
+        ${extra.activities.map(activity => `
+          <div class="activity-line">
+            <span>✨</span>
+            <p>${activity}</p>
+          </div>
+        `).join("")}
+
+      </div>
+
+    </section>
+
+    <section class="next-step-section">
+
+      <h2>
+        Ok… le voyage prend forme ✈️🌴
+      </h2>
+
+      <div class="next-step-grid">
+        <a href="activites.html">🎉 Choisir les activités</a>
+        <a href="#">🏨 Choisir l’hébergement</a>
+        <a href="#">✈ Choisir le transport</a>
+      </div>
+
+      <p class="back-catalogue-text">
+        Finalement c’était pas le bon mood ? 👀
+        <a href="destination.html">
+          Retourner swiper d’autres destinations
+        </a>
+      </p>
+
+    </section>
+  `;
+}
+
+renderDestinationDetail();

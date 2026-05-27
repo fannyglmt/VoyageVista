@@ -10,6 +10,7 @@
 <body>
 
 <header class="navbar">
+
   <div class="brand">
     <img src="assets/images/logo-voyagevista.png" alt="Logo VoyageVista">
   </div>
@@ -26,21 +27,39 @@
     <span>🔔</span>
     <span>👤</span>
   </div>
+
 </header>
 
 <main class="destinations-page">
 
   <section class="destinations-hero">
+
     <p class="tag">SWIPE • MATCH • TRAVEL</p>
+
     <h1>Trouve la destination qui matche avec ta team</h1>
-    <p>Swipe les destinations, filtre selon ton mood et construis ton prochain voyage de groupe.</p>
+
+    <p>
+      Swipe les destinations, filtre selon ton mood et construis ton prochain voyage de groupe.
+    </p>
 
     <div class="destination-search">
-      <input type="text" id="searchInput" placeholder="Rechercher une destination..." />
+
+      <input 
+        type="text"
+        id="searchInput"
+        placeholder="Rechercher une destination..."
+      />
+
+      <button id="searchBtn">
+        🔎
+      </button>
+
     </div>
+
   </section>
 
   <section class="swipe-section">
+
     <div class="swipe-card" id="swipeCard"></div>
 
     <div class="swipe-actions">
@@ -49,12 +68,15 @@
     </div>
 
     <p class="swipe-counter" id="swipeCounter"></p>
+
   </section>
 
   <section class="filters-section">
+
     <h2>Catalogue des destinations</h2>
 
     <div class="filters-grid">
+
       <select id="categoryFilter">
         <option value="all">Toutes les catégories</option>
         <option value="Aventure">Aventure</option>
@@ -99,7 +121,9 @@
         <option value="groups">Adaptées aux groupes</option>
         <option value="new">Nouveautés</option>
       </select>
+
     </div>
+
   </section>
 
   <section class="catalogue-grid" id="catalogueGrid"></section>
