@@ -733,8 +733,9 @@ const hebergements = [
     ],
 
     reviews: [
-      "Le plus bel hôtel du voyage 😭",
+      "Le plus bel hôtel du voyage, un vrai paradis sur terre.",
       "Sunsets incroyables depuis la piscine.",
+      "très intimiste et relaxant, parfait pour se ressourcer après les journées d’aventure à Bali.",
       "Expérience ultra relaxante."
     ]
   },
@@ -759,7 +760,8 @@ const hebergements = [
     ],
 
     reviews: [
-      "On avait l’impression d’être dans Pinterest 😭",
+      "Merveilleuse villa avec vue à couper le souffle.",
+      "Service impeccable, on s’est sentis comme des rois.",
       "Le luxe absolu.",
       "Meilleur spot honeymoon."
     ]
@@ -786,6 +788,7 @@ const hebergements = [
 
     reviews: [
       "Les couchers de soleil sont irréels.",
+      "Hôtel ultra photogénique, parfait pour les amoureux de design.",
       "Design incroyable.",
       "Ambiance très chill."
     ]
