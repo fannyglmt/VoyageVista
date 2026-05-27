@@ -8,214 +8,264 @@
   <title>Hébergements - VoyageVista</title>
 
   <link rel="stylesheet" href="css/hebergements.css">
+  <link rel="stylesheet" href="css/style.css">
+
 </head>
 
 <body>
 
-  <!-- NAVBAR -->
+<header class="navbar">
 
-  <header class="navbar">
+  <div class="brand">
+    <img src="assets/images/logo-voyagevista.png" alt="Logo VoyageVista">
+  </div>
 
-    <div class="brand">
-      <img src="assets/images/logo-voyagevista.png" alt="VoyageVista">
-    </div>
+  <nav>
+    <a href="index.html">Accueil</a>
+    <a href="destination.html">Destinations</a>
+    <a href="activites.html">Activités</a>
+    <a href="hebergements.html" class="active">Hébergements</a>
+  </nav>
 
-    <nav>
-      <a href="index.html">Accueil</a>
-      <a href="#">Destinations</a>
-      <a href="#">Activités</a>
-      <a href="#" class="active-link">Hébergements</a>
-    </nav>
+  <div class="nav-icons">
+    <span class="heart-icon">♥</span>
+    <span>🔔</span>
+    <span>👤</span>
+  </div>
 
-    <div class="nav-icons">
-      <span class="heart-icon">♥</span>
-      <span>🔔</span>
-      <span>👤</span>
-    </div>
+</header>
 
-  </header>
+<main class="hebergements-page">
 
   <!-- HERO -->
 
-  <section class="hebergement-hero">
+  <section class="hebergements-hero">
 
-    <div class="hebergement-hero-content">
+    <p class="tag">
+      STAY • CHILL • EXPERIENCE
+    </p>
 
-      <p class="tag">
-        STAY • DREAM • EXPLORE
-      </p>
+    <h1>
+      Trouve l’hébergement parfait ✨
+    </h1>
 
-      <h1>
-        Trouvez votre hébergement parfait
-      </h1>
+    <p>
+      Villas de rêve, resorts premium et hôtels
+      instagrammables sélectionnés pour votre trip.
+    </p>
 
-      <p class="hero-subtitle">
-        Resorts de luxe, villas privées, hôtels design
-        et expériences uniques dans les plus belles
-        destinations du monde.
-      </p>
+    <div class="hebergement-search">
 
-    </div>
+      <input
+        type="text"
+        placeholder="Rechercher un hébergement..."
+      >
 
-  </section>
-
-  <!-- FILTRES -->
-
-  <section class="filters-section">
-
-    <div class="filters-container">
-
-      <select>
-        <option>Destination</option>
-        <option>Bali</option>
-        <option>Maldives</option>
-        <option>Santorin</option>
-      </select>
-
-      <select>
-        <option>Prix</option>
-        <option>€</option>
-        <option>€€</option>
-        <option>€€€</option>
-      </select>
-
-      <select>
-        <option>Type</option>
-        <option>Hôtel</option>
-        <option>Villa</option>
-        <option>Resort</option>
-      </select>
-
-      <button class="search-btn">
-        Rechercher
+      <button>
+        🔎
       </button>
 
     </div>
 
   </section>
 
-  <!-- HEBERGEMENTS -->
+  <!-- FILTERS -->
 
-  <section class="hebergement-section">
+  <section class="filters-section">
 
-    <div class="section-title">
-      <h2>Hébergements tendances</h2>
-      <a href="#">Voir tout</a>
+    <h2>
+      Explore les hébergements
+    </h2>
+
+    <div class="filters-grid">
+
+      <select>
+        <option>Tous les types</option>
+        <option>Villa</option>
+        <option>Hôtel</option>
+        <option>Resort</option>
+      </select>
+
+      <select>
+        <option>Tous les budgets</option>
+        <option>€</option>
+        <option>€€</option>
+        <option>€€€</option>
+      </select>
+
+      <select>
+        <option>Ambiance</option>
+        <option>Tropicale</option>
+        <option>Romantique</option>
+        <option>Luxury</option>
+      </select>
+
+      <select>
+        <option>Voyageurs</option>
+        <option>2-4 personnes</option>
+        <option>5-8 personnes</option>
+        <option>9+ personnes</option>
+      </select>
+
     </div>
 
-    <div class="hebergement-grid">
+  </section>
 
-      <!-- CARD 1 -->
+  <!-- GRID -->
 
-      <div class="hebergement-card">
+  <section class="hebergement-grid">
+
+    <!-- CARD -->
+
+    <div class="hebergement-card">
+
+      <div class="card-image">
 
         <img src="assets/images/hotel1.jpg" alt="Hotel Bali">
 
-        <div class="hebergement-content">
-
-          <span class="hebergement-type">
-            Resort Luxe
-          </span>
-
-          <h3>Bali Paradise Resort</h3>
-
-          <p>
-            Piscine privée, vue sur l’océan
-            et ambiance tropicale premium.
-          </p>
-
-          <div class="hebergement-info">
-
-            <span class="hebergement-price">
-              320€
-            </span>
-
-            <span class="hebergement-rating">
-              ★ 4.9
-            </span>
-
-          </div>
-
-          <a href="detail-hebergement.html" class="hebergement-btn">
-  Voir détails
-</a>
-
-        </div>
+        <span class="favorite">
+          ♥
+        </span>
 
       </div>
 
-      <!-- CARD 2 -->
+      <div class="card-content">
 
-      <div class="hebergement-card">
+        <div class="card-top">
 
-        <img src="assets/images/hotel2.jpg" alt="Hotel Maldives">
-
-        <div class="hebergement-content">
-
-          <span class="hebergement-type">
-            Villa Privée
+          <span class="type">
+            Resort Luxe
           </span>
 
-          <h3>Maldives Escape</h3>
+          <span class="rating">
+            ★ 4.9
+          </span>
 
-          <p>
-            Une villa moderne au-dessus
-            de l’eau turquoise des Maldives.
-          </p>
+        </div>
 
-          <div class="hebergement-info">
+        <h3>
+          Bali Paradise Resort
+        </h3>
 
-            <span class="hebergement-price">
-              540€
-            </span>
+        <p>
+          Piscine privée, jungle tropicale
+          et sunset incroyable.
+        </p>
 
-            <span class="hebergement-rating">
-              ★ 5.0
-            </span>
+        <div class="card-bottom">
 
-          </div>
+          <strong>
+            320€ / nuit
+          </strong>
 
-          <a href="#" class="hebergement-btn">
-            Voir détails
+          <a href="detail-hebergement.html">
+            Voir détail
           </a>
 
         </div>
 
       </div>
 
-      <!-- CARD 3 -->
+    </div>
 
-      <div class="hebergement-card">
+    <!-- CARD -->
+
+    <div class="hebergement-card">
+
+      <div class="card-image">
+
+        <img src="assets/images/hotel2.jpg" alt="Hotel Maldives">
+
+        <span class="favorite">
+          ♥
+        </span>
+
+      </div>
+
+      <div class="card-content">
+
+        <div class="card-top">
+
+          <span class="type">
+            Villa Premium
+          </span>
+
+          <span class="rating">
+            ★ 5.0
+          </span>
+
+        </div>
+
+        <h3>
+          Maldives Escape
+        </h3>
+
+        <p>
+          Villa au-dessus de l’eau turquoise
+          avec expérience VIP.
+        </p>
+
+        <div class="card-bottom">
+
+          <strong>
+            540€ / nuit
+          </strong>
+
+          <a href="detail-hebergement.html">
+            Voir détail
+          </a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- CARD -->
+
+    <div class="hebergement-card">
+
+      <div class="card-image">
 
         <img src="assets/images/hotel3.jpg" alt="Hotel Santorin">
 
-        <div class="hebergement-content">
+        <span class="favorite">
+          ♥
+        </span>
 
-          <span class="hebergement-type">
+      </div>
+
+      <div class="card-content">
+
+        <div class="card-top">
+
+          <span class="type">
             Hôtel Design
           </span>
 
-          <h3>Santorini Skyline</h3>
+          <span class="rating">
+            ★ 4.8
+          </span>
 
-          <p>
-            Architecture minimaliste avec
-            coucher de soleil exceptionnel.
-          </p>
+        </div>
 
-          <div class="hebergement-info">
+        <h3>
+          Santorini Skyline
+        </h3>
 
-            <span class="hebergement-price">
-              280€
-            </span>
+        <p>
+          Architecture minimaliste avec
+          vue sur coucher de soleil.
+        </p>
 
-            <span class="hebergement-rating">
-              ★ 4.8
-            </span>
+        <div class="card-bottom">
 
-          </div>
+          <strong>
+            280€ / nuit
+          </strong>
 
-          <a href="#" class="hebergement-btn">
-            Voir détails
+          <a href="detail-hebergement.html">
+            Voir détail
           </a>
 
         </div>
@@ -226,31 +276,9 @@
 
   </section>
 
-  <!-- CTA -->
+</main>
 
-  <section class="cta">
-
-    <h2>
-      Réservez votre prochain séjour ✈
-    </h2>
-
-    <p>
-      VoyageVista sélectionne les meilleurs
-      hébergements pour vos aventures.
-    </p>
-
-    <a href="#" class="btn-primary">
-      Explorer les offres
-    </a>
-
-  </section>
-
-  <!-- FOOTER -->
-
-  <footer>
-    © 2026 VoyageVista — Travel differently 🌴
-  </footer>
+<script src="js/script.js"></script>
 
 </body>
-
 </html>
