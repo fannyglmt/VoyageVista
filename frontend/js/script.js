@@ -611,7 +611,19 @@ function renderDestinationDetail() {
   }
 
   const extra = detailExtras[dest.name];
-
+  if (!extra || !extra.activities) {
+  page.innerHTML = `
+    <section class="detail-content">
+      <div class="detail-main-card">
+        <h2>${dest.name}</h2>
+        <p>Les détails de cette destination arrivent bientôt.</p>
+        <a href="destination.html" class="detail-link">Retour aux destinations</a>
+      </div>
+    </section>
+  `;
+  return;
+}
+const availableActivities = activities.map(item => item.name);
   page.innerHTML = `
     <section class="detail-hero">
 
@@ -676,13 +688,26 @@ function renderDestinationDetail() {
 
         <h2>Activités à ne pas rater</h2>
 
-        ${extra.activities.map(activity => `
-          <div class="activity-line">
-            <span>✨</span>
-            <p>${activity}</p>
-          </div>
-        `).join("")}
+  ${extra.activities.map(activity => {
+  if (availableActivities.includes(activity)) {
+    return `
+      <a
+        class="activity-line clickable-activity"
+        href="activite-detail.html?activite=${encodeURIComponent(activity)}"
+      >
+        <span>✨</span>
+        <p>${activity}</p>
+      </a>
+    `;
+  }
 
+  return `
+    <div class="activity-line">
+      <span>✨</span>
+      <p>${activity}</p>
+    </div>
+  `;
+}).join("")}
       </div>
 
     </section>
@@ -710,7 +735,7 @@ function renderDestinationDetail() {
   `;
 }
 
-renderDestinationDetail();
+
 const activities = [
   {
     name: "Cours de surf",
@@ -1189,47 +1214,40 @@ function renderActivityDetail() {
 </section>
 
 <section class="same-destination-section">
+  <div class="same-destination-header">
+    <h2>À la même destination 🌴</h2>
 
-  <h2>
-    À la même destination 🌴
-  </h2>
+    <div class="same-destination-arrows">
+      <button onclick="document.querySelector('.same-activity-grid').scrollBy({ left: -320, behavior: 'smooth' })">
+        ‹
+      </button>
+      <button onclick="document.querySelector('.same-activity-grid').scrollBy({ left: 320, behavior: 'smooth' })">
+        ›
+      </button>
+    </div>
+  </div>
 
   <div class="same-activity-grid">
-
     ${activities
       .filter(item =>
         item.destination === activity.destination &&
         item.name !== activity.name
       )
-      .slice(0, 3)
       .map(item => `
-
         <a
           href="activite-detail.html?activite=${encodeURIComponent(item.name)}"
           class="same-activity-card"
         >
+          <img src="assets/images/${item.image}" alt="${item.name}">
 
-          <img
-            src="assets/images/${item.image}"
-            alt="${item.name}"
-          >
-
-          <div>
+          <div class="same-activity-content">
             <h3>${item.name}</h3>
-
             <p>${item.vibe}</p>
-
-            <span>
-              ⭐ ${item.rating} • ${item.price}€
-            </span>
+            <span>⭐ ${item.rating} • ${item.price}€</span>
           </div>
-
         </a>
-
       `).join("")}
-
   </div>
-
 </section>
     </section>
 
@@ -1243,7 +1261,7 @@ function renderActivityDetail() {
 
 renderActivitiesFeed();
 renderActivityDetail();
-
+renderDestinationDetail();
 const typeFilter = document.getElementById("typeFilter");
 const budgetFilter = document.getElementById("budgetFilter");
 const ambianceFilter = document.getElementById("ambianceFilter");
