@@ -5,12 +5,12 @@
 
 $servername = "localhost";
 $username   = "root";
-$password   = "";
+$password   = "root";
 $dbname     = "voyagevista";
 
 try {
     $pdo = new PDO(
-        "mysql:host=$servername;dbname=$dbname;charset=utf8mb4",
+        "mysql:host=$servername;port=8889;dbname=$dbname;charset=utf8mb4",
         $username,
         $password,
         [
