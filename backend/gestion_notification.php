@@ -65,97 +65,18 @@ $lues          = $pdo->query("SELECT COUNT(*) FROM notifications WHERE lu=1")->f
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Notifications - VoyageVista</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0a0a0f;--card:#1a1a26;--border:rgba(255,255,255,.07);--purple:#7c5cfc;--pink:#f25ca2;--teal:#2dd4bf;--amber:#fbbf24;--red:#f87171;--green:#4ade80;--text:#f0eeff;--muted:#8b8aa8}
-    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-
-    .navbar{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;background:rgba(10,10,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
-    .brand img{height:32px}
-    .navbar nav{display:flex;gap:.25rem}
-    .navbar nav a{font-size:.85rem;font-weight:500;color:var(--muted);text-decoration:none;padding:.4rem .9rem;border-radius:20px;transition:all .2s}
-    .navbar nav a:hover{color:var(--text);background:rgba(255,255,255,.06)}
-    .navbar nav a.active{color:var(--text);background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.3)}
-    .nav-right{display:flex;align-items:center;gap:1rem}
-    .avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700}
-    .logout{font-size:.8rem;color:var(--muted);text-decoration:none;padding:.35rem .8rem;border:1px solid var(--border);border-radius:20px;transition:all .2s}
-    .logout:hover{color:var(--text)}
-
-    .page-hero{padding:2.5rem 2rem 1.5rem;position:relative;overflow:hidden}
-    .page-hero::before{content:'';position:absolute;top:-60px;right:-80px;width:400px;height:300px;background:radial-gradient(ellipse,rgba(251,191,36,.1) 0%,transparent 70%);pointer-events:none}
-    .tag{font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.15em;color:var(--amber);background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.25);padding:.3rem .8rem;border-radius:20px;display:inline-block;margin-bottom:.75rem}
-    .page-hero h1{font-family:'Syne',sans-serif;font-size:1.9rem;font-weight:800;margin-bottom:.4rem}
-    .page-hero h1 span{background:linear-gradient(90deg,var(--amber),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-    .page-hero p{color:var(--muted);font-size:.9rem}
-    .hero-top{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem}
-
-    .page-body{padding:0 2rem 3rem;max-width:1300px}
-
-    .alert{padding:.9rem 1.2rem;border-radius:10px;font-size:.85rem;margin-bottom:1.5rem;border:1px solid}
-    .alert-success{background:rgba(74,222,128,.1);border-color:rgba(74,222,128,.3);color:#86efac}
-    .alert-error{background:rgba(248,113,113,.1);border-color:rgba(248,113,113,.3);color:#fca5a5}
-
-    .kpi-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;margin-bottom:2rem}
-    .kpi-mini{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.3rem;text-align:center;transition:transform .2s}
-    .kpi-mini:hover{transform:translateY(-2px)}
-    .kpi-mini-val{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;line-height:1;margin-bottom:.3rem}
-    .kpi-mini-label{font-size:.75rem;color:var(--muted)}
-
-    .two-col{display:grid;grid-template-columns:380px 1fr;gap:1.5rem;align-items:start}
-    @media(max-width:900px){.two-col{grid-template-columns:1fr}}
-
-    .form-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;position:sticky;top:80px}
-    .form-head{padding:1.2rem 1.5rem;border-bottom:1px solid var(--border)}
-    .form-head h2{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700}
-    .form-body{padding:1.5rem;display:flex;flex-direction:column;gap:1rem}
-    label{display:flex;flex-direction:column;gap:.4rem;font-size:.8rem;color:var(--muted);font-weight:500}
-    input[type=text],textarea,select.fs{background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:.85rem;padding:.6rem .9rem;border-radius:8px;outline:none;transition:border-color .2s;width:100%}
-    input:focus,textarea:focus,select.fs:focus{border-color:rgba(251,191,36,.5)}
-    input::placeholder,textarea::placeholder{color:var(--muted)}
-    textarea{resize:vertical;min-height:90px}
-    #userSelectDiv{transition:opacity .3s}
-
-    .type-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
-    .type-btn{background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.78rem;padding:.5rem;border-radius:8px;cursor:pointer;transition:all .2s;text-align:center}
-    .type-btn.selected{border-color:rgba(251,191,36,.5);background:rgba(251,191,36,.12);color:var(--amber)}
-    input[name=type]{display:none}
-
-    .btn-submit{background:linear-gradient(135deg,var(--amber),var(--pink));color:#fff;border:none;padding:.7rem 1.4rem;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;transition:opacity .2s;width:100%}
-    .btn-submit:hover{opacity:.88}
-
-    .section-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden}
-    .section-head{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1.5rem;border-bottom:1px solid var(--border)}
-    .section-head h2{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700}
-
-    .notif-row{display:grid;grid-template-columns:10px 1fr auto auto auto;align-items:center;gap:1rem;padding:1rem 1.5rem;border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s}
-    .notif-row:last-child{border-bottom:none}
-    .notif-row:hover{background:rgba(255,255,255,.02)}
-    .notif-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-    .dot-unread{background:var(--amber);box-shadow:0 0 6px rgba(251,191,36,.6)}
-    .dot-read{background:var(--muted)}
-    .notif-msg{font-size:.83rem;line-height:1.4}
-    .notif-to{font-size:.72rem;color:var(--muted);margin-top:.2rem}
-    .notif-date{font-size:.72rem;color:var(--muted);white-space:nowrap}
-
-    .pill{display:inline-block;padding:.18rem .6rem;border-radius:20px;font-size:.7rem;font-weight:600}
-    .pill-info{background:rgba(124,92,252,.15);color:#a78bfa;border:1px solid rgba(124,92,252,.25)}
-    .pill-alerte{background:rgba(248,113,113,.15);color:#fca5a5;border:1px solid rgba(248,113,113,.25)}
-    .pill-reservation{background:rgba(45,212,191,.15);color:#5eead4;border:1px solid rgba(45,212,191,.25)}
-    .pill-promotion{background:rgba(251,191,36,.15);color:#fcd34d;border:1px solid rgba(251,191,36,.25)}
-
-    .btn-del{background:transparent;border:1px solid rgba(248,113,113,.25);color:var(--red);font-family:'DM Sans',sans-serif;font-size:.72rem;padding:.25rem .6rem;border-radius:6px;cursor:pointer;transition:all .2s;white-space:nowrap}
-    .btn-del:hover{background:rgba(248,113,113,.1)}
-
-    .empty-state{padding:3rem;text-align:center;color:var(--muted);font-size:.9rem}
-    footer{text-align:center;padding:2rem;color:var(--muted);font-size:.78rem;border-top:1px solid var(--border);margin-top:2rem}
-  </style>
+  <link rel="stylesheet" href="admin_style.css">
 </head>
 <body>
 
 <header class="navbar">
-  <div class="brand"><img src="../frontend/assets/images/logo-voyagevista.png" alt="VoyageVista"></div>
+
+  <div class="brand">
+    <img src="../frontend/assets/images/logo-voyagevista.png" alt="Logo VoyageVista">
+  </div>
+
   <nav>
     <a href="dashboard_admin.php">Dashboard</a>
     <a href="gestion_utilisateur.php">Utilisateurs</a>
@@ -163,10 +84,13 @@ $lues          = $pdo->query("SELECT COUNT(*) FROM notifications WHERE lu=1")->f
     <a href="gestion_notification.php" class="active">Notifications</a>
     <a href="statistiques.php">Stats</a>
   </nav>
-  <div class="nav-right">
-    <div class="avatar"><?php echo strtoupper(substr($_SESSION['username']??'AD',0,2));?></div>
-    <a href="logout.php" class="logout">Déconnexion</a>
+
+  <div class="nav-icons">
+    <span class="heart-icon">♥</span>
+    <span>🔔</span>
+    <a href="logout.php">👤</a>
   </div>
+
 </header>
 
 <section class="page-hero">
@@ -186,7 +110,7 @@ $lues          = $pdo->query("SELECT COUNT(*) FROM notifications WHERE lu=1")->f
 
   <div class="kpi-row">
     <div class="kpi-mini">
-      <div class="kpi-mini-val" style="color:var(--text)"><?php echo (int)$total_notifs;?></div>
+      <div class="kpi-mini-val" style="color:#1a1a2e"><?php echo (int)$total_notifs;?></div>
       <div class="kpi-mini-label">Total envoyées</div>
     </div>
     <div class="kpi-mini">

@@ -57,91 +57,18 @@ $total_count = array_sum($counts);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Utilisateurs - VoyageVista</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0a0a0f;--card:#1a1a26;--border:rgba(255,255,255,.07);--purple:#7c5cfc;--pink:#f25ca2;--teal:#2dd4bf;--amber:#fbbf24;--red:#f87171;--green:#4ade80;--text:#f0eeff;--muted:#8b8aa8}
-    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-
-    .navbar{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;background:rgba(10,10,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
-    .brand img{height:32px}
-    .navbar nav{display:flex;gap:.25rem}
-    .navbar nav a{font-size:.85rem;font-weight:500;color:var(--muted);text-decoration:none;padding:.4rem .9rem;border-radius:20px;transition:all .2s}
-    .navbar nav a:hover{color:var(--text);background:rgba(255,255,255,.06)}
-    .navbar nav a.active{color:var(--text);background:rgba(124,92,252,.15);border:1px solid rgba(124,92,252,.3)}
-    .nav-right{display:flex;align-items:center;gap:1rem}
-    .avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700}
-    .logout{font-size:.8rem;color:var(--muted);text-decoration:none;padding:.35rem .8rem;border:1px solid var(--border);border-radius:20px;transition:all .2s}
-    .logout:hover{color:var(--text)}
-
-    .page-hero{padding:2.5rem 2rem 1.5rem;position:relative;overflow:hidden}
-    .page-hero::before{content:'';position:absolute;top:-60px;left:-80px;width:400px;height:300px;background:radial-gradient(ellipse,rgba(124,92,252,.12) 0%,transparent 70%);pointer-events:none}
-    .tag{font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.15em;color:var(--purple);background:rgba(124,92,252,.15);border:1px solid rgba(124,92,252,.25);padding:.3rem .8rem;border-radius:20px;display:inline-block;margin-bottom:.75rem}
-    .page-hero h1{font-family:'Syne',sans-serif;font-size:1.9rem;font-weight:800;margin-bottom:.4rem}
-    .page-hero h1 span{background:linear-gradient(90deg,var(--purple),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-    .page-hero p{color:var(--muted);font-size:.9rem}
-    .hero-top{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem}
-
-    .page-body{padding:0 2rem 3rem;max-width:1300px}
-
-    .alert{padding:.9rem 1.2rem;border-radius:10px;font-size:.85rem;margin-bottom:1.5rem;border:1px solid}
-    .alert-success{background:rgba(74,222,128,.1);border-color:rgba(74,222,128,.3);color:#86efac}
-    .alert-error{background:rgba(248,113,113,.1);border-color:rgba(248,113,113,.3);color:#fca5a5}
-
-    .kpi-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1rem;margin-bottom:1.5rem}
-    .kpi-mini{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.3rem;text-align:center;transition:transform .2s}
-    .kpi-mini:hover{transform:translateY(-2px)}
-    .kpi-mini-val{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;line-height:1;margin-bottom:.3rem}
-    .kpi-mini-label{font-size:.75rem;color:var(--muted)}
-
-    .toolbar{display:flex;gap:1rem;flex-wrap:wrap;align-items:center;margin-bottom:1.5rem}
-    .search-wrap{position:relative;flex:1;min-width:200px}
-    .search-wrap input{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:.85rem;padding:.6rem 1rem .6rem 2.4rem;border-radius:10px;outline:none;transition:border-color .2s}
-    .search-wrap input:focus{border-color:rgba(124,92,252,.5)}
-    .search-wrap input::placeholder{color:var(--muted)}
-    .search-icon{position:absolute;left:.75rem;top:50%;transform:translateY(-50%);font-size:.9rem;pointer-events:none}
-    .filter-select{background:var(--card);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:.83rem;padding:.6rem 1rem;border-radius:10px;outline:none;cursor:pointer}
-    .btn-search{background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;border:none;padding:.6rem 1.2rem;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.83rem;font-weight:500;cursor:pointer;transition:opacity .2s}
-    .btn-search:hover{opacity:.88}
-
-    .result-count{font-size:.8rem;color:var(--muted);margin-bottom:1rem}
-
-    .section-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden}
-    .data-table{width:100%;border-collapse:collapse}
-    .data-table th{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:.75rem 1.5rem;text-align:left;border-bottom:1px solid var(--border)}
-    .data-table td{padding:.9rem 1.5rem;font-size:.85rem;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:middle}
-    .data-table tr:last-child td{border-bottom:none}
-    .data-table tr:hover td{background:rgba(255,255,255,.02)}
-
-    .user-cell{display:flex;align-items:center;gap:.75rem}
-    .user-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0}
-    .user-name{font-weight:500;font-size:.85rem}
-    .user-email{font-size:.73rem;color:var(--muted)}
-
-    .pill{display:inline-block;padding:.2rem .65rem;border-radius:20px;font-size:.72rem;font-weight:600}
-    .pill-purple{background:rgba(124,92,252,.15);color:#a78bfa;border:1px solid rgba(124,92,252,.25)}
-    .pill-pink{background:rgba(242,92,162,.15);color:#f9a8d4;border:1px solid rgba(242,92,162,.25)}
-    .pill-teal{background:rgba(45,212,191,.15);color:#5eead4;border:1px solid rgba(45,212,191,.25)}
-    .pill-green{background:rgba(74,222,128,.15);color:#86efac;border:1px solid rgba(74,222,128,.25)}
-    .pill-red{background:rgba(248,113,113,.15);color:#fca5a5;border:1px solid rgba(248,113,113,.25)}
-
-    .role-select{background:transparent;border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:.78rem;padding:.3rem .6rem;border-radius:8px;cursor:pointer;outline:none;transition:border-color .2s}
-    .role-select:hover{border-color:rgba(255,255,255,.2)}
-
-    .btn-delete{background:transparent;border:1px solid rgba(248,113,113,.3);color:var(--red);font-family:'DM Sans',sans-serif;font-size:.75rem;padding:.3rem .7rem;border-radius:8px;cursor:pointer;transition:all .2s}
-    .btn-delete:hover{background:rgba(248,113,113,.1)}
-
-    .self-label{font-size:.75rem;color:var(--muted);font-style:italic}
-    .empty-state{padding:3rem;text-align:center;color:var(--muted);font-size:.9rem}
-
-    footer{text-align:center;padding:2rem;color:var(--muted);font-size:.78rem;border-top:1px solid var(--border);margin-top:2rem}
-  </style>
+  <link rel="stylesheet" href="admin_style.css">
 </head>
 <body>
 
 <header class="navbar">
-  <div class="brand"><img src="../frontend/assets/images/logo-voyagevista.png" alt="VoyageVista"></div>
+
+  <div class="brand">
+    <img src="../frontend/assets/images/logo-voyagevista.png" alt="Logo VoyageVista">
+  </div>
+
   <nav>
     <a href="dashboard_admin.php">Dashboard</a>
     <a href="gestion_utilisateur.php" class="active">Utilisateurs</a>
@@ -149,10 +76,13 @@ $total_count = array_sum($counts);
     <a href="gestion_signalement.php">Signalements</a>
     <a href="statistiques.php">Stats</a>
   </nav>
-  <div class="nav-right">
-    <div class="avatar"><?php echo strtoupper(substr($_SESSION['username']??'AD',0,2));?></div>
-    <a href="logout.php" class="logout">Déconnexion</a>
+
+  <div class="nav-icons">
+    <span class="heart-icon">♥</span>
+    <span>🔔</span>
+    <a href="logout.php">👤</a>
   </div>
+
 </header>
 
 <section class="page-hero">
@@ -172,7 +102,7 @@ $total_count = array_sum($counts);
 
   <div class="kpi-row">
     <div class="kpi-mini">
-      <div class="kpi-mini-val" style="color:var(--text)"><?php echo $total_count;?></div>
+      <div class="kpi-mini-val" style="color:#1a1a2e"><?php echo $total_count;?></div>
       <div class="kpi-mini-label">Total</div>
     </div>
     <div class="kpi-mini">
@@ -239,7 +169,7 @@ $total_count = array_sum($counts);
               <button type="submit" name="change_role" style="display:none"></button>
             </form>
           </td>
-          <td style="color:var(--muted);font-size:.8rem"><?php echo substr($u['date_inscription'],0,10);?></td>
+          <td style="color:#6b7280;font-size:.8rem"><?php echo substr($u['date_inscription'],0,10);?></td>
           <td><span class="pill <?php echo isset($u['est_actif'])&&$u['est_actif']?'pill-green':'pill-red';?>"><?php echo isset($u['est_actif'])&&$u['est_actif']?'Actif':'Banni';?></span></td>
           <td>
             <?php if(!$isSelf):?>
