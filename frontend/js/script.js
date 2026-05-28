@@ -1426,7 +1426,211 @@ const hebergementsData = {
       "Terrasse sunset",
       "Cuisine équipée"
     ]
-  }
+  },
+
+  "Ibiza Sunset Hotel": {
+  image: "hotel4.jpg",
+  type: "Hotel",
+  price: "300€ / nuit",
+  rating: "4.6",
+  location: "Ibiza",
+  description:
+    "Hôtel avec rooftop et vue incroyable sur les sunsets d’Ibiza.",
+
+  services: [
+    "Rooftop sunset",
+    "Piscine extérieure",
+    "Petit-déjeuner inclus",
+    "Vue mer"
+  ]
+},
+
+"Tokyo Luxury Hotel": {
+  image: "hotel5.jpg",
+  type: "Hotel",
+  price: "500€ / nuit",
+  rating: "4.9",
+  location: "Tokyo",
+  description:
+    "Hôtel design premium au cœur de Tokyo avec vue panoramique sur la ville.",
+
+  services: [
+    "Vue panoramique",
+    "Spa premium",
+    "Salle de sport",
+    "Room service"
+  ]
+},
+
+"Marrakech Luxury Hotel": {
+  image: "hotel6.jpg",
+  type: "Hotel",
+  price: "280€ / nuit",
+  rating: "4.9",
+  location: "Marrakech",
+  description:
+    "Hôtel luxueux avec piscine et spa au cœur de Marrakech.",
+
+  services: [
+    "Spa oriental",
+    "Piscine privée",
+    "Restaurant marocain",
+    "Terrasse rooftop"
+  ]
+},
+
+"Ibiza Villa": {
+  image: "ibizavilla.jpg",
+  type: "Villa",
+  price: "320€ / nuit",
+  rating: "4.9",
+  location: "Ibiza",
+  description:
+    "Villa avec piscine privée et vue mer parfaite pour les groupes.",
+
+  services: [
+    "Piscine privée",
+    "Vue mer",
+    "Cuisine équipée",
+    "Terrasse lounge"
+  ]
+},
+
+"Tokyo Forest Location": {
+  image: "tokyoloc.jpg",
+  type: "Location",
+  price: "420€ / nuit",
+  rating: "4.7",
+  location: "Tokyo",
+  description:
+    "Location moderne au cœur d’une forêt urbaine à Tokyo.",
+
+  services: [
+    "Vue forêt",
+    "Wi-Fi premium",
+    "Cuisine moderne",
+    "Espace détente"
+  ]
+},
+
+"Marrakech Luxury Villa": {
+  image: "villamarrakech.jpg",
+  type: "Villa",
+  price: "280€ / nuit",
+  rating: "4.9",
+  location: "Marrakech",
+  description:
+    "Villa luxueuse avec piscine privée et jardin tropical.",
+
+  services: [
+    "Piscine privée",
+    "Jardin luxuriant",
+    "Suite premium",
+    "Terrasse extérieure"
+  ]
+},
+
+"Costa Rica Luxury Hotel": {
+  image: "hotel7.jpg",
+  type: "Hotel",
+  price: "450€ / nuit",
+  rating: "5.0",
+  location: "Costa Rica",
+  description:
+    "Hôtel premium avec accès direct à la plage et ambiance tropicale.",
+
+  services: [
+    "Accès plage",
+    "Piscine infinity",
+    "Spa tropical",
+    "Petit-déjeuner inclus"
+  ]
+},
+
+"Barcelona City Hotel": {
+  image: "hotel8.jpg",
+  type: "Hotel",
+  price: "500€ / nuit",
+  rating: "4.8",
+  location: "Barcelone",
+  description:
+    "Hôtel moderne au cœur de Barcelone avec rooftop et vue ville.",
+
+  services: [
+    "Rooftop",
+    "Vue ville",
+    "Salle fitness",
+    "Petit-déjeuner inclus"
+  ]
+},
+
+"Chamonix Alpine Lodge": {
+  image: "hotel9.jpg",
+  type: "Hotel",
+  price: "550€ / nuit",
+  rating: "5.0",
+  location: "Chamonix",
+  description:
+    "Lodge alpin avec vue montagne et accès direct aux pistes.",
+
+  services: [
+    "Vue montagne",
+    "Accès ski",
+    "Spa montagne",
+    "Chambres premium"
+  ]
+},
+
+"Costa Rica Luxury Villa": {
+  image: "villacosta.jpg",
+  type: "Villa",
+  price: "480€ / nuit",
+  rating: "4.8",
+  location: "Costa Rica",
+  description:
+    "Villa tropicale avec piscine privée et accès plage.",
+
+  services: [
+    "Piscine privée",
+    "Accès plage",
+    "Jardin tropical",
+    "Cuisine équipée"
+  ]
+},
+
+"Barcelone Luxury Villa": {
+  image: "barcelonevilla.jpg",
+  type: "Villa",
+  price: "600€ / nuit",
+  rating: "4.8",
+  location: "Barcelone",
+  description:
+    "Villa moderne avec piscine privée au cœur de Barcelone.",
+
+  services: [
+    "Piscine privée",
+    "Terrasse rooftop",
+    "Cuisine design",
+    "Suite premium"
+  ]
+},
+
+"Chamonix Alpine Loft": {
+  image: "loftchamonix.jpg",
+  type: "Loft",
+  price: "550€ / nuit",
+  rating: "5.0",
+  location: "Chamonix",
+  description:
+    "Loft design avec rooftop et vue incroyable sur les montagnes.",
+
+  services: [
+    "Vue montagne",
+    "Rooftop",
+    "Cheminée moderne",
+    "Accès pistes"
+  ]
+}
 
 };
 
