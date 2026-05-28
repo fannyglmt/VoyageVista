@@ -68,37 +68,37 @@ $top_prestataires = $pdo->query("SELECT u.username, COUNT(s.id) AS nb_services, 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0a0a0f;--card:#1a1a26;--border:rgba(255,255,255,.07);--purple:#7c5cfc;--pink:#f25ca2;--teal:#2dd4bf;--amber:#fbbf24;--red:#f87171;--green:#4ade80;--text:#f0eeff;--muted:#8b8aa8}
-    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+    :root{--bg:#ffffff;--card:#ffffff;--border:rgba(255,255,255,.07);--purple:#7c5cfc;--pink:#f25ca2;--teal:#2dd4bf;--amber:#fbbf24;--red:#f87171;--green:#4ade80;--text:#1a1a2e;--muted:#6b7280}
+    body{font-family:'DM Sans',sans-serif;background:#fff;color:#1a1a2e;min-height:100vh}
 
-    .navbar{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;background:rgba(10,10,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+    .navbar{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
     .brand img{height:32px}
     .navbar nav{display:flex;gap:.25rem}
-    .navbar nav a{font-size:.85rem;font-weight:500;color:var(--muted);text-decoration:none;padding:.4rem .9rem;border-radius:20px;transition:all .2s}
-    .navbar nav a:hover{color:var(--text);background:rgba(255,255,255,.06)}
-    .navbar nav a.active{color:var(--text);background:rgba(124,92,252,.15);border:1px solid rgba(124,92,252,.3)}
+    .navbar nav a{font-size:.85rem;font-weight:500;color:#4a9fd4;text-decoration:none;padding:.4rem .9rem;border-radius:20px;transition:all .2s}
+    .navbar nav a:hover{color:#2d7db3;background:#f0f7ff}
+    .navbar nav a.active{color:#f59e0b;background:transparent;font-weight:600}
     .nav-right{display:flex;align-items:center;gap:1rem}
     .avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700}
-    .logout{font-size:.8rem;color:var(--muted);text-decoration:none;padding:.35rem .8rem;border:1px solid var(--border);border-radius:20px;transition:all .2s}
-    .logout:hover{color:var(--text)}
+    .logout{font-size:.8rem;color:#6b7280;text-decoration:none;padding:.35rem .8rem;border:1px solid #e5e7eb;border-radius:20px;transition:all .2s}
+    .logout:hover{color:#1a1a2e}
 
     .page-hero{padding:2.5rem 2rem 1.5rem;position:relative;overflow:hidden}
     .page-hero::before{content:'';position:absolute;top:-60px;right:-80px;width:400px;height:300px;background:radial-gradient(ellipse,rgba(74,222,128,.1) 0%,transparent 70%);pointer-events:none}
-    .tag{font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.15em;color:var(--green);background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.25);padding:.3rem .8rem;border-radius:20px;display:inline-block;margin-bottom:.75rem}
-    .page-hero h1{font-family:'Syne',sans-serif;font-size:1.9rem;font-weight:800;margin-bottom:.4rem}
-    .page-hero h1 span{background:linear-gradient(90deg,var(--green),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-    .page-hero p{color:var(--muted);font-size:.9rem}
+    .tag{display:inline-block;font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.15em;color:#f59e0b;background:none;border:none;padding:0;margin-bottom:.9rem}
+    .page-hero h1{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:#3b6fd4;margin-bottom:.5rem;line-height:1.2}
+    .page-hero h1 span{color:#3b6fd4}
+    .page-hero p{color:#6b7280;font-size:.9rem}
     .hero-top{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem}
 
     .periode-filter{display:flex;gap:.5rem;flex-wrap:wrap;align-self:center}
-    .periode-filter a{font-size:.82rem;font-weight:500;padding:.4rem .9rem;border-radius:20px;text-decoration:none;color:var(--muted);border:1px solid var(--border);transition:all .2s}
-    .periode-filter a:hover{color:var(--text);border-color:rgba(255,255,255,.2)}
-    .periode-filter a.active{color:var(--text);background:rgba(74,222,128,.15);border-color:rgba(74,222,128,.3)}
+    .periode-filter a{font-size:.82rem;font-weight:500;padding:.4rem .9rem;border-radius:20px;text-decoration:none;color:#6b7280;border:1px solid #e5e7eb;transition:all .2s}
+    .periode-filter a:hover{color:#1a1a2e;border-color:rgba(255,255,255,.2)}
+    .periode-filter a.active{color:#1a1a2e;background:rgba(74,222,128,.15);border-color:rgba(74,222,128,.3)}
 
     .page-body{padding:0 2rem 3rem;max-width:1400px}
 
     .kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-bottom:2rem}
-    .kpi-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.4rem 1.6rem;position:relative;overflow:hidden;transition:transform .2s}
+    .kpi-card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:1.4rem 1.6rem;position:relative;overflow:hidden;transition:transform .2s}
     .kpi-card:hover{transform:translateY(-3px)}
     .kpi-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:16px 16px 0 0}
     .kpi-card.purple::after{background:linear-gradient(90deg,var(--purple),var(--pink))}
@@ -113,24 +113,24 @@ $top_prestataires = $pdo->query("SELECT u.username, COUNT(s.id) AS nb_services, 
     .kpi-card.amber  .kpi-value{color:var(--amber)}
     .kpi-card.red    .kpi-value{color:var(--red)}
     .kpi-card.green  .kpi-value{color:var(--green)}
-    .kpi-label{font-size:.8rem;color:var(--muted);margin-bottom:.5rem}
-    .kpi-sub{font-size:.75rem;color:var(--muted)}
+    .kpi-label{font-size:.8rem;color:#6b7280;margin-bottom:.5rem}
+    .kpi-sub{font-size:.75rem;color:#6b7280}
     .kpi-sub.up{color:var(--green)}
     .kpi-sub.bad{color:var(--red)}
 
     .charts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(520px,1fr));gap:1.5rem;margin-bottom:2rem}
     @media(max-width:700px){.charts-grid{grid-template-columns:1fr}}
-    .chart-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem}
-    .chart-card h3{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;margin-bottom:1.2rem;color:var(--text)}
+    .chart-card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:1.5rem}
+    .chart-card h3{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;margin-bottom:1.2rem;color:#1a1a2e}
     .chart-card canvas{max-height:260px}
     .chart-card.full{grid-column:1/-1}
 
-    .section-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:1.5rem}
+    .section-card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;margin-bottom:1.5rem}
     .section-head{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1.5rem;border-bottom:1px solid var(--border)}
     .section-head h2{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700}
 
     .data-table{width:100%;border-collapse:collapse}
-    .data-table th{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:.75rem 1.5rem;text-align:left;border-bottom:1px solid var(--border)}
+    .data-table th{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;padding:.75rem 1.5rem;text-align:left;border-bottom:1px solid var(--border)}
     .data-table td{padding:.85rem 1.5rem;font-size:.83rem;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:middle}
     .data-table tr:last-child td{border-bottom:none}
     .data-table tr:hover td{background:rgba(255,255,255,.02)}
@@ -142,23 +142,30 @@ $top_prestataires = $pdo->query("SELECT u.username, COUNT(s.id) AS nb_services, 
     .pill-purple{background:rgba(124,92,252,.15);color:#a78bfa;border:1px solid rgba(124,92,252,.25)}
     .pill-teal{background:rgba(45,212,191,.15);color:#5eead4;border:1px solid rgba(45,212,191,.25)}
 
-    footer{text-align:center;padding:2rem;color:var(--muted);font-size:.78rem;border-top:1px solid var(--border);margin-top:2rem}
+    footer{text-align:center;padding:2rem;color:#6b7280;font-size:.78rem;border-top:1px solid var(--border);margin-top:2rem}
   </style>
 </head>
 <body>
 
 <header class="navbar">
-  <div class="brand"><img src="../frontend/assets/images/logo-voyagevista.png" alt="VoyageVista"></div>
+
+  <div class="brand">
+    <img src="../frontend/assets/images/logo-voyagevista.png" alt="Logo VoyageVista">
+  </div>
+
   <nav>
     <a href="dashboard_admin.php">Dashboard</a>
     <a href="gestion_utilisateur.php">Utilisateurs</a>
     <a href="gestion_signalement.php">Signalements</a>
     <a href="statistiques.php" class="active">Stats</a>
   </nav>
-  <div class="nav-right">
-    <div class="avatar"><?php echo strtoupper(substr($_SESSION['username']??'AD',0,2));?></div>
-    <a href="logout.php" class="logout">Déconnexion</a>
+
+  <div class="nav-icons">
+    <span class="heart-icon">♥</span>
+    <span>🔔</span>
+    <a href="logout.php">👤</a>
   </div>
+
 </header>
 
 <section class="page-hero">
@@ -247,15 +254,15 @@ $top_prestataires = $pdo->query("SELECT u.username, COUNT(s.id) AS nb_services, 
       <thead><tr><th>#</th><th>Utilisateur</th><th>Destination</th><th>Dates</th><th>Voyageurs</th><th>Prix</th><th>Statut</th></tr></thead>
       <tbody>
         <?php if(empty($dernieres_resa)):?>
-        <tr><td colspan="7" style="text-align:center;color:var(--muted);padding:2rem">Aucune réservation.</td></tr>
+        <tr><td colspan="7" style="text-align:center;color:#6b7280;padding:2rem">Aucune réservation.</td></tr>
         <?php else: foreach($dernieres_resa as $r):
           $sc=['confirmee'=>'pill-green','en_attente'=>'pill-amber','annulee'=>'pill-red','terminee'=>'pill-purple'];
           $sc2=$sc[$r['statut']]??'pill-amber';?>
         <tr>
-          <td style="color:var(--muted)">#<?php echo (int)$r['id'];?></td>
+          <td style="color:#6b7280">#<?php echo (int)$r['id'];?></td>
           <td style="font-weight:500"><?php echo htmlspecialchars($r['username']);?></td>
           <td><?php echo htmlspecialchars($r['destination']);?></td>
-          <td style="color:var(--muted);font-size:.78rem"><?php echo htmlspecialchars($r['date_debut']);?> → <?php echo htmlspecialchars($r['date_fin']);?></td>
+          <td style="color:#6b7280;font-size:.78rem"><?php echo htmlspecialchars($r['date_debut']);?> → <?php echo htmlspecialchars($r['date_fin']);?></td>
           <td style="text-align:center"><?php echo (int)$r['nb_voyageurs'];?></td>
           <td style="font-family:'Syne',sans-serif;font-weight:700;color:var(--green)"><?php echo number_format((float)$r['prix_total'],0,',',' ');?>€</td>
           <td><span class="pill <?php echo $sc2;?>"><?php echo htmlspecialchars($r['statut']);?></span></td>
@@ -271,7 +278,7 @@ $top_prestataires = $pdo->query("SELECT u.username, COUNT(s.id) AS nb_services, 
       <thead><tr><th>Prestataire</th><th>Services</th><th>Réservations</th><th>CA généré</th></tr></thead>
       <tbody>
         <?php if(empty($top_prestataires)):?>
-        <tr><td colspan="4" style="text-align:center;color:var(--muted);padding:2rem">Aucun prestataire.</td></tr>
+        <tr><td colspan="4" style="text-align:center;color:#6b7280;padding:2rem">Aucun prestataire.</td></tr>
         <?php else: foreach($top_prestataires as $p):?>
         <tr>
           <td style="font-weight:500"><?php echo htmlspecialchars($p['username']);?></td>
@@ -291,7 +298,7 @@ $top_prestataires = $pdo->query("SELECT u.username, COUNT(s.id) AS nb_services, 
 <script>
 const palette=['#7c5cfc','#2dd4bf','#fbbf24','#f87171','#4ade80','#f25ca2','#818cf8','#34d399'];
 const gridColor='rgba(255,255,255,0.06)';
-const textColor='#8b8aa8';
+const textColor='#6b7280';
 const defaults={color:textColor,font:{family:"'DM Sans',sans-serif",size:11}};
 Chart.defaults.color=textColor;
 Chart.defaults.font.family="'DM Sans',sans-serif";
@@ -300,13 +307,13 @@ new Chart(document.getElementById('chartResas'),{data:{labels:<?php echo json_en
 
 new Chart(document.getElementById('chartUsers'),{type:'line',data:{labels:<?php echo json_encode($labels_users);?>,datasets:[{label:'Inscriptions',data:<?php echo json_encode($data_users);?>,borderColor:'#f25ca2',backgroundColor:'rgba(242,92,162,.08)',fill:true,tension:.4,pointRadius:4}]},options:{responsive:true,scales:{y:{beginAtZero:true,grid:{color:gridColor},ticks:{color:textColor}},x:{grid:{color:gridColor},ticks:{color:textColor}}},plugins:{legend:{labels:{color:textColor}}}}});
 
-new Chart(document.getElementById('chartStatuts'),{type:'doughnut',data:{labels:<?php echo json_encode($labels_statuts);?>,datasets:[{data:<?php echo json_encode($data_statuts);?>,backgroundColor:palette,borderColor:'#1a1a26',borderWidth:3}]},options:{responsive:true,plugins:{legend:{position:'right',labels:{color:textColor}}}}});
+new Chart(document.getElementById('chartStatuts'),{type:'doughnut',data:{labels:<?php echo json_encode($labels_statuts);?>,datasets:[{data:<?php echo json_encode($data_statuts);?>,backgroundColor:palette,borderColor:'#ffffff',borderWidth:3}]},options:{responsive:true,plugins:{legend:{position:'right',labels:{color:textColor}}}}});
 
 new Chart(document.getElementById('chartDest'),{type:'bar',data:{labels:<?php echo json_encode($labels_dest);?>,datasets:[{label:'Réservations',data:<?php echo json_encode($data_dest);?>,backgroundColor:palette}]},options:{responsive:true,indexAxis:'y',scales:{x:{beginAtZero:true,grid:{color:gridColor},ticks:{color:textColor}},y:{grid:{color:gridColor},ticks:{color:textColor}}},plugins:{legend:{display:false}}}});
 
-new Chart(document.getElementById('chartRegions'),{type:'pie',data:{labels:<?php echo json_encode($labels_regions);?>,datasets:[{data:<?php echo json_encode($data_regions);?>,backgroundColor:palette,borderColor:'#1a1a26',borderWidth:3}]},options:{responsive:true,plugins:{legend:{position:'right',labels:{color:textColor}}}}});
+new Chart(document.getElementById('chartRegions'),{type:'pie',data:{labels:<?php echo json_encode($labels_regions);?>,datasets:[{data:<?php echo json_encode($data_regions);?>,backgroundColor:palette,borderColor:'#ffffff',borderWidth:3}]},options:{responsive:true,plugins:{legend:{position:'right',labels:{color:textColor}}}}});
 
-new Chart(document.getElementById('chartRoles'),{type:'doughnut',data:{labels:<?php echo json_encode($labels_roles);?>,datasets:[{data:<?php echo json_encode($data_roles);?>,backgroundColor:['#7c5cfc','#2dd4bf','#fbbf24'],borderColor:'#1a1a26',borderWidth:3}]},options:{responsive:true,plugins:{legend:{position:'right',labels:{color:textColor}}}}});
+new Chart(document.getElementById('chartRoles'),{type:'doughnut',data:{labels:<?php echo json_encode($labels_roles);?>,datasets:[{data:<?php echo json_encode($data_roles);?>,backgroundColor:['#7c5cfc','#2dd4bf','#fbbf24'],borderColor:'#ffffff',borderWidth:3}]},options:{responsive:true,plugins:{legend:{position:'right',labels:{color:textColor}}}}});
 </script>
 </body>
 </html>
