@@ -295,3 +295,31 @@
   }
 
 }
+.hidden-card {
+  display: none;
+}
+
+.show-more-container {
+  display: flex;
+  justify-content: center;
+  margin: 50px 0 80px;
+}
+
+#showMoreBtn {
+  padding: 16px 38px;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+
+  background: linear-gradient(135deg,#79a9df,#f3b27d);
+
+  color: white;
+  font-size: 17px;
+  font-weight: 700;
+
+  transition: 0.3s;
+}
+
+#showMoreBtn:hover {
+  transform: translateY(-5px);
+}

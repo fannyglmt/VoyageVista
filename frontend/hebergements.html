@@ -57,9 +57,10 @@
     <div class="hebergement-search">
 
       <input
-        type="text"
-        placeholder="Rechercher un hébergement..."
-      >
+  type="text"
+  id="hebergementSearch"
+  placeholder="Rechercher un hébergement..."
+>
 
       <button>
         🔎
@@ -79,28 +80,28 @@
 
     <div class="filters-grid">
 
-      <select>
+      <select id="typeFilter">
         <option>Tous les types</option>
         <option>Villa</option>
-        <option>Hôtel</option>
+        <option>Hotel</option>
         <option>Resort</option>
       </select>
 
-      <select>
+      <select id="budgetFilter">
         <option>Tous les budgets</option>
         <option>€</option>
         <option>€€</option>
         <option>€€€</option>
       </select>
 
-      <select>
+      <select id="ambianceFilter">
         <option>Ambiance</option>
         <option>Tropicale</option>
         <option>Romantique</option>
         <option>Luxury</option>
       </select>
 
-      <select>
+      <select id="voyageurFilter">
         <option>Voyageurs</option>
         <option>2-4 personnes</option>
         <option>5-8 personnes</option>
@@ -113,7 +114,7 @@
 
   <!-- GRID -->
 
-  <section class="hebergement-grid">
+  <section class="hebergement-grid" id="hebergementGrid">
 
     <!-- CARD -->
 
@@ -134,7 +135,7 @@
         <div class="card-top">
 
           <span class="type">
-            Resort Luxe
+            Resort
           </span>
 
           <span class="rating">
@@ -188,7 +189,7 @@
         <div class="card-top">
 
           <span class="type">
-            Villa Premium
+            Hotel
           </span>
 
           <span class="rating">
@@ -241,7 +242,7 @@
         <div class="card-top">
 
           <span class="type">
-            Hôtel Design
+            Hotel
           </span>
 
           <span class="rating">
@@ -294,7 +295,7 @@
         <div class="card-top">
 
           <span class="type">
-            Villa Chill
+            Villa
           </span>
 
           <span class="rating">
@@ -348,7 +349,7 @@
         <div class="card-top">
 
           <span class="type">
-            Villa de Luxe Maldives
+            Villa
           </span>
 
           <span class="rating">
@@ -439,7 +440,7 @@
 
     <!-- CARD -->
 
-    <div class="hebergement-card">
+    <div class="hebergement-card hidden-card">
 
       <div class="card-image">
 
@@ -456,7 +457,7 @@
         <div class="card-top">
 
           <span class="type">
-            Hôtel Ibiza
+            Hotel
           </span>
 
           <span class="rating">
@@ -493,7 +494,7 @@
 
     <!-- CARD -->
 
-    <div class="hebergement-card">
+    <div class="hebergement-card hidden-card">
 
       <div class="card-image">
 
@@ -510,7 +511,7 @@
         <div class="card-top">
 
           <span class="type">
-            Hôtel de Luxe
+            Hotel
           </span>
 
           <span class="rating">
@@ -547,7 +548,7 @@
 
     <!-- CARD -->
 
-    <div class="hebergement-card">
+    <div class="hebergement-card hidden-card">
 
       <div class="card-image">
 
@@ -564,7 +565,7 @@
         <div class="card-top">
 
           <span class="type">
-            Hôtel de Luxe
+            Hotel
           </span>
 
           <span class="rating">
@@ -601,7 +602,7 @@
 
     <!-- CARD -->
 
-    <div class="hebergement-card">
+    <div class="hebergement-card hidden-card">
 
       <div class="card-image">
 
@@ -618,7 +619,7 @@
         <div class="card-top">
 
           <span class="type">
-            Villa Premium
+            Villa
           </span>
 
           <span class="rating">
@@ -655,7 +656,7 @@
 
     <!-- CARD -->
 
-    <div class="hebergement-card">
+    <div class="hebergement-card hidden-card">
 
       <div class="card-image">
 
@@ -709,7 +710,7 @@
 
     <!-- CARD -->
 
-    <div class="hebergement-card">
+    <div class="hebergement-card hidden-card">
 
       <div class="card-image">
 
@@ -726,7 +727,7 @@
         <div class="card-top">
 
           <span class="type">
-            Villa Premium
+            Villa
           </span>
 
           <span class="rating">
@@ -762,7 +763,7 @@
 
     <!-- CARD -->
 
-    <div class="hebergement-card">
+    <div class="hebergement-card hidden-card">
 
       <div class="card-image">
 
@@ -779,7 +780,7 @@
         <div class="card-top">
 
           <span class="type">
-            Hôtel Costa Rica
+            Hotel
           </span>
 
           <span class="rating">
@@ -816,7 +817,7 @@
 
     <!-- CARD -->
 
-    <div class="hebergement-card">
+    <div class="hebergement-card hidden-card">
 
       <div class="card-image">
 
@@ -833,7 +834,7 @@
         <div class="card-top">
 
           <span class="type">
-            Hôtel Barcelone
+            Hotel
           </span>
 
           <span class="rating">
@@ -869,7 +870,7 @@
     </div>
     <!-- CARD -->
 
-    <div class="hebergement-card">
+    <div class="hebergement-card hidden-card">
 
       <div class="card-image">
 
@@ -886,7 +887,7 @@
         <div class="card-top">
 
           <span class="type">
-            Hôtel Chamonix
+            Hotel
           </span>
 
           <span class="rating">
@@ -923,7 +924,7 @@
 
     <!-- CARD -->
 
-    <div class="hebergement-card">
+    <div class="hebergement-card hidden-card">
 
       <div class="card-image">
 
@@ -940,7 +941,7 @@
         <div class="card-top">
 
           <span class="type">
-            Villa Costa Rica
+            Villa
           </span>
 
           <span class="rating">
@@ -977,7 +978,7 @@
 
     <!-- CARD -->
 
-    <div class="hebergement-card">
+    <div class="hebergement-card hidden-card">
 
       <div class="card-image">
 
@@ -994,7 +995,7 @@
         <div class="card-top">
 
           <span class="type">
-            Villa Barcelone
+            Villa
           </span>
 
           <span class="rating">
@@ -1031,7 +1032,7 @@
 
     <!-- CARD -->
 
-    <div class="hebergement-card">
+    <div class="hebergement-card hidden-card">
 
       <div class="card-image">
 
@@ -1084,6 +1085,11 @@
     </div>
 
   </section>
+  <div class="show-more-container">
+  <button id="showMoreBtn">
+    Voir plus ✨
+  </button>
+</div>
 
 </main>
 
