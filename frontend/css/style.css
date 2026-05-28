@@ -1751,3 +1751,115 @@ footer {
     font-size: 40px;
   }
 }
+.clickable-activity {
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.clickable-activity:hover {
+  transform: translateY(-4px);
+  background: linear-gradient(135deg, #79a9df, #f3b27d);
+}
+
+.clickable-activity:hover p,
+.clickable-activity:hover span {
+  color: white;
+}
+.same-destination-section {
+  padding: 75px 6%;
+  background: #f7fbff;
+}
+
+.same-destination-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35px;
+}
+
+.same-destination-header h2 {
+  color: #4a68a6;
+  font-size: 42px;
+  margin: 0;
+}
+
+.same-destination-arrows {
+  display: flex;
+  gap: 14px;
+}
+
+.same-destination-arrows button {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: white;
+  color: #4a68a6;
+  font-size: 36px;
+  cursor: pointer;
+  box-shadow: 0 12px 28px rgba(69,139,202,0.18);
+  transition: 0.25s;
+}
+
+.same-destination-arrows button:hover {
+  transform: scale(1.1);
+  background: linear-gradient(135deg, #79a9df, #f3b27d);
+  color: white;
+}
+
+.same-activity-grid {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 10px 5px 30px;
+}
+
+.same-activity-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.same-activity-card {
+  min-width: 280px;
+  max-width: 280px;
+  background: white;
+  border-radius: 28px;
+  overflow: hidden;
+  text-decoration: none;
+  box-shadow: 0 16px 35px rgba(69,139,202,0.16);
+  transition: 0.3s;
+  color: #466789;
+}
+
+.same-activity-card:hover {
+  transform: translateY(-8px);
+}
+
+.same-activity-card img {
+  width: 100%;
+  height: 175px;
+  object-fit: cover;
+  display: block;
+}
+
+.same-activity-content {
+  padding: 20px;
+}
+
+.same-activity-content h3 {
+  color: #4a68a6;
+  font-size: 22px;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+.same-activity-content p {
+  color: #466789;
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+
+.same-activity-content span {
+  color: #f39b5f;
+  font-weight: 800;
+}

@@ -611,7 +611,19 @@ function renderDestinationDetail() {
   }
 
   const extra = detailExtras[dest.name];
-
+  if (!extra || !extra.activities) {
+  page.innerHTML = `
+    <section class="detail-content">
+      <div class="detail-main-card">
+        <h2>${dest.name}</h2>
+        <p>Les détails de cette destination arrivent bientôt.</p>
+        <a href="destination.html" class="detail-link">Retour aux destinations</a>
+      </div>
+    </section>
+  `;
+  return;
+}
+const availableActivities = activities.map(item => item.name);
   page.innerHTML = `
     <section class="detail-hero">
 
@@ -676,13 +688,26 @@ function renderDestinationDetail() {
 
         <h2>Activités à ne pas rater</h2>
 
-        ${extra.activities.map(activity => `
-          <div class="activity-line">
-            <span>✨</span>
-            <p>${activity}</p>
-          </div>
-        `).join("")}
+  ${extra.activities.map(activity => {
+  if (availableActivities.includes(activity)) {
+    return `
+      <a
+        class="activity-line clickable-activity"
+        href="activite-detail.html?activite=${encodeURIComponent(activity)}"
+      >
+        <span>✨</span>
+        <p>${activity}</p>
+      </a>
+    `;
+  }
 
+  return `
+    <div class="activity-line">
+      <span>✨</span>
+      <p>${activity}</p>
+    </div>
+  `;
+}).join("")}
       </div>
 
     </section>
@@ -710,7 +735,7 @@ function renderDestinationDetail() {
   `;
 }
 
-renderDestinationDetail();
+
 const activities = [
   {
     name: "Cours de surf",
@@ -719,6 +744,12 @@ const activities = [
     category: "Sport",
     price: 45,
     duration: "2h",
+    rating: 4.8,
+reviews: 124,
+date: "18 juin",
+places: 6,
+comment1: "Super activité à faire en groupe, l’ambiance était incroyable.",
+comment2: "Simple à réserver et vraiment un des meilleurs moments du voyage.",
     vibe: "🌊 Sport • fun • plage",
     description: "Apprends à surfer avec ta team sur une plage incroyable. Parfait pour commencer le voyage avec de l’énergie."
   },
@@ -729,6 +760,12 @@ const activities = [
     category: "Détente",
     price: 65,
     duration: "3h",
+    rating: 4.7,
+reviews: 126,
+date: "20 juin",
+places: 8,
+comment1: "Le sunset sur le bateau était incroyable.",
+comment2: "Activité parfaite pour chill avec le groupe.",
     vibe: "🛥️ Mer • chill • sunset",
     description: "Une sortie en bateau pour profiter de la mer, du soleil et des meilleurs spots photo."
   },
@@ -739,6 +776,12 @@ const activities = [
     category: "Culture",
     price: 25,
     duration: "1h30",
+    rating: 4.6,
+reviews: 93,
+date: "21 juin",
+places: 12,
+comment1: "Super beau et hyper apaisant.",
+comment2: "Ça change vraiment des activités classiques.",
     vibe: "🏛️ Culture • découverte",
     description: "Découvre un lieu iconique, calme et magnifique pour ajouter une vraie touche culturelle au séjour."
   },
@@ -749,6 +792,12 @@ const activities = [
     category: "Gastronomie",
     price: 55,
     duration: "2h",
+    rating: 4.9,
+reviews: 214,
+date: "17 juin",
+places: 5,
+comment1: "On a trop mangé 😭 mais c’était incroyable.",
+comment2: "Le meilleur moyen de découvrir Tokyo.",
     vibe: "🍜 Food • ville • découverte",
     description: "Teste les meilleurs spots food locaux et découvre la ville à travers ses saveurs."
   },
@@ -759,6 +808,12 @@ const activities = [
     category: "Nightlife",
     price: 70,
     duration: "Soirée",
+    rating: 4.8,
+reviews: 301,
+date: "22 juin",
+places: 18,
+comment1: "Meilleure soirée du voyage clairement.",
+comment2: "L’ambiance était folle du début à la fin.",
     vibe: "🎉 Nightlife • plage • musique",
     description: "Ambiance festive, musique et coucher de soleil : l’activité parfaite pour une team qui veut kiffer."
   },
@@ -769,6 +824,12 @@ const activities = [
     category: "Nature",
     price: 30,
     duration: "4h",
+    rating: 4.5,
+reviews: 87,
+date: "19 juin",
+places: 10,
+comment1: "Les paysages étaient magnifiques.",
+comment2: "Très bonne activité pour déconnecter un peu.",
     vibe: "🥾 Nature • aventure",
     description: "Un moment en pleine nature pour respirer, marcher et profiter de paysages incroyables."
   },
@@ -779,6 +840,12 @@ const activities = [
     category: "Détente",
     price: 80,
     duration: "2h",
+    rating: 4.9,
+reviews: 144,
+date: "23 juin",
+places: 4,
+comment1: "On voulait plus repartir 😭",
+comment2: "Le moment le plus relax du séjour.",
     vibe: "🧘 Détente • bien-être",
     description: "Pause détente obligatoire : spa, calme et recharge totale avant de repartir explorer."
   },
@@ -789,6 +856,12 @@ const activities = [
     category: "Culture",
     price: 20,
     duration: "1h",
+    rating: 4.4,
+reviews: 68,
+date: "18 juin",
+places: 20,
+comment1: "Très stylé pour les photos.",
+comment2: "Petit musée mais expérience super sympa.",
     vibe: "🎨 Culture • photo • indoor",
     description: "Une activité simple, visuelle et sympa à faire entre deux sorties en ville."
   },
@@ -800,6 +873,12 @@ const activities = [
   category: "Culture",
   price: 30,
   duration: "2h",
+  rating: 4.9,
+reviews: 246,
+date: "21 juin",
+places: 7,
+comment1: "On comprend pourquoi tout le monde en parle.",
+comment2: "Les photos là-bas sont incroyables.",
   vibe: "🏛️ Culture • sunset • photos",
   description: "Découvre les ruelles blanches d’Oia, les vues iconiques et les spots parfaits pour les photos."
 },
@@ -810,6 +889,12 @@ const activities = [
     category: "Détente",
     price: 35,
     duration: "Soirée",
+    rating: 4.8,
+reviews: 173,
+date: "24 juin",
+places: 9,
+comment1: "La vue au coucher du soleil était dingue.",
+comment2: "Hyper bonne vibe pour finir la journée.",
     vibe: "🌅 Sunset • chill • photos",
     description: "Un rooftop stylé pour profiter du coucher de soleil et finir la journée en beauté."
   },
@@ -820,6 +905,12 @@ const activities = [
   category: "Gastronomie",
   price: 45,
   duration: "1h30",
+  rating: 4.6,
+reviews: 91,
+date: "20 juin",
+places: 11,
+comment1: "Très bonne surprise franchement.",
+comment2: "On a découvert plein de spécialités.",
   vibe: "🍽️ Food • local • chill",
   description: "Une pause gourmande pour goûter les spécialités locales et profiter d’un moment simple avec ta team."
 },
@@ -830,6 +921,12 @@ const activities = [
   category: "Détente",
   price: 80,
   duration: "3h",
+  rating: 5.0,
+reviews: 318,
+date: "22 juin",
+places: 3,
+comment1: "Le coucher de soleil était irréel 😭",
+comment2: "Moment préféré du voyage.",
   vibe: "🌅 Sunset • mer • premium",
   description: "Une croisière au coucher du soleil pour finir la journée avec une vraie vibe carte postale."
 },
@@ -840,6 +937,12 @@ const activities = [
   category: "Culture",
   price: 20,
   duration: "1h30",
+  rating: 4.7,
+reviews: 141,
+date: "19 juin",
+places: 15,
+comment1: "Très beau temple et super ambiance.",
+comment2: "À faire absolument à Tokyo.",
   vibe: "🏮 Culture • Japon • découverte",
   description: "Explore un temple iconique de Tokyo et plonge dans une ambiance traditionnelle au cœur de la ville."
 },
@@ -850,6 +953,12 @@ const activities = [
   category: "Sport",
   price: 75,
   duration: "Journée",
+  rating: 4.8,
+reviews: 224,
+date: "17 juin",
+places: 12,
+comment1: "Les pistes étaient parfaites.",
+comment2: "On a passé une journée incroyable.",
   vibe: "⛷️ Sport • neige • montagne",
   description: "Une journée ski pour profiter des pistes, de la montagne et d’un bon mood sportif avec ta team."
 },
@@ -860,6 +969,12 @@ const activities = [
   category: "Nightlife",
   price: 35,
   duration: "2h",
+  rating: 4.9,
+reviews: 278,
+date: "18 juin",
+places: 9,
+comment1: "Tokyo la nuit c’est une folie.",
+comment2: "On avait l’impression d’être dans un film.",
   vibe: "🌃 Néons • ville • nightlife",
   description: "Découvre Shibuya de nuit, ses lumières, son énergie et ses spots parfaits pour sortir entre amis."
 },
@@ -870,6 +985,12 @@ const activities = [
   category: "Culture",
   price: 25,
   duration: "2h",
+  rating: 4.5,
+reviews: 117,
+date: "20 juin",
+places: 14,
+comment1: "Trop de choses à voir partout.",
+comment2: "Les couleurs et l’ambiance sont incroyables.",
   vibe: "🧺 Souks • culture • couleurs",
   description: "Balade dans les souks, entre artisanat, épices, ruelles vivantes et ambiance marocaine."
 },
@@ -880,6 +1001,12 @@ const activities = [
   category: "Aventure",
   price: 70,
   duration: "2h",
+  rating: 4.9,
+reviews: 167,
+date: "19 juin",
+places: 6,
+comment1: "Adrénaline maximale 😭",
+comment2: "La jungle vue d’en haut c’était fou.",
   vibe: "🌿 Jungle • adrénaline • fun",
   description: "Traverse la jungle en tyrolienne pour une activité pleine de sensations et parfaite pour les groupes."
 },
@@ -890,6 +1017,12 @@ const activities = [
   category: "Gastronomie",
   price: 40,
   duration: "Soirée",
+  rating: 4.7,
+reviews: 102,
+date: "22 juin",
+places: 10,
+comment1: "Le repas était incroyable.",
+comment2: "Très bonne ambiance avec musique et déco.",
   vibe: "🍽️ Food • ambiance • partage",
   description: "Un dîner marocain convivial avec plats traditionnels, ambiance chaleureuse et vraie vibe locale."
 },
@@ -899,7 +1032,12 @@ const activities = [
   destination: "Road Trip Portugal",
   category: "Plage",
   price: 35,
-  duration: "Journée",
+  duration: "Journée",rating: 4.9,
+reviews: 242,
+date: "21 juin",
+places: 7,
+comment1: "Les plages étaient incroyables.",
+comment2: "Clairement un highlight du road trip.",
   vibe: "🌊 Plage • road trip • soleil",
   description: "Cap sur l’Algarve pour profiter des plages, falaises et spots parfaits pendant le road trip."
 },
@@ -910,6 +1048,12 @@ const activities = [
   category: "Nature",
   price: 45,
   duration: "4h",
+  rating: 4.6,
+reviews: 95,
+date: "18 juin",
+places: 8,
+comment1: "Paysages incroyables tout le long.",
+comment2: "Bonne activité si on aime marcher.",
   vibe: "🌋 Nature • marche • aventure",
   description: "Une randonnée autour d’un volcan pour profiter de paysages impressionnants et d’une vraie pause nature."
 },
@@ -921,6 +1065,12 @@ const activities = [
   category: "Aventure",
   price: 65,
   duration: "Demi-journée",
+  rating: 4.8,
+reviews: 189,
+date: "21 juin",
+places: 5,
+comment1: "Le coucher de soleil dans le désert 😭",
+comment2: "Expérience vraiment mémorable.",
   vibe: "🐪 Désert • aventure • golden hour",
   description: "Une sortie dans le désert pour vivre un moment dépaysant, entre paysages dorés et souvenirs de groupe."
 },
@@ -931,6 +1081,12 @@ const activities = [
   category: "Détente",
   price: 60,
   duration: "2h",
+  rating: 4.9,
+reviews: 133,
+date: "18 juin",
+places: 4,
+comment1: "Le spa avec vue montagne 😭",
+comment2: "Ultra relaxant après le ski.",
   vibe: "🧖 Détente • montagne • chill",
   description: "Après l’effort, place au chill : spa, calme et vue montagne pour recharger tout le groupe."
 },
@@ -941,6 +1097,12 @@ const activities = [
   category: "Culture",
   price: 30,
   duration: "Journée",
+  rating: 4.7,
+reviews: 158,
+date: "20 juin",
+places: 13,
+comment1: "Ville trop agréable à visiter.",
+comment2: "Les points de vue sont magnifiques.",
   vibe: "🚋 Ville • culture • food",
   description: "Découvre Lisbonne entre ruelles, tramways, points de vue et pauses gourmandes."
 },
@@ -1012,20 +1174,81 @@ function renderActivityDetail() {
     </section>
 
     <section class="activity-detail-boxes">
-      <div class="activity-detail-box">
-        <h3>Pourquoi on valide ?</h3>
-        <p>Parce que c’est simple à réserver, visuel, fun et parfait pour créer des souvenirs de groupe.</p>
-      </div>
 
-      <div class="activity-detail-box">
-        <h3>Pour qui ?</h3>
-        <p>Idéal pour les groupes qui veulent ajouter une vraie vibe au voyage sans se prendre la tête.</p>
-      </div>
+  <div class="activity-detail-box">
+    <h3>Pourquoi on valide ?</h3>
 
-      <div class="activity-detail-box">
-        <h3>À prévoir</h3>
-        <p>Réserve à l’avance, prépare ton téléphone pour les photos et viens avec une bonne énergie.</p>
-      </div>
+    <p>
+      Parce que c’est simple à réserver, visuel, fun et parfait pour créer des souvenirs de groupe.
+    </p>
+  </div>
+
+  <div class="activity-detail-box">
+    <h3>Avis voyageurs</h3>
+
+    <p>
+      ⭐ ${activity.rating}/5 — ${activity.reviews} avis
+    </p>
+
+    <p>
+      “${activity.comment1}”
+    </p>
+
+    <p>
+      “${activity.comment2}”
+    </p>
+  </div>
+
+  <div class="activity-detail-box">
+    <h3>Disponibilités</h3>
+
+    <p>
+      📅 Prochaine date : ${activity.date}
+    </p>
+
+    <p>
+      👥 ${activity.places} places restantes
+    </p>
+  </div>
+
+</section>
+
+<section class="same-destination-section">
+  <div class="same-destination-header">
+    <h2>À la même destination 🌴</h2>
+
+    <div class="same-destination-arrows">
+      <button onclick="document.querySelector('.same-activity-grid').scrollBy({ left: -320, behavior: 'smooth' })">
+        ‹
+      </button>
+      <button onclick="document.querySelector('.same-activity-grid').scrollBy({ left: 320, behavior: 'smooth' })">
+        ›
+      </button>
+    </div>
+  </div>
+
+  <div class="same-activity-grid">
+    ${activities
+      .filter(item =>
+        item.destination === activity.destination &&
+        item.name !== activity.name
+      )
+      .map(item => `
+        <a
+          href="activite-detail.html?activite=${encodeURIComponent(item.name)}"
+          class="same-activity-card"
+        >
+          <img src="assets/images/${item.image}" alt="${item.name}">
+
+          <div class="same-activity-content">
+            <h3>${item.name}</h3>
+            <p>${item.vibe}</p>
+            <span>⭐ ${item.rating} • ${item.price}€</span>
+          </div>
+        </a>
+      `).join("")}
+  </div>
+</section>
     </section>
 
     <section class="activity-detail-cta">
@@ -1038,90 +1261,464 @@ function renderActivityDetail() {
 
 renderActivitiesFeed();
 renderActivityDetail();
-const hebergements = [
+renderDestinationDetail();
+const typeFilter = document.getElementById("typeFilter");
+const budgetFilter = document.getElementById("budgetFilter");
+const ambianceFilter = document.getElementById("ambianceFilter");
+const voyageurFilter = document.getElementById("voyageurFilter");
+const hebergementSearch = document.getElementById("hebergementSearch");
 
-  {
-    name: "Bali Paradise Resort",
+const cards = document.querySelectorAll(".hebergement-card");
+
+function filterHebergements() {
+
+  const typeValue =
+    typeFilter?.value.toLowerCase() || "";
+
+  const budgetValue =
+    budgetFilter?.value.toLowerCase() || "";
+
+  const ambianceValue =
+    ambianceFilter?.value.toLowerCase() || "";
+
+  const voyageurValue =
+    voyageurFilter?.value.toLowerCase() || "";
+
+  const searchValue =
+    hebergementSearch?.value.toLowerCase() || "";
+
+  cards.forEach(card => {
+
+    const type =
+      card.querySelector(".type")
+      ?.textContent.toLowerCase() || "";
+
+    const title =
+      card.querySelector("h3")
+      ?.textContent.toLowerCase() || "";
+
+    const text =
+      card.textContent.toLowerCase();
+
+    const matchType =
+      typeValue.includes("tous") ||
+      type.includes(typeValue);
+
+    const matchBudget =
+      budgetValue.includes("tous") ||
+      text.includes(budgetValue);
+
+    const matchAmbiance =
+      ambianceValue.includes("ambiance") ||
+      text.includes(ambianceValue);
+
+    const matchVoyageur =
+      voyageurValue.includes("voyageurs") ||
+      text.includes(voyageurValue);
+
+    const matchSearch =
+      title.includes(searchValue);
+
+    if (
+      matchType &&
+      matchBudget &&
+      matchAmbiance &&
+      matchVoyageur &&
+      matchSearch
+    ) {
+      card.style.display = "block";
+    } else {
+      card.style.display = "none";
+    }
+
+  });
+
+}
+
+typeFilter?.addEventListener("change", filterHebergements);
+budgetFilter?.addEventListener("change", filterHebergements);
+ambianceFilter?.addEventListener("change", filterHebergements);
+voyageurFilter?.addEventListener("change", filterHebergements);
+hebergementSearch?.addEventListener("input", filterHebergements);
+
+const transportFilters =
+  document.querySelectorAll(".transport-filter");
+
+const transportCards =
+  document.querySelectorAll(".transport-card");
+
+const transportSearch =
+  document.getElementById("transportSearch");
+
+let currentTransportFilter = "all";
+
+function filterTransports() {
+
+  const searchValue =
+    transportSearch?.value.toLowerCase() || "";
+
+  transportCards.forEach(card => {
+
+    const type =
+      card.dataset.type;
+
+    const text =
+      card.textContent.toLowerCase();
+
+    const matchFilter =
+      currentTransportFilter === "all" ||
+      type === currentTransportFilter;
+
+    const matchSearch =
+      text.includes(searchValue);
+
+    if (matchFilter && matchSearch) {
+
+      card.style.display = "block";
+
+    } else {
+
+      card.style.display = "none";
+
+    }
+
+  });
+
+}
+
+transportFilters.forEach(button => {
+
+  button.addEventListener("click", () => {
+
+    transportFilters.forEach(btn =>
+      btn.classList.remove("active")
+    );
+
+    button.classList.add("active");
+
+    currentTransportFilter =
+      button.dataset.type;
+
+    filterTransports();
+
+  });
+
+});
+
+transportSearch?.addEventListener(
+  "input",
+  filterTransports
+);
+
+const hebergementsData = {
+
+  "Bali Paradise Resort": {
     image: "hotel1.jpg",
-    location: "Bali, Indonésie",
-    type: "Resort Luxe",
-    price: 320,
-    rating: 4.9,
-
+    type: "Resort",
+    price: "320€ / nuit",
+    rating: "4.9",
+    location: "Bali",
     description:
-      "Un resort tropical premium avec piscine privée, spa et vue jungle.",
+      "Resort tropical avec piscine privée, jungle luxuriante et sunset incroyable.",
 
-    equipments: [
+    services: [
       "Piscine privée",
-      "Spa",
-      "Wifi ultra rapide",
-      "Petit déjeuner inclus",
+      "Spa & massages",
+      "Petit-déjeuner inclus",
       "Vue jungle"
-    ],
-
-    reviews: [
-      "Le plus bel hôtel du voyage, un vrai paradis sur terre.",
-      "Sunsets incroyables depuis la piscine.",
-      "très intimiste et relaxant, parfait pour se ressourcer après les journées d’aventure à Bali.",
-      "Expérience ultra relaxante."
     ]
   },
 
-  {
-    name: "Maldives Escape",
+  "Maldives Escape": {
     image: "hotel2.jpg",
+    type: "Hotel",
+    price: "540€ / nuit",
+    rating: "5.0",
     location: "Maldives",
-    type: "Villa Premium",
-    price: 540,
-    rating: 5.0,
-
     description:
-      "Villa au-dessus de l’eau turquoise avec expérience VIP.",
+      "Villa premium au-dessus de l’eau turquoise avec expérience VIP.",
 
-    equipments: [
+    services: [
       "Villa sur l’eau",
-      "Room service",
-      "Spa",
-      "Excursions privées",
-      "Vue océan"
-    ],
-
-    reviews: [
-      "Merveilleuse villa avec vue à couper le souffle.",
-      "Service impeccable, on s’est sentis comme des rois.",
-      "Le luxe absolu.",
-      "Meilleur spot honeymoon."
+      "Accès plage privée",
+      "Restaurant gastronomique",
+      "Service VIP"
     ]
   },
 
-  {
-    name: "Santorini Skyline",
+  "Santorini Skyline": {
     image: "hotel3.jpg",
-    location: "Santorin, Grèce",
-    type: "Hôtel Design",
-    price: 280,
-    rating: 4.8,
-
+    type: "Hotel",
+    price: "280€ / nuit",
+    rating: "4.8",
+    location: "Santorin",
     description:
-      "Architecture minimaliste avec vue coucher de soleil.",
+      "Architecture minimaliste avec vue magique sur le coucher de soleil.",
 
-    equipments: [
-      "Infinity pool",
+    services: [
       "Vue mer",
-      "Petit déjeuner",
-      "Rooftop",
-      "Spa"
-    ],
-
-    reviews: [
-      "Les couchers de soleil sont irréels.",
-      "Hôtel ultra photogénique, parfait pour les amoureux de design.",
-      "Design incroyable.",
-      "Ambiance très chill."
+      "Piscine rooftop",
+      "Suite romantique",
+      "Petit-déjeuner inclus"
     ]
-  }
+  },
 
-];
+  "Jungle Villa Bali": {
+    image: "villachill.jpg",
+    type: "Villa",
+    price: "420€ / nuit",
+    rating: "4.9",
+    location: "Bali",
+    description:
+      "Villa luxueuse au cœur de la jungle avec piscine privée.",
+
+    services: [
+      "Piscine privée",
+      "Vue jungle",
+      "Cuisine équipée",
+      "Terrasse tropicale"
+    ]
+  },
+
+  "Ocean Villa Maldives": {
+    image: "maldivevilla.jpg",
+    type: "Villa",
+    price: "350€ / nuit",
+    rating: "4.7",
+    location: "Maldives",
+    description:
+      "Villa premium avec accès direct à la mer turquoise.",
+
+    services: [
+      "Accès mer",
+      "Suite premium",
+      "Terrasse privée",
+      "Sunset view"
+    ]
+  },
+
+  "Maison Cyclades": {
+    image: "maisongrecquetypique.jpg",
+    type: "Maison Grecque",
+    price: "400€ / nuit",
+    rating: "5.0",
+    location: "Santorin",
+    description:
+      "Maison typique des Cyclades avec vue panoramique sur la mer.",
+
+    services: [
+      "Vue mer",
+      "Maison traditionnelle",
+      "Terrasse sunset",
+      "Cuisine équipée"
+    ]
+  },
+
+  "Ibiza Sunset Hotel": {
+  image: "hotel4.jpg",
+  type: "Hotel",
+  price: "300€ / nuit",
+  rating: "4.6",
+  location: "Ibiza",
+  description:
+    "Hôtel avec rooftop et vue incroyable sur les sunsets d’Ibiza.",
+
+  services: [
+    "Rooftop sunset",
+    "Piscine extérieure",
+    "Petit-déjeuner inclus",
+    "Vue mer"
+  ]
+},
+
+"Tokyo Luxury Hotel": {
+  image: "hotel5.jpg",
+  type: "Hotel",
+  price: "500€ / nuit",
+  rating: "4.9",
+  location: "Tokyo",
+  description:
+    "Hôtel design premium au cœur de Tokyo avec vue panoramique sur la ville.",
+
+  services: [
+    "Vue panoramique",
+    "Spa premium",
+    "Salle de sport",
+    "Room service"
+  ]
+},
+
+"Marrakech Luxury Hotel": {
+  image: "hotel6.jpg",
+  type: "Hotel",
+  price: "280€ / nuit",
+  rating: "4.9",
+  location: "Marrakech",
+  description:
+    "Hôtel luxueux avec piscine et spa au cœur de Marrakech.",
+
+  services: [
+    "Spa oriental",
+    "Piscine privée",
+    "Restaurant marocain",
+    "Terrasse rooftop"
+  ]
+},
+
+"Ibiza Villa": {
+  image: "ibizavilla.jpg",
+  type: "Villa",
+  price: "320€ / nuit",
+  rating: "4.9",
+  location: "Ibiza",
+  description:
+    "Villa avec piscine privée et vue mer parfaite pour les groupes.",
+
+  services: [
+    "Piscine privée",
+    "Vue mer",
+    "Cuisine équipée",
+    "Terrasse lounge"
+  ]
+},
+
+"Tokyo Forest Location": {
+  image: "tokyoloc.jpg",
+  type: "Location",
+  price: "420€ / nuit",
+  rating: "4.7",
+  location: "Tokyo",
+  description:
+    "Location moderne au cœur d’une forêt urbaine à Tokyo.",
+
+  services: [
+    "Vue forêt",
+    "Wi-Fi premium",
+    "Cuisine moderne",
+    "Espace détente"
+  ]
+},
+
+"Marrakech Luxury Villa": {
+  image: "villamarrakech.jpg",
+  type: "Villa",
+  price: "280€ / nuit",
+  rating: "4.9",
+  location: "Marrakech",
+  description:
+    "Villa luxueuse avec piscine privée et jardin tropical.",
+
+  services: [
+    "Piscine privée",
+    "Jardin luxuriant",
+    "Suite premium",
+    "Terrasse extérieure"
+  ]
+},
+
+"Costa Rica Luxury Hotel": {
+  image: "hotel7.jpg",
+  type: "Hotel",
+  price: "450€ / nuit",
+  rating: "5.0",
+  location: "Costa Rica",
+  description:
+    "Hôtel premium avec accès direct à la plage et ambiance tropicale.",
+
+  services: [
+    "Accès plage",
+    "Piscine infinity",
+    "Spa tropical",
+    "Petit-déjeuner inclus"
+  ]
+},
+
+"Barcelona City Hotel": {
+  image: "hotel8.jpg",
+  type: "Hotel",
+  price: "500€ / nuit",
+  rating: "4.8",
+  location: "Barcelone",
+  description:
+    "Hôtel moderne au cœur de Barcelone avec rooftop et vue ville.",
+
+  services: [
+    "Rooftop",
+    "Vue ville",
+    "Salle fitness",
+    "Petit-déjeuner inclus"
+  ]
+},
+
+"Chamonix Alpine Lodge": {
+  image: "hotel9.jpg",
+  type: "Hotel",
+  price: "550€ / nuit",
+  rating: "5.0",
+  location: "Chamonix",
+  description:
+    "Lodge alpin avec vue montagne et accès direct aux pistes.",
+
+  services: [
+    "Vue montagne",
+    "Accès ski",
+    "Spa montagne",
+    "Chambres premium"
+  ]
+},
+
+"Costa Rica Luxury Villa": {
+  image: "villacosta.jpg",
+  type: "Villa",
+  price: "480€ / nuit",
+  rating: "4.8",
+  location: "Costa Rica",
+  description:
+    "Villa tropicale avec piscine privée et accès plage.",
+
+  services: [
+    "Piscine privée",
+    "Accès plage",
+    "Jardin tropical",
+    "Cuisine équipée"
+  ]
+},
+
+"Barcelone Luxury Villa": {
+  image: "barcelonevilla.jpg",
+  type: "Villa",
+  price: "600€ / nuit",
+  rating: "4.8",
+  location: "Barcelone",
+  description:
+    "Villa moderne avec piscine privée au cœur de Barcelone.",
+
+  services: [
+    "Piscine privée",
+    "Terrasse rooftop",
+    "Cuisine design",
+    "Suite premium"
+  ]
+},
+
+"Chamonix Alpine Loft": {
+  image: "loftchamonix.jpg",
+  type: "Loft",
+  price: "550€ / nuit",
+  rating: "5.0",
+  location: "Chamonix",
+  description:
+    "Loft design avec rooftop et vue incroyable sur les montagnes.",
+
+  services: [
+    "Vue montagne",
+    "Rooftop",
+    "Cheminée moderne",
+    "Accès pistes"
+  ]
+}
+
+};
 
 function renderHebergementDetail() {
 
@@ -1134,130 +1731,188 @@ function renderHebergementDetail() {
     new URLSearchParams(window.location.search);
 
   const name =
-    params.get("hebergement") ||
-    "Bali Paradise Resort";
+    params.get("hebergement");
 
-  const hotel =
-    hebergements.find(
-      h => h.name.toLowerCase() === name.toLowerCase()
-    );
+  const hebergement =
+    hebergementsData[name];
 
-  if (!hotel) {
-    window.location.href = "404.html";
+  if (!hebergement) {
+
+    page.innerHTML = `
+      <section class="error-page">
+        <h1>Hébergement introuvable 😢</h1>
+      </section>
+    `;
+
     return;
   }
 
   page.innerHTML = `
 
-    <section class="hebergement-detail-hero">
+<section class="hebergement-detail-hero">
 
-      <img
-        src="assets/images/${hotel.image}"
-        alt="${hotel.name}"
-      >
+  <img
+    src="assets/images/${hebergement.image}"
+    alt="${name}"
+  >
 
-      <div class="detail-overlay">
+  <div class="hebergement-detail-overlay">
 
-        <p class="tag">
-          HÉBERGEMENT MATCHÉ ✨
-        </p>
+    <p class="tag">
+      ${hebergement.type}
+    </p>
 
-        <h1>
-          ${hotel.name}
-        </h1>
+    <h1>
+      ${name}
+    </h1>
 
+    <p>
+      ${hebergement.description}
+    </p>
+
+    <div class="detail-meta">
+
+      <span>
+        ⭐ ${hebergement.rating}
+      </span>
+
+      <span>
+        📍 ${hebergement.location}
+      </span>
+
+      <span>
+        💸 ${hebergement.price}
+      </span>
+
+    </div>
+
+  </div>
+
+</section>
+
+<section class="hebergement-detail-content">
+
+  <div class="detail-main-card">
+
+    <h2>
+      Pourquoi choisir cet hébergement ? ✨
+    </h2>
+
+    <p>
+      Cet hébergement est parfait pour profiter
+      d’un séjour premium avec une ambiance
+      immersive et relaxante.
+    </p>
+
+    <div class="detail-options">
+
+      <div>
+        <h3>🏝 Ambiance</h3>
         <p>
-          ${hotel.description}
+          Luxe, détente et expérience instagrammable.
         </p>
-
-        <div class="detail-meta">
-
-          <span>
-            📍 ${hotel.location}
-          </span>
-
-          <span>
-            ⭐ ${hotel.rating}
-          </span>
-
-          <span>
-            ${hotel.price}€ / nuit
-          </span>
-
-        </div>
-
       </div>
 
-    </section>
-
-    <section class="hebergement-detail-content">
-
-      <div class="detail-main-card">
-
-        <h2>
-          Équipements premium
-        </h2>
-
-        <div class="equipments-grid">
-
-          ${hotel.equipments.map(eq => `
-            <div class="equipment-card">
-              ✨ ${eq}
-            </div>
-          `).join("")}
-
-        </div>
-
-        <h2>
-          Avis voyageurs
-        </h2>
-
-        <div class="reviews-grid">
-
-          ${hotel.reviews.map(review => `
-            <div class="review-card">
-              "${review}"
-            </div>
-          `).join("")}
-
-        </div>
-
-      </div>
-
-      <div class="booking-card">
-
-        <h3>
-          Réserver maintenant
-        </h3>
-
-        <p class="booking-price">
-          ${hotel.price}€
-          <span>/ nuit</span>
+      <div>
+        <h3>🍽 Restauration</h3>
+        <p>
+          Restaurants premium et petit-déjeuner inclus.
         </p>
-
-        <div class="detail-navigation">
-
-  <a href="hebergements.html" class="back-btn">
-    ← Retour aux hébergements
-  </a>
-
-  <a href="gestion-hebergements.html" class="manage-btn">
-    ⚙ Gérer cet hébergement
-  </a>
-
-</div>
-        <button class="booking-btn">
-          Réserver ✈
-        </button>
-
-        <a href="transports.html" class="transport-btn">
-          Continuer vers les transports
-        </a>
-
       </div>
 
-    </section>
-  `;
+      <div>
+        <h3>🛏 Confort</h3>
+        <p>
+          Chambres modernes avec équipements haut de gamme.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="detail-side-card">
+
+    <h2>
+      Services inclus ✨
+    </h2>
+
+    ${hebergement.services.map(service => `
+      <div class="activity-line">
+        <span>✔</span>
+        <p>${service}</p>
+      </div>
+    `).join("")}
+
+  </div>
+
+</section>
+
+<section class="next-step-section">
+
+  <h2>
+    Votre hébergement est trouvé 🏨
+  </h2>
+
+  <div class="next-step-grid">
+
+    <a href="transports.html">
+      ✈ Choisir le transport
+    </a>
+
+    <a href="hebergements.html">
+      🏨 Retour aux hébergements
+    </a>
+
+    <a href="activites.html">
+      🎉 Voir les activités
+    </a>
+
+  </div>
+
+  <button class="add-cart-btn">
+    Ajouter au panier voyage
+  </button>
+
+</section>
+
+`;
 }
 
 renderHebergementDetail();
+
+const showMoreBtn =
+  document.getElementById("showMoreBtn");
+
+const hiddenCards =
+  document.querySelectorAll(".hidden-card");
+
+let isExpanded = false;
+
+if (showMoreBtn) {
+
+  showMoreBtn.addEventListener("click", () => {
+
+    isExpanded = !isExpanded;
+
+    hiddenCards.forEach(card => {
+
+      if (isExpanded) {
+
+        card.style.display = "block";
+
+      } else {
+
+        card.style.display = "none";
+
+      }
+
+    });
+
+    showMoreBtn.textContent = isExpanded
+      ? "Voir moins ✨"
+      : "Voir plus ✨";
+
+  });
+
+}
