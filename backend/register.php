@@ -1,31 +1,46 @@
 <?php
 // =========================================
 // BACKEND/REGISTER.PHP — VOYAGEVISTA
-// Logique d'inscription uniquement (pas de HTML)
+// Logique d'inscription
 // =========================================
 
 session_start();
 
 require_once 'configuration.php';
 
-// Si déjà connecté, on redirige
+// Si déjà connecté → redirection
 if (isset($_SESSION['user_id'])) {
-    header('Location: ../frontend/index.html');
+    if ($_SESSION['role'] === 'admin')        header('Location: dashboard_admin.php');
+    elseif ($_SESSION['role'] === 'prestataire') header('Location: dashboard_prestataire.php');
+    else                                      header('Location: ../frontend/index.html');
     exit;
 }
 
-// Uniquement si le formulaire est soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
 
-    $prenom           = trim($_POST['prenom']           ?? '');
-    $nom              = trim($_POST['nom']              ?? '');
+    $username         = trim($_POST['username']         ?? '');
     $email            = trim($_POST['email']            ?? '');
     $password         = $_POST['password']              ?? '';
     $confirm_password = $_POST['confirm_password']      ?? '';
+    $role             = $_POST['role']                  ?? 'utilisateur';
 
-    // --- Validations ---
-    if (empty($prenom) || empty($nom) || empty($email) || empty($password) || empty($confirm_password)) {
+    // ── Valider le rôle (sécurité : on n'accepte que ces deux valeurs) ──
+    $roles_valides = ['utilisateur', 'prestataire'];
+    if (!in_array($role, $roles_valides)) $role = 'utilisateur';
+
+    // ── Validations ─────────────────────────────────────────
+    if (empty($username) || empty($email) || empty($password) || empty($confirm_password)) {
         header('Location: ../frontend/register.html?error=champs_vides');
+        exit;
+    }
+
+    if (strlen($username) < 3) {
+        header('Location: ../frontend/register.html?error=username_trop_court');
+        exit;
+    }
+
+    if (strlen($username) > 50) {
+        header('Location: ../frontend/register.html?error=username_trop_long');
         exit;
     }
 
@@ -44,27 +59,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
         exit;
     }
 
-    // --- Vérification email déjà utilisé ---
+    // ── Vérifier email déjà utilisé ─────────────────────────
     $stmt = $pdo->prepare('SELECT id FROM utilisateurs WHERE email = ? LIMIT 1');
     $stmt->execute([$email]);
-
     if ($stmt->fetch()) {
         header('Location: ../frontend/register.html?error=email_deja_utilise');
         exit;
     }
 
-    // --- Insertion en BDD ---
+    // ── Vérifier username déjà utilisé ──────────────────────
+    $stmt = $pdo->prepare('SELECT id FROM utilisateurs WHERE username = ? LIMIT 1');
+    $stmt->execute([$username]);
+    if ($stmt->fetch()) {
+        header('Location: ../frontend/register.html?error=username_deja_utilise');
+        exit;
+    }
+
+    // ── Insertion en BDD ────────────────────────────────────
     $password_hash = password_hash($password, PASSWORD_BCRYPT);
 
-    $stmt = $pdo->prepare('INSERT INTO utilisateurs (prenom, nom, email, password, role) VALUES (?, ?, ?, ?, ?)');
-    $stmt->execute([$prenom, $nom, $email, $password_hash, 'client']);
+    $stmt = $pdo->prepare('
+        INSERT INTO utilisateurs (username, email, password, role, est_actif, date_inscription)
+        VALUES (?, ?, ?, ?, 1, NOW())
+    ');
+    $stmt->execute([$username, $email, $password_hash, $role]);
 
-    // Inscription réussie → on redirige vers le login avec message de succès
-    header('Location: ../frontend/login.html?success=compte_cree');
+    // ── Connexion automatique après inscription ──────────────
+    $newId = $pdo->lastInsertId();
+    session_regenerate_id(true);
+    $_SESSION['user_id']  = $newId;
+    $_SESSION['username'] = $username;
+    $_SESSION['role']     = $role;
+
+    // Redirection selon le rôle
+    if ($role === 'prestataire') {
+        header('Location: dashboard_prestataire.php');
+    } else {
+        header('Location: ../frontend/index.html?success=compte_cree');
+    }
     exit;
 
 } else {
-    // Accès direct sans POST → on renvoie vers le formulaire
     header('Location: ../frontend/register.html');
     exit;
 }
