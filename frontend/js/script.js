@@ -1149,20 +1149,88 @@ function renderActivityDetail() {
     </section>
 
     <section class="activity-detail-boxes">
-      <div class="activity-detail-box">
-        <h3>Pourquoi on valide ?</h3>
-        <p>Parce que c’est simple à réserver, visuel, fun et parfait pour créer des souvenirs de groupe.</p>
-      </div>
 
-      <div class="activity-detail-box">
-        <h3>Pour qui ?</h3>
-        <p>Idéal pour les groupes qui veulent ajouter une vraie vibe au voyage sans se prendre la tête.</p>
-      </div>
+  <div class="activity-detail-box">
+    <h3>Pourquoi on valide ?</h3>
 
-      <div class="activity-detail-box">
-        <h3>À prévoir</h3>
-        <p>Réserve à l’avance, prépare ton téléphone pour les photos et viens avec une bonne énergie.</p>
-      </div>
+    <p>
+      Parce que c’est simple à réserver, visuel, fun et parfait pour créer des souvenirs de groupe.
+    </p>
+  </div>
+
+  <div class="activity-detail-box">
+    <h3>Avis voyageurs</h3>
+
+    <p>
+      ⭐ ${activity.rating}/5 — ${activity.reviews} avis
+    </p>
+
+    <p>
+      “${activity.comment1}”
+    </p>
+
+    <p>
+      “${activity.comment2}”
+    </p>
+  </div>
+
+  <div class="activity-detail-box">
+    <h3>Disponibilités</h3>
+
+    <p>
+      📅 Prochaine date : ${activity.date}
+    </p>
+
+    <p>
+      👥 ${activity.places} places restantes
+    </p>
+  </div>
+
+</section>
+
+<section class="same-destination-section">
+
+  <h2>
+    À la même destination 🌴
+  </h2>
+
+  <div class="same-activity-grid">
+
+    ${activities
+      .filter(item =>
+        item.destination === activity.destination &&
+        item.name !== activity.name
+      )
+      .slice(0, 3)
+      .map(item => `
+
+        <a
+          href="activite-detail.html?activite=${encodeURIComponent(item.name)}"
+          class="same-activity-card"
+        >
+
+          <img
+            src="assets/images/${item.image}"
+            alt="${item.name}"
+          >
+
+          <div>
+            <h3>${item.name}</h3>
+
+            <p>${item.vibe}</p>
+
+            <span>
+              ⭐ ${item.rating} • ${item.price}€
+            </span>
+          </div>
+
+        </a>
+
+      `).join("")}
+
+  </div>
+
+</section>
     </section>
 
     <section class="activity-detail-cta">
