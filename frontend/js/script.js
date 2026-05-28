@@ -1323,3 +1323,306 @@ transportSearch?.addEventListener(
   "input",
   filterTransports
 );
+
+const hebergementsData = {
+
+  "Bali Paradise Resort": {
+    image: "hotel1.jpg",
+    type: "Resort",
+    price: "320€ / nuit",
+    rating: "4.9",
+    location: "Bali",
+    description:
+      "Resort tropical avec piscine privée, jungle luxuriante et sunset incroyable.",
+
+    services: [
+      "Piscine privée",
+      "Spa & massages",
+      "Petit-déjeuner inclus",
+      "Vue jungle"
+    ]
+  },
+
+  "Maldives Escape": {
+    image: "hotel2.jpg",
+    type: "Hotel",
+    price: "540€ / nuit",
+    rating: "5.0",
+    location: "Maldives",
+    description:
+      "Villa premium au-dessus de l’eau turquoise avec expérience VIP.",
+
+    services: [
+      "Villa sur l’eau",
+      "Accès plage privée",
+      "Restaurant gastronomique",
+      "Service VIP"
+    ]
+  },
+
+  "Santorini Skyline": {
+    image: "hotel3.jpg",
+    type: "Hotel",
+    price: "280€ / nuit",
+    rating: "4.8",
+    location: "Santorin",
+    description:
+      "Architecture minimaliste avec vue magique sur le coucher de soleil.",
+
+    services: [
+      "Vue mer",
+      "Piscine rooftop",
+      "Suite romantique",
+      "Petit-déjeuner inclus"
+    ]
+  },
+
+  "Jungle Villa Bali": {
+    image: "villachill.jpg",
+    type: "Villa",
+    price: "420€ / nuit",
+    rating: "4.9",
+    location: "Bali",
+    description:
+      "Villa luxueuse au cœur de la jungle avec piscine privée.",
+
+    services: [
+      "Piscine privée",
+      "Vue jungle",
+      "Cuisine équipée",
+      "Terrasse tropicale"
+    ]
+  },
+
+  "Ocean Villa Maldives": {
+    image: "maldivevilla.jpg",
+    type: "Villa",
+    price: "350€ / nuit",
+    rating: "4.7",
+    location: "Maldives",
+    description:
+      "Villa premium avec accès direct à la mer turquoise.",
+
+    services: [
+      "Accès mer",
+      "Suite premium",
+      "Terrasse privée",
+      "Sunset view"
+    ]
+  },
+
+  "Maison Cyclades": {
+    image: "maisongrecquetypique.jpg",
+    type: "Maison Grecque",
+    price: "400€ / nuit",
+    rating: "5.0",
+    location: "Santorin",
+    description:
+      "Maison typique des Cyclades avec vue panoramique sur la mer.",
+
+    services: [
+      "Vue mer",
+      "Maison traditionnelle",
+      "Terrasse sunset",
+      "Cuisine équipée"
+    ]
+  }
+
+};
+
+function renderHebergementDetail() {
+
+  const page =
+    document.getElementById("hebergementDetailPage");
+
+  if (!page) return;
+
+  const params =
+    new URLSearchParams(window.location.search);
+
+  const name =
+    params.get("hebergement");
+
+  const hebergement =
+    hebergementsData[name];
+
+  if (!hebergement) {
+
+    page.innerHTML = `
+      <section class="error-page">
+        <h1>Hébergement introuvable 😢</h1>
+      </section>
+    `;
+
+    return;
+  }
+
+  page.innerHTML = `
+
+<section class="hebergement-detail-hero">
+
+  <img
+    src="assets/images/${hebergement.image}"
+    alt="${name}"
+  >
+
+  <div class="hebergement-detail-overlay">
+
+    <p class="tag">
+      ${hebergement.type}
+    </p>
+
+    <h1>
+      ${name}
+    </h1>
+
+    <p>
+      ${hebergement.description}
+    </p>
+
+    <div class="detail-meta">
+
+      <span>
+        ⭐ ${hebergement.rating}
+      </span>
+
+      <span>
+        📍 ${hebergement.location}
+      </span>
+
+      <span>
+        💸 ${hebergement.price}
+      </span>
+
+    </div>
+
+  </div>
+
+</section>
+
+<section class="hebergement-detail-content">
+
+  <div class="detail-main-card">
+
+    <h2>
+      Pourquoi choisir cet hébergement ? ✨
+    </h2>
+
+    <p>
+      Cet hébergement est parfait pour profiter
+      d’un séjour premium avec une ambiance
+      immersive et relaxante.
+    </p>
+
+    <div class="detail-options">
+
+      <div>
+        <h3>🏝 Ambiance</h3>
+        <p>
+          Luxe, détente et expérience instagrammable.
+        </p>
+      </div>
+
+      <div>
+        <h3>🍽 Restauration</h3>
+        <p>
+          Restaurants premium et petit-déjeuner inclus.
+        </p>
+      </div>
+
+      <div>
+        <h3>🛏 Confort</h3>
+        <p>
+          Chambres modernes avec équipements haut de gamme.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="detail-side-card">
+
+    <h2>
+      Services inclus ✨
+    </h2>
+
+    ${hebergement.services.map(service => `
+      <div class="activity-line">
+        <span>✔</span>
+        <p>${service}</p>
+      </div>
+    `).join("")}
+
+  </div>
+
+</section>
+
+<section class="next-step-section">
+
+  <h2>
+    Votre hébergement est trouvé 🏨
+  </h2>
+
+  <div class="next-step-grid">
+
+    <a href="transports.html">
+      ✈ Choisir le transport
+    </a>
+
+    <a href="hebergements.html">
+      🏨 Retour aux hébergements
+    </a>
+
+    <a href="activites.html">
+      🎉 Voir les activités
+    </a>
+
+  </div>
+
+  <button class="add-cart-btn">
+    Ajouter au panier voyage
+  </button>
+
+</section>
+
+`;
+}
+
+renderHebergementDetail();
+
+const showMoreBtn =
+  document.getElementById("showMoreBtn");
+
+const hiddenCards =
+  document.querySelectorAll(".hidden-card");
+
+let isExpanded = false;
+
+if (showMoreBtn) {
+
+  showMoreBtn.addEventListener("click", () => {
+
+    isExpanded = !isExpanded;
+
+    hiddenCards.forEach(card => {
+
+      if (isExpanded) {
+
+        card.style.display = "block";
+
+      } else {
+
+        card.style.display = "none";
+
+      }
+
+    });
+
+    showMoreBtn.textContent = isExpanded
+      ? "Voir moins ✨"
+      : "Voir plus ✨";
+
+  });
+
+}
