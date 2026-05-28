@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoyageVista — Mon Profil</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/profil.css">
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="brand">
+      <a href="index.html">
+        <img src="assets/images/logo-voyagevista.png" alt="VoyageVista">
+      </a>
+    </div>
+    <nav>
+      <a href="index.html">Accueil</a>
+      <a href="destination.html">Destinations</a>
+      <a href="activites.html">Activités</a>
+    </nav>
+    <div class="nav-icons">
+      <span class="heart-icon">♥</span>
+      <span>🔔</span>
+      <a href="login.html"><span>👤</span></a>
+    </div>
+  </header>
+
+  <main class="profil-main">
+
+    <!-- ================================
+         HERO PROFIL
+    ================================ -->
+    <section class="profil-hero">
+      <div class="profil-hero-bg"></div>
+      <div class="profil-hero-content">
+
+        <div class="profil-avatar">
+          <span class="avatar-emoji">👤</span>
+        </div>
+
+        <div class="profil-hero-info">
+          <div class="profil-badge" id="badgeVoyageur">
+            <span class="badge-icon">🌍</span>
+            <span class="badge-label">Explorateur</span>
+          </div>
+          <h1 id="profilNom">Marie-Zoé D.</h1>
+          <p class="profil-email" id="profilEmail">marie-zoe@email.com</p>
+          <p class="profil-membre">Membre depuis <strong>Mai 2026</strong></p>
+        </div>
+
+        <a href="../backend/logout.php" class="btn-logout">
+          Se déconnecter 👋
+        </a>
+
+      </div>
+    </section>
+
+    <div class="profil-grid">
+
+      <!-- ================================
+           COLONNE GAUCHE
+      ================================ -->
+      <div class="profil-col-left">
+
+        <!-- STATS -->
+        <div class="profil-card">
+          <div class="card-header">
+            <h2>🗺️ Mes stats de voyage</h2>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <span class="stat-number" id="statSwipes">0</span>
+              <span class="stat-label">Destinations swipées</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number" id="statReservations">0</span>
+              <span class="stat-label">Voyages réservés</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number" id="statActivites">0</span>
+              <span class="stat-label">Activités ajoutées</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number" id="statFavoris">0</span>
+              <span class="stat-label">Favoris</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROCHAIN VOYAGE -->
+        <div class="profil-card">
+          <div class="card-header">
+            <h2>✈️ Prochain voyage</h2>
+          </div>
+          <div class="prochain-voyage" id="prochainVoyage">
+            <div class="voyage-card">
+              <div class="voyage-dest-icon">🏝️</div>
+              <div class="voyage-info">
+                <h3>Bali, Indonésie</h3>
+                <p class="voyage-date">📅 15 Juillet 2026 → 25 Juillet 2026</p>
+                <p class="voyage-groupe">👥 4 voyageurs</p>
+                <div class="voyage-tags">
+                  <span>🌊 Plage</span>
+                  <span>🌴 Nature</span>
+                  <span>🍜 Gastronomie</span>
+                </div>
+              </div>
+            </div>
+            <a href="panier.html" class="btn-voir-voyage">Voir le séjour →</a>
+          </div>
+
+          <!-- Affiché si aucun voyage prévu -->
+          <div class="no-voyage hidden" id="noVoyage">
+            <p class="no-voyage-emoji">🗺️</p>
+            <p>Aucun voyage prévu pour l'instant.</p>
+            <a href="destination.html" class="btn-primary" style="margin-top:16px; display:inline-block;">
+              Commencer à swiper
+            </a>
+          </div>
+        </div>
+
+        <!-- DESTINATIONS FAVORITES -->
+        <div class="profil-card">
+          <div class="card-header">
+            <h2>❤️ Mes destinations favorites</h2>
+            <a href="favoris.html" class="card-link">Tout voir →</a>
+          </div>
+          <div class="favoris-grid" id="favorisGrid">
+            <div class="favori-card">
+              <div class="favori-img" style="background: linear-gradient(135deg, #79a9df, #9bdff4);">
+                <span>🏝️</span>
+              </div>
+              <div class="favori-info">
+                <h4>Bali</h4>
+                <p>dès 780€</p>
+              </div>
+            </div>
+            <div class="favori-card">
+              <div class="favori-img" style="background: linear-gradient(135deg, #f3b27d, #f39b5f);">
+                <span>🎉</span>
+              </div>
+              <div class="favori-info">
+                <h4>Ibiza</h4>
+                <p>dès 520€</p>
+              </div>
+            </div>
+            <div class="favori-card">
+              <div class="favori-img" style="background: linear-gradient(135deg, #9bdff4, #57c5b6);">
+                <span>🌊</span>
+              </div>
+              <div class="favori-info">
+                <h4>Santorin</h4>
+                <p>dès 640€</p>
+              </div>
+            </div>
+          </div>
+          <div class="no-favoris hidden" id="noFavoris">
+            <p>Tu n'as pas encore de destinations favorites.</p>
+            <a href="destination.html" class="btn-primary" style="margin-top:12px; display:inline-block;">
+              Explorer les destinations
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ================================
+           COLONNE DROITE
+      ================================ -->
+      <div class="profil-col-right">
+
+        <!-- MODIFIER LES INFOS -->
+        <div class="profil-card">
+          <div class="card-header">
+            <h2>✏️ Mes informations</h2>
+          </div>
+
+          <div id="alertModif"></div>
+
+          <form class="profil-form" id="profilForm" method="POST" action="../backend/modifier_profil.php">
+
+            <div class="form-group">
+              <label for="prenom">Prénom</label>
+              <input type="text" id="prenom" name="prenom" placeholder="Ton prénom" value="Marie-Zoé">
+            </div>
+
+            <div class="form-group">
+              <label for="nom">Nom</label>
+              <input type="text" id="nom" name="nom" placeholder="Ton nom" value="D.">
+            </div>
+
+            <div class="form-group">
+              <label for="email">Adresse email</label>
+              <input type="email" id="email" name="email" placeholder="ton@email.com" value="marie-zoe@email.com">
+            </div>
+
+            <div class="form-divider"></div>
+
+            <p class="form-section-title">🔒 Changer le mot de passe</p>
+            <p class="form-section-sub">Laisse vide si tu ne veux pas le changer.</p>
+
+            <div class="form-group">
+              <label for="ancien_mdp">Ancien mot de passe</label>
+              <div class="input-wrap-profil">
+                <input type="password" id="ancien_mdp" name="ancien_mdp" placeholder="••••••••">
+                <button type="button" class="toggle-pw-profil" data-target="ancien_mdp">👁</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="nouveau_mdp">Nouveau mot de passe</label>
+              <div class="input-wrap-profil">
+                <input type="password" id="nouveau_mdp" name="nouveau_mdp" placeholder="••••••••">
+                <button type="button" class="toggle-pw-profil" data-target="nouveau_mdp">👁</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="confirm_mdp">Confirmer le nouveau mot de passe</label>
+              <div class="input-wrap-profil">
+                <input type="password" id="confirm_mdp" name="confirm_mdp" placeholder="••••••••">
+                <button type="button" class="toggle-pw-profil" data-target="confirm_mdp">👁</button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-save" id="btnSave">
+              Sauvegarder ✓
+            </button>
+
+          </form>
+        </div>
+
+        <!-- HISTORIQUE -->
+        <div class="profil-card">
+          <div class="card-header">
+            <h2>🕐 Historique des voyages</h2>
+            <a href="historique.html" class="card-link">Tout voir →</a>
+          </div>
+          <div class="historique-list">
+
+            <div class="historique-item">
+              <div class="historique-icon" style="background: linear-gradient(135deg,#79a9df,#9bdff4)">🗼</div>
+              <div class="historique-info">
+                <h4>Paris, France</h4>
+                <p>🗓 Mars 2026 • 👥 3 voyageurs</p>
+              </div>
+              <span class="historique-badge termine">Terminé</span>
+            </div>
+
+            <div class="historique-item">
+              <div class="historique-icon" style="background: linear-gradient(135deg,#f3b27d,#f39b5f)">🎉</div>
+              <div class="historique-info">
+                <h4>Ibiza, Espagne</h4>
+                <p>🗓 Août 2025 • 👥 6 voyageurs</p>
+              </div>
+              <span class="historique-badge termine">Terminé</span>
+            </div>
+
+            <div class="historique-item">
+              <div class="historique-icon" style="background: linear-gradient(135deg,#9bdff4,#57c5b6)">🏔️</div>
+              <div class="historique-info">
+                <h4>Alpes, Suisse</h4>
+                <p>🗓 Janvier 2025 • 👥 2 voyageurs</p>
+              </div>
+              <span class="historique-badge termine">Terminé</span>
+            </div>
+
+          </div>
+          <div class="no-historique hidden" id="noHistorique">
+            <p>Tu n'as pas encore effectué de voyage.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>© 2026 VoyageVista — Explore, swipe, travel together.</p>
+  </footer>
+
+  <script src="js/profil.js"></script>
+
+</body>
+</html>
