@@ -164,7 +164,7 @@ $top_destinations = $pdo->query("
 <body>
 
 <header class="navbar">
-  <div class="brand"><img src="assets/images/logo-voyagevista.png" alt="VoyageVista"></div>
+  <div class="brand"><img src="../frontend/assets/images/logo-voyagevista.png" alt="VoyageVista"></div>
   <nav>
     <a href="dashboard_admin.php" class="active">Dashboard</a>
     <a href="gestion_utilisateur.php">Utilisateurs</a>

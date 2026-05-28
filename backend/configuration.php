@@ -2,12 +2,12 @@
 // =============================================
 // Configuration BDD - VoyageVista
 // =============================================
- 
+
 $servername = "localhost";
 $username   = "root";
 $password   = "";
 $dbname     = "voyagevista";
- 
+
 try {
     $pdo = new PDO(
         "mysql:host=$servername;dbname=$dbname;charset=utf8mb4",
