@@ -2,6 +2,8 @@
 session_start();
 
 require_once "configuration.php";
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
 
     $deleteId = intval($_POST['delete_id']);
@@ -17,6 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     exit;
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_hebergement'])) {
+  $type = $_POST['type'];
+$capacite = $_POST['capacite'];
 
     $nom = $_POST['nom'];
     $description = $_POST['description'];
@@ -25,26 +29,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_hebergement'])) {
     $destinationId = $_POST['destination_id'];
 
     $stmt = $pdo->prepare("
-        INSERT INTO hebergements (
-            nom,
-            description,
-            prix_nuit,
-            image_url,
-            destination_id,
-            prestataire_id,
-            est_actif
-        )
-        VALUES (?, ?, ?, ?, ?, ?, 1)
-    ");
+    INSERT INTO hebergements (
+        nom,
+        description,
+        type,
+        prix_nuit,
+        capacite,
+        image_url,
+        destination_id,
+        prestataire_id,
+        est_actif
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)
+");
 
     $stmt->execute([
-        $nom,
-        $description,
-        $prix,
-        $image,
-        $destinationId,
-        $_SESSION['user_id']
-    ]);
+    $nom,
+    $description,
+    $type,
+    $prix,
+    $capacite,
+    $image,
+    $destinationId,
+    $_SESSION['user_id']
+]);
 
     header("Location: gestion-hebergements.php");
     exit;
@@ -242,6 +250,20 @@ $noteMoyenne = $totalHebergements > 0
       required
     >
 
+    <select name="type" required>
+    <option value="hotel">Hôtel</option>
+    <option value="villa">Villa</option>
+    <option value="appartement">Appartement</option>
+    <option value="auberge">Auberge</option>
+    <option value="camping">Camping</option>
+</select>
+
+<input
+  type="number"
+  name="capacite"
+  placeholder="Capacité"
+  required
+>if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_hebergement']))
     <button type="submit" name="add_hebergement">
         Enregistrer
     </button>
@@ -305,16 +327,6 @@ $noteMoyenne = $totalHebergements > 0
             <span>
                 ⭐ <?= $hebergement['note_moyenne'] ?>
             </span>
-    <input
-        type="hidden"
-        name="delete_id"
-        value="<?= $hebergement['id'] ?>"
-    >
-
-    <button type="submit" class="btn-delete">
-        Supprimer
-    </button>
-</form>
 
         </div>
 
