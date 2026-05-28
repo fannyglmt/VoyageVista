@@ -54,7 +54,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_dispo'])) {
 }
 
 // ── DONNÉES ───────────────────────────────────────────────
-$stmtSvc = $pdo->prepare("SELECT * FROM services WHERE prestataire_id=? ORDER BY nom ASC");
+// Charger services existants + fallback sur hebergements/activites si services vide
+$stmtSvc = $pdo->prepare("SELECT s.*, 
+    CASE s.type 
+        WHEN 'hebergement' THEN '🏨'
+        WHEN 'activite' THEN '🏄'
+        ELSE '📦' 
+    END as type_icon
+    FROM services s WHERE s.prestataire_id=? ORDER BY s.nom ASC");
 $stmtSvc->execute([$user_id]);
 $services = $stmtSvc->fetchAll();
 
@@ -198,9 +205,10 @@ $disponibles   = $totalDispos - $bloquees;
       <p style="font-size:12px;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Vos services</p>
       <?php foreach(array_slice($services,0,3) as $s):
         $nb=$pdo->prepare("SELECT COUNT(*) FROM disponibilites WHERE service_id=?"); $nb->execute([$s['id']]); $nbD=$nb->fetchColumn();
+        $icon = $s['type']==='activite' ? '🏄' : ($s['type']==='transport' ? '🚌' : '🏨');
       ?>
       <div class="service-cal">
-        <div class="service-cal-icon">🏨</div>
+        <div class="service-cal-icon"><?php echo $icon;?></div>
         <div>
           <div class="service-cal-name"><?php echo htmlspecialchars($s['nom']);?></div>
           <div class="service-cal-info"><?php echo $nbD;?> créneau<?php echo $nbD>1?'x':'';?> défini<?php echo $nbD>1?'s':'';?></div>
@@ -216,15 +224,25 @@ $disponibles   = $totalDispos - $bloquees;
 
       <div class="form-group">
         <label>Service *</label>
+        <?php if(empty($services)):?>
+          <div style="padding:12px 16px;background:#fff8e1;border:1.5px solid #fde68a;border-radius:14px;font-size:13px;color:#92400e">
+            ⚠️ Aucun service trouvé. Commencez par ajouter un 
+            <a href="gestion-hebergements.php" style="color:#5b3ed4;font-weight:700">hébergement</a> ou une 
+            <a href="gestion-activites.php" style="color:#5b3ed4;font-weight:700">activité</a> pour créer des disponibilités.
+          </div>
+        <?php else:?>
         <div class="input-wrap">
           <span class="input-icon">🏨</span>
           <select name="service_id" required>
             <option value="">— Sélectionner un service —</option>
             <?php foreach($services as $s):?>
-            <option value="<?php echo (int)$s['id'];?>"><?php echo htmlspecialchars($s['nom']);?></option>
+            <option value="<?php echo (int)$s['id'];?>">
+              <?php echo htmlspecialchars(($s['type_icon']??'📦').' '.$s['nom'].' ('.$s['type'].')');?>
+            </option>
             <?php endforeach;?>
           </select>
         </div>
+        <?php endif;?>
       </div>
 
       <div class="form-row-2">

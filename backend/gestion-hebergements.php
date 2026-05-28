@@ -12,6 +12,8 @@ $message = ""; $error = "";
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     $deleteId = (int)$_POST['delete_id'];
     $pdo->prepare("DELETE FROM hebergements WHERE id=? AND prestataire_id=?")->execute([$deleteId, $user_id]);
+    // Supprimer aussi de services
+    $pdo->prepare("DELETE FROM services WHERE ref_id=? AND type='hebergement' AND prestataire_id=?")->execute([$deleteId, $user_id]);
     $message = "Hébergement supprimé.";
 }
 
@@ -34,6 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_hebergement'])) {
     else {
         $pdo->prepare("INSERT INTO hebergements (nom,description,type,prix_nuit,capacite,image_url,destination_id,prestataire_id,est_actif) VALUES (?,?,?,?,?,?,?,?,1)")
             ->execute([$nom,$description,$type,$prix,$capacite,$image,$destId,$user_id]);
+        // Alimenter aussi la table services pour les disponibilités
+        $newId = $pdo->lastInsertId();
+        $pdo->prepare("INSERT INTO services (prestataire_id,type,ref_id,nom,prix,statut) VALUES (?,?,?,?,?,'actif')")
+            ->execute([$user_id,'hebergement',(int)$newId,$nom,$prix]);
         $message = "Hébergement « $nom » ajouté.";
     }
 }
@@ -186,7 +192,7 @@ $destImages = ['Bali'=>'assets/images/bali.png','Algarve'=>'assets/images/algarv
 
 <!-- NAVBAR -->
 <header class="navbar">
-  <div class="brand"><img src="assets/images/logo-voyagevista.png" alt="Logo VoyageVista"></div>
+  <div class="brand"><img src="../frontend/assets/images/logo-voyagevista.png" alt="Logo VoyageVista"></div>
   <nav>
     <a href="index.html">Accueil</a>
     <a href="destination.html">Destinations</a>

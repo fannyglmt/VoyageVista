@@ -28,6 +28,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_activite'])) {
         else {
             $pdo->prepare("INSERT INTO activites (nom,description,categorie,prix,duree_heures,image_url,destination_id,prestataire_id,est_actif) VALUES (?,?,?,?,?,?,?,?,1)")
                 ->execute([$nom,$desc,$cat,$prix,$duree,$image,$destId,$user_id]);
+            // Alimenter aussi la table services pour les disponibilités
+            $newId = $pdo->lastInsertId();
+            $pdo->prepare("INSERT INTO services (prestataire_id,type,ref_id,nom,prix,statut) VALUES (?,?,?,?,?,'actif')")
+                ->execute([$user_id,'activite',(int)$newId,$nom,$prix]);
             $message = "Activité « $nom » ajoutée.";
         }
     }
