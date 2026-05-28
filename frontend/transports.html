@@ -57,6 +57,13 @@
         Compare les meilleures options pour rejoindre
         votre destination dans le meilleur confort.
       </p>
+      <div class="transport-search">
+  <input
+    type="text"
+    id="transportSearch"
+    placeholder="Rechercher un transport..."
+  >
+</div>
 
     </div>
 
@@ -66,23 +73,31 @@
 
   <section class="transport-filters">
 
-    <button class="transport-filter active">
-      ✈ Avion
-    </button>
+  <button class="transport-filter active" data-type="all">
+    Tous
+  </button>
 
-    <button class="transport-filter">
-      🚄 Train
-    </button>
+  <button class="transport-filter" data-type="avion">
+    ✈ Avion
+  </button>
 
-    <button class="transport-filter">
-      🚗 Road Trip
-    </button>
+  <button class="transport-filter" data-type="train">
+    🚄 Train
+  </button>
 
-    <button class="transport-filter">
-      🛥 Ferry
-    </button>
+  <button class="transport-filter" data-type="roadtrip">
+    🚗 Road Trip
+  </button>
 
-  </section>
+  <button class="transport-filter" data-type="ferry">
+    🛥 Ferry
+  </button>
+
+  <button class="transport-filter" data-type="velo">
+    🚴 Vélo
+  </button>
+
+</section>
 
   <!-- TRANSPORTS GRID -->
 
@@ -90,7 +105,7 @@
 
     <!-- CARD 1 -->
 
-    <article class="transport-card">
+    <article class="transport-card" data-type="avion">
 
       <img
         src="assets/images/transport-avion.jpg"
@@ -146,7 +161,7 @@
 
     <!-- CARD 2 -->
 
-    <article class="transport-card">
+    <article class="transport-card" data-type="train">
 
       <img
         src="assets/images/transport-train.jpg"
@@ -202,7 +217,7 @@
 
     <!-- CARD 3 -->
 
-    <article class="transport-card">
+    <article class="transport-card" data-type="roadtrip">
 
       <img
         src="assets/images/transport-van.jpg"
@@ -258,7 +273,7 @@
 
     <!-- CARD 4 -->
 
-    <article class="transport-card">
+    <article class="transport-card" data-type="avion">
 
       <img
         src="assets/images/transport-avion.jpg"
@@ -314,7 +329,7 @@
 
     <!-- CARD 4 -->
 
-    <article class="transport-card">
+    <article class="transport-card" data-type="ferry">
 
       <img
         src="assets/images/transport-ferry.jpg"
@@ -370,7 +385,7 @@
 
     <!-- CARD 5 -->
 
-    <article class="transport-card">
+    <article class="transport-card" data-type="velo">
 
       <img
         src="assets/images/transport-velo.jpg"
@@ -424,7 +439,7 @@
 
     </article>
 
-    
+
 
 
   </section>

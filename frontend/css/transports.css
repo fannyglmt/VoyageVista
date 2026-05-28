@@ -348,3 +348,48 @@
   }
 
 }
+
+.transport-search {
+  display: flex;
+  justify-content: center;
+  margin-top: 35px;
+}
+
+.transport-search input {
+
+  width: 420px;
+  max-width: 90%;
+
+  padding: 16px 22px;
+
+  border-radius: 14px;
+  border: 2px solid rgba(255,255,255,0.25);
+
+  background: white;
+
+  color: #1e293b;
+
+  font-size: 16px;
+  font-weight: 500;
+
+  outline: none;
+
+  transition: 0.3s ease;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.12);
+}
+
+.transport-search input::placeholder {
+  color: #94a3b8;
+}
+
+.transport-search input:focus {
+
+  border-color: #7c9cf5;
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 15px 35px rgba(124,156,245,0.25);
+}

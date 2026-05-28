@@ -1254,3 +1254,72 @@ budgetFilter?.addEventListener("change", filterHebergements);
 ambianceFilter?.addEventListener("change", filterHebergements);
 voyageurFilter?.addEventListener("change", filterHebergements);
 hebergementSearch?.addEventListener("input", filterHebergements);
+
+const transportFilters =
+  document.querySelectorAll(".transport-filter");
+
+const transportCards =
+  document.querySelectorAll(".transport-card");
+
+const transportSearch =
+  document.getElementById("transportSearch");
+
+let currentTransportFilter = "all";
+
+function filterTransports() {
+
+  const searchValue =
+    transportSearch?.value.toLowerCase() || "";
+
+  transportCards.forEach(card => {
+
+    const type =
+      card.dataset.type;
+
+    const text =
+      card.textContent.toLowerCase();
+
+    const matchFilter =
+      currentTransportFilter === "all" ||
+      type === currentTransportFilter;
+
+    const matchSearch =
+      text.includes(searchValue);
+
+    if (matchFilter && matchSearch) {
+
+      card.style.display = "block";
+
+    } else {
+
+      card.style.display = "none";
+
+    }
+
+  });
+
+}
+
+transportFilters.forEach(button => {
+
+  button.addEventListener("click", () => {
+
+    transportFilters.forEach(btn =>
+      btn.classList.remove("active")
+    );
+
+    button.classList.add("active");
+
+    currentTransportFilter =
+      button.dataset.type;
+
+    filterTransports();
+
+  });
+
+});
+
+transportSearch?.addEventListener(
+  "input",
+  filterTransports
+);
