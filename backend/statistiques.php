@@ -64,6 +64,7 @@ $top_prestataires = $pdo->query("SELECT u.username, COUNT(s.id) AS nb_services, 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Statistiques - VoyageVista</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="admin_style.css">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
@@ -71,22 +72,22 @@ $top_prestataires = $pdo->query("SELECT u.username, COUNT(s.id) AS nb_services, 
     :root{--bg:#ffffff;--card:#ffffff;--border:rgba(255,255,255,.07);--purple:#7c5cfc;--pink:#f25ca2;--teal:#2dd4bf;--amber:#fbbf24;--red:#f87171;--green:#4ade80;--text:#1a1a2e;--muted:#6b7280}
     body{font-family:'DM Sans',sans-serif;background:#fff;color:#1a1a2e;min-height:100vh}
 
-    .navbar{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
-    .brand img{height:32px}
+    .navbar{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:105px;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+    .brand img{height:100px}
     .navbar nav{display:flex;gap:.25rem}
     .navbar nav a{font-size:.85rem;font-weight:500;color:#4a9fd4;text-decoration:none;padding:.4rem .9rem;border-radius:20px;transition:all .2s}
-    .navbar nav a:hover{color:#2d7db3;background:#f0f7ff}
+    .navbar nav a:hover{color:#31517c;background:#f0f7ff}
     .navbar nav a.active{color:#f59e0b;background:transparent;font-weight:600}
     .nav-right{display:flex;align-items:center;gap:1rem}
-    .avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700}
+    .avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#79a9df,#f3b27d);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700}
     .logout{font-size:.8rem;color:#6b7280;text-decoration:none;padding:.35rem .8rem;border:1px solid #e5e7eb;border-radius:20px;transition:all .2s}
     .logout:hover{color:#1a1a2e}
 
     .page-hero{padding:2.5rem 2rem 1.5rem;position:relative;overflow:hidden}
     .page-hero::before{content:'';position:absolute;top:-60px;right:-80px;width:400px;height:300px;background:radial-gradient(ellipse,rgba(74,222,128,.1) 0%,transparent 70%);pointer-events:none}
-    .tag{display:inline-block;font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.15em;color:#f59e0b;background:none;border:none;padding:0;margin-bottom:.9rem}
-    .page-hero h1{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:#3b6fd4;margin-bottom:.5rem;line-height:1.2}
-    .page-hero h1 span{color:#3b6fd4}
+    .tag{display:inline-block;font-family:'Syne',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:3px;color:var(--orange);background:none;border:none;padding:0;margin-bottom:.9rem}
+    .page-hero h1{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--blue);margin-bottom:.5rem;line-height:1.2}
+    .page-hero h1 span{color:var(--blue)}
     .page-hero p{color:#6b7280;font-size:.9rem}
     .hero-top{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem}
 

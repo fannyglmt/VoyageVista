@@ -87,7 +87,7 @@ $destImages = ['Bali'=>'assets/images/bali.png','Algarve'=>'assets/images/algarv
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="admin_style.css">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="admin_style.css">
+  
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:'DM Sans',system-ui,sans-serif;background:#f7fbff;color:var(--text)}
