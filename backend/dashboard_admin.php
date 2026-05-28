@@ -25,6 +25,7 @@ $top_destinations = $pdo->query("SELECT d.nom, d.region, d.budget, COUNT(r.id) A
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Admin - VoyageVista</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="admin_style.css">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -32,28 +33,28 @@ $top_destinations = $pdo->query("SELECT d.nom, d.region, d.budget, COUNT(r.id) A
     body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 
     /* ── NAVBAR style index.html ── */
-    .navbar{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:0 1px 8px rgba(0,0,0,.06)}
-    .brand img{height:32px}
+    .navbar{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:105px;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:0 1px 8px rgba(0,0,0,.06)}
+    .brand img{height:100px}
     .navbar nav{display:flex;gap:.25rem}
     .navbar nav a{font-size:.85rem;font-weight:500;color:#4a9fd4;text-decoration:none;padding:.4rem .9rem;border-radius:20px;transition:all .2s}
-    .navbar nav a:hover{color:#2d7db3;background:#f0f7ff}
+    .navbar nav a:hover{color:#31517c;background:#f0f7ff}
     .navbar nav a.active{color:#f59e0b;background:transparent;font-weight:600}
     .nav-right{display:flex;align-items:center;gap:1rem}
-    .avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:#fff;cursor:pointer}
+    .avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#79a9df,#f3b27d);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:#fff;cursor:pointer}
     .logout{font-size:.82rem;color:var(--muted);text-decoration:none;padding:.35rem .9rem;border:1px solid var(--border);border-radius:20px;transition:all .2s}
     .logout:hover{color:var(--text);border-color:#d1d5db}
 
     /* ── HERO style index.html ── */
     .page-hero{padding:3rem 2rem 2rem;background:linear-gradient(135deg,#faf5ff 0%,#fdf2f8 50%,#f0fdfa 100%);border-bottom:1px solid var(--border);position:relative;overflow:hidden}
     .page-hero::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;background:radial-gradient(circle,rgba(124,92,252,.12) 0%,transparent 70%);pointer-events:none}
-    .tag{display:inline-block;font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.15em;color:#f59e0b;background:none;border:none;padding:0;margin-bottom:.9rem}
-    .page-hero h1{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:#3b6fd4;margin-bottom:.5rem;line-height:1.2}
-    .page-hero h1 span{color:#3b6fd4}
+    .tag{display:inline-block;font-family:'Syne',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:3px;color:var(--orange);background:none;border:none;padding:0;margin-bottom:.9rem}
+    .page-hero h1{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--blue);margin-bottom:.5rem;line-height:1.2}
+    .page-hero h1 span{color:var(--blue)}
     .page-hero p{color:var(--muted);font-size:.95rem}
     .hero-top{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem}
     .hero-actions{display:flex;gap:.75rem;flex-wrap:wrap;align-self:center}
-    .btn-primary{background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;border:none;padding:.65rem 1.4rem;border-radius:24px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;text-decoration:none;transition:opacity .2s,transform .2s;display:inline-flex;align-items:center;gap:.4rem;box-shadow:0 4px 15px rgba(124,92,252,.3)}
-    .btn-primary:hover{opacity:.88;transform:translateY(-1px)}
+    .btn-primary{background:linear-gradient(135deg,#79a9df,#f3b27d);color:#fff;border:none;padding:.65rem 1.4rem;border-radius:24px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;text-decoration:none;transition:opacity .2s,transform .2s;display:inline-flex;align-items:center;gap:.4rem;box-shadow:0 14px 30px rgba(95,144,200,0.22)}
+    .btn-primary:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 22px 40px rgba(95,144,200,.3)}
     .btn-secondary{background:#fff;color:var(--purple);border:2px solid rgba(124,92,252,.3);padding:.6rem 1.3rem;border-radius:24px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all .2s;display:inline-flex;align-items:center;gap:.4rem}
     .btn-secondary:hover{background:rgba(124,92,252,.06)}
 
@@ -118,7 +119,7 @@ $top_destinations = $pdo->query("SELECT d.nom, d.region, d.budget, COUNT(r.id) A
     .data-table tr:last-child td{border-bottom:none}
     .data-table tr:hover td{background:#fafafa}
     .user-cell{display:flex;align-items:center;gap:.7rem}
-    .user-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:#fff;flex-shrink:0}
+    .user-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#79a9df,#f3b27d);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:#fff;flex-shrink:0}
     .user-name{font-weight:500;font-size:.84rem;color:var(--text)}
     .user-email{font-size:.73rem;color:var(--muted)}
 

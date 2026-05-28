@@ -21,7 +21,7 @@ foreach($services as &$s){ $sc=$pdo->prepare("SELECT COALESCE(SUM(r.prix_total),
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="admin_style.css">
   <style>
-    .tag{display:inline-block;font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.15em;color:#f59e0b;background:none;border:none;padding:0;margin-bottom:.9rem}
+    .tag{display:inline-block;font-family:'Syne',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:3px;color:var(--orange);background:none;border:none;padding:0;margin-bottom:.9rem}
     .page-hero::before{background:radial-gradient(circle,rgba(45,212,191,.12) 0%,transparent 70%)}
     .btn-primary{background:linear-gradient(135deg,#2dd4bf,var(--purple));box-shadow:0 4px 15px rgba(45,212,191,.3)}
     .navbar nav a.active{color:#f59e0b;background:transparent;font-weight:600}
@@ -75,7 +75,7 @@ foreach($services as &$s){ $sc=$pdo->prepare("SELECT COALESCE(SUM(r.prix_total),
       <p>Gérez vos services et suivez vos performances</p>
     </div>
     <div class="hero-actions">
-      <a href="../frontend/gestion-hebergements.html" class="btn-primary">🏨 Ajouter un service</a>
+      <a href="gestion-hebergements.php" class="btn-primary">🏨 Ajouter un service</a>
       <a href="../frontend/gestion-disponibilites.html" class="btn-secondary">📅 Disponibilités</a>
     </div>
   </div>
@@ -93,14 +93,14 @@ foreach($services as &$s){ $sc=$pdo->prepare("SELECT COALESCE(SUM(r.prix_total),
   <!-- Mes services style trend-card -->
   <div class="section-title">
     <h2>🏨 Mes services</h2>
-    <a href="../frontend/gestion-hebergements.html">Tout gérer →</a>
+    <a href="gestion-hebergements.php">Tout gérer →</a>
   </div>
   <?php
     $svcImages=['hebergement'=>'../frontend/assets/images/hebergement-bg.jpg','activite'=>'../frontend/assets/images/boat.png','transport'=>'../frontend/assets/images/barcelone.png'];
     $colors=['#2dd4bf','#7c5cfc','#fbbf24','#4ade80','#f25ca2'];
   ?>
   <?php if(empty($services)):?>
-    <div class="white-card"><p class="empty-state">Aucun service publié. <a href="../frontend/gestion-hebergements.html" style="color:var(--purple)">Ajouter un service →</a></p></div>
+    <div class="white-card"><p class="empty-state">Aucun service publié. <a href="gestion-hebergements.php" style="color:var(--purple)">Ajouter un service →</a></p></div>
   <?php else:?>
   <div class="svc-grid">
     <?php foreach($services as $i=>$s):
@@ -116,7 +116,7 @@ foreach($services as &$s){ $sc=$pdo->prepare("SELECT COALESCE(SUM(r.prix_total),
           <span style="font-family:'Syne',sans-serif;font-weight:700;color:#16a34a"><?php echo number_format((float)($s['prix']??0),0,',',' ');?>€</span>
           <span class="pill <?php echo $sc2;?>"><?php echo htmlspecialchars($s['statut']??'en_attente');?></span>
         </div>
-        <a href="../frontend/gestion-hebergements.html?id=<?php echo (int)$s['id'];?>" style="display:block;margin-top:.8rem;text-align:center;font-size:.78rem;color:var(--purple);text-decoration:none;font-weight:500;padding:.4rem;border:1px solid rgba(124,92,252,.2);border-radius:8px">Modifier →</a>
+        <a href="gestion-hebergements.php?id=<?php echo (int)$s['id'];?>" style="display:block;margin-top:.8rem;text-align:center;font-size:.78rem;color:var(--purple);text-decoration:none;font-weight:500;padding:.4rem;border:1px solid rgba(124,92,252,.2);border-radius:8px">Modifier →</a>
       </div>
     </div>
     <?php endforeach;?>
@@ -161,7 +161,7 @@ foreach($services as &$s){ $sc=$pdo->prepare("SELECT COALESCE(SUM(r.prix_total),
   <!-- Navigation rapide style concept-section -->
   <div class="section-title"><h2>⚡ Navigation rapide</h2></div>
   <div class="white-card">
-    <a href="../frontend/gestion-hebergements.html" class="action-item">
+    <a href="gestion-hebergements.php" class="action-item">
       <div class="action-num" style="background:rgba(45,212,191,.1)">🏨</div>
       <div><div class="action-label">Hébergements</div><div class="action-sub">Gérer mes logements</div></div>
       <span class="action-arrow">›</span>
