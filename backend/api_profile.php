@@ -1,4 +1,7 @@
 <?php
+session_name('VOYAGEVISTA_SESSION');
+session_set_cookie_params(['lifetime'=>0,'path'=>'/','domain'=>'','secure'=>false,'httponly'=>true,'samesite'=>'Lax']);
+session_start();
 // =============================================
 // API_PROFIL.PHP — VoyageVista
 // Retourne les données du profil utilisateur connecté
@@ -12,9 +15,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 require_once 'configuration.php';
-session_name('VOYAGEVISTA_SESSION');
-session_set_cookie_params(['lifetime'=>0,'path'=>'/','domain'=>'','secure'=>false,'httponly'=>true,'samesite'=>'Lax']);
-session_start();
+
 
 $user_id = (int)$_SESSION['user_id'];
 
