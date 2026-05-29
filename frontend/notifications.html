@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoyageVista — Notifications</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/notifications.css">
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="brand">
+      <a href="index.html">
+        <img src="assets/images/logo-voyagevista.png" alt="VoyageVista">
+      </a>
+    </div>
+    <nav>
+      <a href="index.html">Accueil</a>
+      <a href="destination.html">Destinations</a>
+      <a href="activites.html">Activités</a>
+    </nav>
+    <div class="nav-icons">
+      <span class="heart-icon">♥</span>
+      <a href="notifications.html">
+        <span class="notif-bell">🔔<span class="notif-count" id="navNotifCount">6</span></span>
+      </a>
+      <a href="login.html"><span>👤</span></a>
+    </div>
+  </header>
+
+  <main class="notif-main">
+
+    <!-- HERO -->
+    <section class="notif-hero">
+      <div class="notif-hero-bg"></div>
+      <div class="notif-hero-content">
+        <h1>🔔 Notifications</h1>
+        <p>Reste à jour sur tes voyages, ton groupe et tes destinations.</p>
+        <div class="notif-hero-actions">
+          <button class="btn-tout-lire" id="btnToutLire">Tout marquer comme lu</button>
+          <span class="notif-count-label"><span id="countNonLues">6</span> non lue(s)</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="notif-container">
+
+      <!-- FILTRES -->
+      <div class="notif-filters">
+        <button class="filter-btn active" data-filter="all">Toutes</button>
+        <button class="filter-btn" data-filter="reservation">✈️ Réservations</button>
+        <button class="filter-btn" data-filter="groupe">👥 Groupe</button>
+        <button class="filter-btn" data-filter="destination">🌍 Destinations</button>
+        <button class="filter-btn" data-filter="offre">🏷️ Offres</button>
+        <button class="filter-btn" data-filter="rappel">⏰ Rappels</button>
+      </div>
+
+      <!-- LISTE DES NOTIFICATIONS -->
+      <div class="notif-list" id="notifList">
+
+        <!-- RÉSERVATION -->
+        <div class="notif-item unread" data-type="reservation">
+          <div class="notif-icon-wrap" style="background: linear-gradient(135deg,#79a9df,#9bdff4)">✈️</div>
+          <div class="notif-content">
+            <div class="notif-header">
+              <h3>Réservation confirmée !</h3>
+              <span class="notif-time">Il y a 5 min</span>
+            </div>
+            <p>Ton séjour à <strong>Bali</strong> du 15 au 25 juillet 2026 est confirmé. Bon voyage ! 🌴</p>
+            <div class="notif-actions">
+              <a href="panier.html" class="notif-btn-primary">Voir le séjour</a>
+            </div>
+          </div>
+          <button class="notif-close" data-id="1">✕</button>
+        </div>
+
+        <!-- GROUPE -->
+        <div class="notif-item unread" data-type="groupe">
+          <div class="notif-icon-wrap" style="background: linear-gradient(135deg,#f3b27d,#f39b5f)">👥</div>
+          <div class="notif-content">
+            <div class="notif-header">
+              <h3>Ton groupe a voté !</h3>
+              <span class="notif-time">Il y a 20 min</span>
+            </div>
+            <p>3 membres de ton groupe ont swiped <strong>Santorin</strong> à droite. C'est un match ! 🎉</p>
+            <div class="notif-actions">
+              <a href="destination-detail.html" class="notif-btn-primary">Voir la destination</a>
+            </div>
+          </div>
+          <button class="notif-close" data-id="2">✕</button>
+        </div>
+
+        <!-- ACTIVITÉ BIENTÔT COMPLÈTE -->
+        <div class="notif-item unread" data-type="reservation">
+          <div class="notif-icon-wrap" style="background: linear-gradient(135deg,#e64b5d,#f39b5f)">⚠️</div>
+          <div class="notif-content">
+            <div class="notif-header">
+              <h3>Activité bientôt complète !</h3>
+              <span class="notif-time">Il y a 1h</span>
+            </div>
+            <p>La <strong>plongée à Bali</strong> dans ton panier n'a plus que <strong>3 places</strong> disponibles. Réserve vite !</p>
+            <div class="notif-actions">
+              <a href="panier.html" class="notif-btn-primary">Voir mon panier</a>
+              <a href="activite-detail.html" class="notif-btn-secondary">Détails</a>
+            </div>
+          </div>
+          <button class="notif-close" data-id="3">✕</button>
+        </div>
+
+        <!-- PRIX EN BAISSE -->
+        <div class="notif-item unread" data-type="offre">
+          <div class="notif-icon-wrap" style="background: linear-gradient(135deg,#57c5b6,#9bdff4)">📉</div>
+          <div class="notif-content">
+            <div class="notif-header">
+              <h3>Prix en baisse sur Ibiza !</h3>
+              <span class="notif-time">Il y a 3h</span>
+            </div>
+            <p>Une destination que tu as likée a baissé de prix. <strong>Ibiza</strong> est maintenant accessible dès <strong>480€</strong> au lieu de 520€ !</p>
+            <div class="notif-actions">
+              <a href="destination-detail.html" class="notif-btn-primary">Voir l'offre</a>
+            </div>
+          </div>
+          <button class="notif-close" data-id="4">✕</button>
+        </div>
+
+        <!-- NOUVEAU MATCH -->
+        <div class="notif-item unread" data-type="destination">
+          <div class="notif-icon-wrap" style="background: linear-gradient(135deg,#79a9df,#f3b27d)">💘</div>
+          <div class="notif-content">
+            <div class="notif-header">
+              <h3>Nouveau match de destination !</h3>
+              <span class="notif-time">Il y a 5h</span>
+            </div>
+            <p><strong>Tulum, Mexique</strong> correspond parfaitement à tes préférences de swipe. Jungle, plages et cenotes t'attendent ! 🌿</p>
+            <div class="notif-actions">
+              <a href="destination.html" class="notif-btn-primary">Découvrir</a>
+            </div>
+          </div>
+          <button class="notif-close" data-id="5">✕</button>
+        </div>
+
+        <!-- RAPPEL VOYAGE -->
+        <div class="notif-item unread" data-type="rappel">
+          <div class="notif-icon-wrap" style="background: linear-gradient(135deg,#4a68a6,#79a9df)">⏰</div>
+          <div class="notif-content">
+            <div class="notif-header">
+              <h3>Rappel — Bali dans 30 jours !</h3>
+              <span class="notif-time">Il y a 8h</span>
+            </div>
+            <p>Ton voyage à <strong>Bali</strong> commence dans <strong>30 jours</strong>. Pense à vérifier ton panier et à préparer tes documents. ✈️</p>
+            <div class="notif-actions">
+              <a href="panier.html" class="notif-btn-primary">Vérifier mon panier</a>
+            </div>
+          </div>
+          <button class="notif-close" data-id="6">✕</button>
+        </div>
+
+        <!-- OFFRE LIMITÉE (déjà lue) -->
+        <div class="notif-item read" data-type="offre">
+          <div class="notif-icon-wrap" style="background: linear-gradient(135deg,#f39b5f,#f3b27d)">🏷️</div>
+          <div class="notif-content">
+            <div class="notif-header">
+              <h3>Offre limitée — Hébergement</h3>
+              <span class="notif-time">Hier</span>
+            </div>
+            <p>La villa que tu as sauvegardée à <strong>Santorin</strong> est en promotion jusqu'à ce soir. <strong>-20%</strong> sur le tarif habituel !</p>
+            <div class="notif-actions">
+              <a href="detail-hebergement.html" class="notif-btn-secondary">Voir l'hébergement</a>
+            </div>
+          </div>
+          <button class="notif-close" data-id="7">✕</button>
+        </div>
+
+        <!-- GROUPE (déjà lue) -->
+        <div class="notif-item read" data-type="groupe">
+          <div class="notif-icon-wrap" style="background: linear-gradient(135deg,#9bdff4,#57c5b6)">💬</div>
+          <div class="notif-content">
+            <div class="notif-header">
+              <h3>Nouveau membre dans ton groupe</h3>
+              <span class="notif-time">Il y a 2 jours</span>
+            </div>
+            <p><strong>Léa</strong> a rejoint ton groupe de voyage pour Bali. Vous êtes maintenant 4 voyageurs ! 👋</p>
+          </div>
+          <button class="notif-close" data-id="8">✕</button>
+        </div>
+
+      </div>
+
+      <!-- ÉTAT VIDE -->
+      <div class="notif-empty hidden" id="notifEmpty">
+        <div class="empty-icon">🔔</div>
+        <h2>Tout est à jour !</h2>
+        <p>Tu n'as aucune notification pour l'instant.<br>Continue à swiper des destinations pour en recevoir !</p>
+        <a href="destination.html" class="btn-primary" style="margin-top: 24px; display:inline-block;">
+          Explorer les destinations
+        </a>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer>
+    <p>© 2026 VoyageVista — Explore, swipe, travel together.</p>
+  </footer>
+
+  <script src="js/notifications.js"></script>
+
+</body>
+</html>
