@@ -1,9 +1,9 @@
 <?php
-session_start();
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     header("Location: login.php"); exit;
 }
 require_once 'configuration.php';
+session_start();
 
 $message = ""; $error = "";
 if (empty($_SESSION['csrf_token'])) $_SESSION['csrf_token'] = bin2hex(random_bytes(32));

@@ -2,8 +2,8 @@
 // =============================================
 // MODIFIER_PROFIL.PHP — VoyageVista
 // =============================================
-session_start();
 require_once 'configuration.php';
+session_start();
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: ../frontend/login.html'); exit;

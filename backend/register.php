@@ -4,9 +4,8 @@
 // Logique d'inscription
 // =========================================
 
-session_start();
-
 require_once 'configuration.php';
+session_start();
 
 // Si déjà connecté → redirection
 if (isset($_SESSION['user_id'])) {

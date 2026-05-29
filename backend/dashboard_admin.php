@@ -1,9 +1,9 @@
 <?php
-session_start();
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     header("Location: login.php"); exit;
 }
 require_once 'configuration.php';
+session_start();
 
 $total_users          = $pdo->query("SELECT COUNT(*) FROM utilisateurs")->fetchColumn();
 $total_dest           = $pdo->query("SELECT COUNT(*) FROM destinations WHERE est_active=1")->fetchColumn();

@@ -5,7 +5,6 @@
 // =============================================
 header('Content-Type: application/json; charset=utf-8');
 
-session_start();
 
 if (!isset($_SESSION['user_id'])) {
     echo json_encode(['success' => false, 'error' => 'non_connecte', 'redirect' => 'login.html']);
@@ -13,6 +12,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 require_once 'configuration.php';
+session_start();
 
 $user_id = (int)$_SESSION['user_id'];
 

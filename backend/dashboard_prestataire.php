@@ -1,9 +1,9 @@
 <?php
-session_start();
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'prestataire') {
     header("Location: login.php"); exit;
 }
 require_once 'configuration.php';
+session_start();
 
 $pid = (int)$_SESSION['user_id'];
 
