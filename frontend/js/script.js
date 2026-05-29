@@ -1,1918 +1,646 @@
+// =============================================
+// SCRIPT.JS — VoyageVista
+// Synchronisé avec la BDD via les APIs PHP
+// =============================================
+
 console.log("VoyageVista chargé 🌴");
 
+// ── SPLASH SCREEN ─────────────────────────────────────────
 window.addEventListener("load", () => {
   const splash = document.getElementById("splash-screen");
-
   if (splash) {
-    setTimeout(() => {
-      splash.classList.add("hidden");
-    }, 7800);
+    setTimeout(() => splash.classList.add("hidden"), 7800);
   }
 });
 
-const destinations = [
-  {
-    name: "Bali",
-    image: "bali.png",
-    categories: ["Plage", "Nature", "Détente", "Aventure"],
-    region: "Asie",
-    budget: "€€",
-    price: 780,
-    rating: 4.8,
-    group: "9+",
-    popular: 98,
-    trend: 95,
-    isNew: false,
-    description: "Plages turquoise, temples, surf et sunsets parfaits avec ta team."
-  },
-  {
-    name: "Ibiza",
-    image: "ibiza.png",
-    categories: ["Nightlife", "Plage", "Détente"],
-    region: "Europe",
-    budget: "€€",
-    price: 520,
-    rating: 4.6,
-    group: "5-8",
-    popular: 96,
-    trend: 99,
-    isNew: false,
-    description: "Le spot idéal pour alterner plage, musique et soirées entre potes."
-  },
-  {
-    name: "Santorin",
-    image: "santorin.png",
-    categories: ["Culture", "Plage", "Gastronomie", "Détente"],
-    region: "Europe",
-    budget: "€€€",
-    price: 640,
-    rating: 4.9,
-    group: "2-4",
-    popular: 93,
-    trend: 91,
-    isNew: false,
-    description: "Maisons blanches, vues incroyables et ambiance sunset premium."
-  },
-  {
-    name: "Tokyo",
-    image: "tokyo.png",
-    categories: ["Culture", "Gastronomie", "Nightlife"],
-    region: "Asie",
-    budget: "€€€",
-    price: 1100,
-    rating: 4.9,
-    group: "2-4",
-    popular: 94,
-    trend: 97,
-    isNew: true,
-    description: "Une ville ultra vivante entre food, néons, temples et quartiers iconiques."
-  },
-  {
-    name: "Marrakech",
-    image: "marrakech.png",
-    categories: ["Culture", "Gastronomie", "Road Trip"],
-    region: "Afrique",
-    budget: "€",
-    price: 390,
-    rating: 4.5,
-    group: "5-8",
-    popular: 89,
-    trend: 90,
-    isNew: true,
-    description: "Souks, riads, désert et vibes orientales pour un séjour dépaysant."
-  },
-  {
-    name: "Costa Rica",
-    image: "costarica.png",
-    categories: ["Nature", "Aventure", "Sport"],
-    region: "Amérique",
-    budget: "€€",
-    price: 890,
-    rating: 4.7,
-    group: "9+",
-    popular: 90,
-    trend: 92,
-    isNew: false,
-    description: "Jungle, volcans, surf et aventures nature pour un groupe motivé."
-  },
-  {
-    name: "Barcelone",
-    image: "barcelone.png",
-    categories: ["Culture", "Nightlife", "Gastronomie", "Plage"],
-    region: "Europe",
-    budget: "€€",
-    price: 430,
-    rating: 4.6,
-    group: "5-8",
-    popular: 97,
-    trend: 94,
-    isNew: false,
-    description: "Ville solaire, tapas, plage et soirées faciles à organiser."
-  },
-  {
-    name: "Chamonix",
-    image: "chamonix.png",
-    categories: ["Sport", "Nature", "Aventure"],
-    region: "Europe",
-    budget: "€€",
-    price: 560,
-    rating: 4.4,
-    group: "2-4",
-    popular: 83,
-    trend: 86,
-    isNew: true,
-    description: "Montagne, ski, randonnées et sensations fortes au grand air."
-  },
-  {
-    name: "Road Trip Portugal",
-    image: "portugal.png",
-    categories: ["Road Trip", "Plage", "Gastronomie", "Détente"],
-    region: "Europe",
-    budget: "€",
-    price: 350,
-    rating: 4.5,
-    group: "9+",
-    popular: 88,
-    trend: 93,
-    isNew: true,
-    description: "Un itinéraire chill entre Lisbonne, Algarve, plages et bons restos."
-  }
-];
+// ── CONFIG ────────────────────────────────────────────────
+const IMAGES_PATH   = 'assets/images/';
+const API_BASE      = '../backend/';
 
 const categoryIcons = {
-  "Aventure": "🧭",
-  "Nightlife": "🎉",
-  "Plage": "🌊",
+  "Aventure":    "🧭",
+  "Nightlife":   "🎉",
+  "Plage":       "🌊",
   "Gastronomie": "🍽️",
-  "Culture": "🏛️",
-  "Nature": "🌿",
-  "Sport": "🏄",
-  "Détente": "🧘",
-  "Road Trip": "🚗"
+  "Culture":     "🏛️",
+  "Nature":      "🌿",
+  "Sport":       "🏄",
+  "Detente":     "🧘",
+  "Road Trip":   "🚗",
+  "Surf & Sports nautiques": "🏄",
+  "Randonnée & Aventure":    "🧗",
+  "Gastronomie & Food tour": "🍜",
+  "Croisière & Bateau":      "🛥️",
+  "Culture & Visite":        "🏛️",
+  "Nightlife & Soirée":      "🎉",
+  "Bien-être & Spa":         "🧖",
 };
 
+// Mapping image BDD → image locale
+const destImagesMap = {
+  'bali.png':              'bali.png',
+  'algarve.png':           'algarve.png',
+  'barcelone.png':         'barcelone.png',
+  'chamonix.png':          'chamonix.png',
+  'costarica.png':         'costarica.png',
+  'ibiza.png':             'ibiza.png',
+  'santorin.png':          'santorin.png',
+  'diner-marocain.png':    'diner-marocain.png',
+  'food-tour.png':         'food-tour.png',
+  'boat.png':              'boat.png',
+  'croisiere-sunset.png':  'croisiere-sunset.png',
+  'hebergement-bg.jpg':    'hebergement-bg.jpg',
+  'barcelonevilla.jpg':    'barcelonevista.jpg',
+};
+
+function resolveImg(imageUrl, fallback = 'hebergement-bg.jpg') {
+  if (!imageUrl) return IMAGES_PATH + fallback;
+  return IMAGES_PATH + (destImagesMap[imageUrl] || imageUrl);
+}
+
+// ── DONNÉES (chargées depuis la BDD) ─────────────────────
+let destinations = [];
+let activities   = [];
+
+// ── INIT ─────────────────────────────────────────────────
+document.addEventListener("DOMContentLoaded", async () => {
+  await chargerDonnees();
+  renderSwipeCard();
+  renderCatalogue(destinations);
+  renderActivitiesFeed();
+  renderDestinationDetail();
+  renderActivityDetail();
+  renderHebergementDetail();
+  setupFiltres();
+  setupSearch();
+});
+
+// ── CHARGEMENT DONNÉES DEPUIS LA BDD ─────────────────────
+async function chargerDonnees() {
+  try {
+    const [resD, resA] = await Promise.all([
+      fetch(API_BASE + 'api_destinations.php?limit=50', { credentials: 'include' }),
+      fetch(API_BASE + 'api_activites.php?limit=100',   { credentials: 'include' }),
+    ]);
+
+    const jsonD = await resD.json();
+    const jsonA = await resA.json();
+
+    if (jsonD.success && jsonD.data.length > 0) {
+      // Convertir format BDD → format attendu par le reste du script
+      destinations = jsonD.data.map(d => ({
+        id:          d.id,
+        name:        d.nom,
+        image:       d.image_url || 'bali.png',
+        categories:  d.categorie ? [d.categorie] : ['Voyage'],
+        region:      d.region    || '',
+        budget:      d.budget    || '€€',
+        price:       d.prix_base || 0,
+        rating:      d.note_moyenne || 4.5,
+        group:       d.nb_voyageurs_max >= 9 ? '9+' : d.nb_voyageurs_max >= 5 ? '5-8' : '2-4',
+        popular:     d.nb_reservations || 0,
+        trend:       d.nb_reservations || 0,
+        isNew:       false,
+        description: d.description || '',
+        pays:        d.pays || '',
+      }));
+    } else {
+      // Fallback données hardcodées si BDD vide
+      destinations = destinationsFallback;
+    }
+
+    if (jsonA.success && jsonA.data.length > 0) {
+      activities = jsonA.data.map(a => ({
+        id:          a.id,
+        name:        a.nom,
+        image:       a.image_url || 'boat.png',
+        destination: a.destination_nom || '',
+        category:    a.categorie || '',
+        price:       a.prix || 0,
+        duration:    a.duree_heures ? a.duree_heures + 'h' : '2h',
+        rating:      a.note_moyenne || 4.5,
+        reviews:     0,
+        vibe:        (categoryIcons[a.categorie] || '✨') + ' ' + (a.categorie || 'Activité'),
+        description: a.description || '',
+        comment1:    'Super activité à faire en groupe.',
+        comment2:    'Une expérience mémorable avec toute la team.',
+        date:        '',
+        places:      10,
+      }));
+    } else {
+      activities = activitesFallback;
+    }
+
+  } catch (err) {
+    console.warn('API non disponible, données locales utilisées :', err);
+    destinations = destinationsFallback;
+    activities   = activitesFallback;
+  }
+}
+
+// ── SWIPE ─────────────────────────────────────────────────
 let swipeIndex = 0;
 
-const swipeCard = document.getElementById("swipeCard");
+const swipeCard    = document.getElementById("swipeCard");
 const swipeCounter = document.getElementById("swipeCounter");
-const passBtn = document.getElementById("passBtn");
-const likeBtn = document.getElementById("likeBtn");
-const catalogueGrid = document.getElementById("catalogueGrid");
+const passBtn      = document.getElementById("passBtn");
+const likeBtn      = document.getElementById("likeBtn");
 
 function createBadges(categories) {
-  return categories.map(cat => {
-    return `<span class="dest-badge">${categoryIcons[cat] || "✨"} ${cat}</span>`;
-  }).join("");
+  return categories.map(cat =>
+    `<span class="dest-badge">${categoryIcons[cat] || "✨"} ${cat}</span>`
+  ).join("");
 }
 
 function renderSwipeCard() {
-
   if (!swipeCard) return;
 
   if (swipeIndex >= destinations.length) {
-
     swipeCard.innerHTML = `
-      <div style="
-        width:100%;
-        height:100%;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        padding:60px;
-      ">
-
-        <div style="
-          max-width:700px;
-          text-align:center;
-        ">
-
-          <h2 style="
-            font-size:58px;
-            color:#4a68a6;
-            margin-bottom:25px;
-            line-height:1.1;
-          ">
+      <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:60px">
+        <div style="max-width:700px;text-align:center">
+          <h2 style="font-size:58px;color:#4a68a6;margin-bottom:25px;line-height:1.1">
             Tu as vu toutes les destinations ✨
           </h2>
-
-          <p style="
-            font-size:24px;
-            color:#5b6f8f;
-            margin-bottom:40px;
-            line-height:1.5;
-          ">
+          <p style="font-size:24px;color:#5b6f8f;margin-bottom:40px;line-height:1.5">
             Continue avec le catalogue pour filtrer, comparer et choisir le voyage parfait.
           </p>
-
-          <a href="#catalogueGrid" class="detail-link" style="
-            padding:18px 45px;
-            font-size:20px;
-          ">
+          <a href="#catalogueGrid" class="detail-link" style="padding:18px 45px;font-size:20px">
             Voir le catalogue
           </a>
-
         </div>
-
-      </div>
-    `;
-
+      </div>`;
     swipeCounter.textContent = "Fin du swipe";
     return;
   }
 
   const dest = destinations[swipeIndex];
-
   swipeCard.innerHTML = `
-    <img src="assets/images/${dest.image}" alt="${dest.name}" class="swipe-img">
-
+    <img src="${resolveImg(dest.image)}" alt="${dest.name}" class="swipe-img">
     <div class="swipe-content">
-
       <h2>${dest.name}</h2>
-
       <p class="swipe-description">${dest.description}</p>
-
-      <div class="badges">
-        ${createBadges(dest.categories)}
-      </div>
-
+      <div class="badges">${createBadges(dest.categories)}</div>
       <div class="destination-meta">
         <span>${dest.budget} • dès ${dest.price}€</span>
         <span>👥 ${dest.group}</span>
         <span>⭐ ${dest.rating}</span>
       </div>
-
-      <a href="destination-detail.html?destination=${encodeURIComponent(dest.name)}" class="detail-link">
+      <a href="destination-detail.html?id=${dest.id}" class="detail-link">
         Voir les détails
       </a>
+    </div>`;
 
-    </div>
-  `;
+  swipeCounter.textContent = `${swipeIndex + 1} / ${destinations.length}`;
 
-  swipeCounter.textContent =
-    `${swipeIndex + 1} / ${destinations.length}`;
+  // Sauvegarder le swipe localement pour les stats profil
+  const swipes = JSON.parse(localStorage.getItem('vv_swipes') || '[]');
+  if (!swipes.includes(dest.id)) {
+    swipes.push(dest.id);
+    localStorage.setItem('vv_swipes', JSON.stringify(swipes));
+  }
 }
 
 function nextSwipe(direction) {
-
   if (!swipeCard) return;
-
-  swipeCard.classList.add(
-    direction === "like"
-      ? "swipe-right"
-      : "swipe-left"
-  );
-
+  swipeCard.classList.add(direction === "like" ? "swipe-right" : "swipe-left");
   setTimeout(() => {
-
     swipeIndex++;
-
-    swipeCard.classList.remove(
-      "swipe-right",
-      "swipe-left"
-    );
-
+    swipeCard.classList.remove("swipe-right", "swipe-left");
     renderSwipeCard();
-
   }, 430);
 }
 
-if (passBtn) {
-  passBtn.addEventListener("click", () => nextSwipe("pass"));
-}
+if (passBtn) passBtn.addEventListener("click", () => nextSwipe("pass"));
+if (likeBtn) likeBtn.addEventListener("click", () => nextSwipe("like"));
 
-if (likeBtn) {
-  likeBtn.addEventListener("click", () => nextSwipe("like"));
-}
+// ── CATALOGUE ─────────────────────────────────────────────
+const catalogueGrid = document.getElementById("catalogueGrid");
 
 function renderCatalogue(list) {
-
   if (!catalogueGrid) return;
 
   if (list.length === 0) {
-
     catalogueGrid.innerHTML = `
-      <div class="empty-message">
-        Aucune destination ne matche avec ces filtres 😭
-      </div>
-    `;
-
+      <div class="empty-message">Aucune destination ne matche avec ces filtres 😭</div>`;
     return;
   }
 
   catalogueGrid.innerHTML = list.map(dest => `
     <article class="catalogue-card">
-
-      <button class="fav-btn">♥</button>
-
-      <img src="assets/images/${dest.image}" alt="${dest.name}">
-
+      <button class="fav-btn" data-id="${dest.id}">♥</button>
+      <img src="${resolveImg(dest.image)}" alt="${dest.name}">
       <div class="catalogue-content">
-
         <h3>${dest.name}</h3>
-
         <p>${dest.description}</p>
-
-        <div class="badges">
-          ${createBadges(dest.categories.slice(0, 3))}
-        </div>
-
+        <div class="badges">${createBadges(dest.categories.slice(0, 3))}</div>
         <div class="destination-meta">
           <span>${dest.budget} • ${dest.price}€</span>
           <span>👥 ${dest.group}</span>
           <span>⭐ ${dest.rating}</span>
         </div>
-
-        <a href="destination-detail.html?destination=${encodeURIComponent(dest.name)}" class="detail-link">
+        <a href="destination-detail.html?id=${dest.id}" class="detail-link">
           Voir les détails
         </a>
-
       </div>
-
-    </article>
-  `).join("");
+    </article>`).join("");
 
   document.querySelectorAll(".fav-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      btn.classList.toggle("active");
-    });
+    btn.addEventListener("click", () => btn.classList.toggle("active"));
+  });
+}
+
+// ── FILTRES ───────────────────────────────────────────────
+function setupFiltres() {
+  ["searchInput","categoryFilter","regionFilter",
+   "budgetFilter","groupFilter","sortFilter"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener("input",  applyFilters);
+      el.addEventListener("change", applyFilters);
+    }
   });
 }
 
 function applyFilters() {
-
-  const search =
-    document.getElementById("searchInput")?.value.toLowerCase() || "";
-
-  const category =
-    document.getElementById("categoryFilter")?.value || "all";
-
-  const region =
-    document.getElementById("regionFilter")?.value || "all";
-
-  const budget =
-    document.getElementById("budgetFilter")?.value || "all";
-
-  const group =
-    document.getElementById("groupFilter")?.value || "all";
-
-  const sort =
-    document.getElementById("sortFilter")?.value || "popular";
+  const search   = document.getElementById("searchInput")?.value.toLowerCase()  || "";
+  const category = document.getElementById("categoryFilter")?.value              || "all";
+  const region   = document.getElementById("regionFilter")?.value                || "all";
+  const budget   = document.getElementById("budgetFilter")?.value                || "all";
+  const group    = document.getElementById("groupFilter")?.value                 || "all";
+  const sort     = document.getElementById("sortFilter")?.value                  || "popular";
 
   let filtered = destinations.filter(dest => {
-
-    const matchSearch =
-      dest.name.toLowerCase().includes(search);
-
-    const matchCategory =
-      category === "all" ||
-      dest.categories.includes(category);
-
-    const matchRegion =
-      region === "all" ||
-      dest.region === region;
-
-    const matchBudget =
-      budget === "all" ||
-      dest.budget === budget;
-
-    const matchGroup =
-      group === "all" ||
-      dest.group === group;
-
-    return (
-      matchSearch &&
-      matchCategory &&
-      matchRegion &&
-      matchBudget &&
-      matchGroup
-    );
+    const matchSearch   = dest.name.toLowerCase().includes(search) ||
+                          dest.description.toLowerCase().includes(search);
+    const matchCategory = category === "all" || dest.categories.includes(category);
+    const matchRegion   = region === "all"   || dest.region === region;
+    const matchBudget   = budget === "all"   || dest.budget === budget;
+    const matchGroup    = group === "all"    || dest.group === group;
+    return matchSearch && matchCategory && matchRegion && matchBudget && matchGroup;
   });
 
-  if (sort === "priceAsc")
-    filtered.sort((a, b) => a.price - b.price);
-
-  if (sort === "priceDesc")
-    filtered.sort((a, b) => b.price - a.price);
-
-  if (sort === "rating")
-    filtered.sort((a, b) => b.rating - a.rating);
-
-  if (sort === "popular")
-    filtered.sort((a, b) => b.popular - a.popular);
-
-  if (sort === "trend")
-    filtered.sort((a, b) => b.trend - a.trend);
-
-  if (sort === "groups")
-    filtered.sort((a, b) =>
-      (b.group === "9+") - (a.group === "9+")
-    );
-
-  if (sort === "new")
-    filtered.sort((a, b) => b.isNew - a.isNew);
+  if (sort === "priceAsc")  filtered.sort((a,b) => a.price - b.price);
+  if (sort === "priceDesc") filtered.sort((a,b) => b.price - a.price);
+  if (sort === "rating")    filtered.sort((a,b) => b.rating - a.rating);
+  if (sort === "popular")   filtered.sort((a,b) => b.popular - a.popular);
+  if (sort === "trend")     filtered.sort((a,b) => b.trend - a.trend);
+  if (sort === "groups")    filtered.sort((a,b) => (b.group==="9+")-(a.group==="9+"));
+  if (sort === "new")       filtered.sort((a,b) => b.isNew - a.isNew);
 
   renderCatalogue(filtered);
 }
 
-[
-  "searchInput",
-  "categoryFilter",
-  "regionFilter",
-  "budgetFilter",
-  "groupFilter",
-  "sortFilter"
-].forEach(id => {
+// ── RECHERCHE ─────────────────────────────────────────────
+function setupSearch() {
+  const searchInput = document.getElementById("searchInput");
+  const searchBtn   = document.getElementById("searchBtn");
 
-  const element = document.getElementById(id);
-
-  if (element) {
-    element.addEventListener("input", applyFilters);
-    element.addEventListener("change", applyFilters);
-  }
-});
-
-renderSwipeCard();
-renderCatalogue(destinations);
-
-const destinationSearchInput =
-  document.getElementById("searchInput");
-
-const searchBtn =
-  document.getElementById("searchBtn");
-
-function searchDestination() {
-
-  if (!destinationSearchInput) return;
-
-  const searchValue =
-    destinationSearchInput.value.trim().toLowerCase();
-
-  const foundDestination =
-  destinations.find((dest) =>
-    dest.name.toLowerCase().includes(searchValue)
-  );
-
-  if (foundDestination) {
-
-    window.location.href =
-      `destination-detail.html?destination=${encodeURIComponent(foundDestination.name)}`;
-
-  } else {
-
-    window.location.href = "404.html";
-
-  }
-}
-
-if (destinationSearchInput) {
-
-  destinationSearchInput.addEventListener(
-    "keydown",
-    (event) => {
-
-      if (event.key === "Enter") {
-        searchDestination();
-      }
-
+  function doSearch() {
+    if (!searchInput) return;
+    const val = searchInput.value.trim().toLowerCase();
+    const found = destinations.find(d => d.name.toLowerCase().includes(val));
+    if (found) {
+      window.location.href = `destination-detail.html?id=${found.id}`;
+    } else {
+      window.location.href = "404.html";
     }
-  );
-}
-
-if (searchBtn) {
-  searchBtn.addEventListener(
-    "click",
-    searchDestination
-  );
-}
-
-const detailExtras = {
-
-  "Bali": {
-    transport: "Vol Paris → Denpasar",
-    hebergement: "Villa partagée avec piscine",
-    mood: "Chill, plage, surf et sunsets",
-    activities: [
-      "Cours de surf",
-      "Temple d’Uluwatu",
-      "Sunset beach club"
-    ]
-  },
-
-  "Ibiza": {
-    transport: "Vol Paris → Ibiza",
-    hebergement: "Appartement proche plage",
-    mood: "Nightlife, mer et soirées",
-    activities: [
-      "Beach party",
-      "Balade bateau",
-      "Soirée club"
-    ]
-  },
-
-  "Santorin": {
-    transport: "Vol Paris → Santorin",
-    hebergement: "Hôtel vue mer",
-    mood: "Photos, sunset et détente",
-    activities: [
-      "Croisière sunset",
-      "Visite d’Oia",
-      "Dégustation locale"
-    ]
-  },
-
-  "Tokyo": {
-    transport: "Vol Paris → Tokyo",
-    hebergement: "Hôtel central à Shibuya",
-    mood: "Culture, food et néons",
-    activities: [
-      "Shibuya by night",
-      "Temple Senso-ji",
-      "Street food tour"
-    ]
-  },
-
-  "Marrakech": {
-    transport: "Vol Paris → Marrakech",
-    hebergement: "Riad traditionnel",
-    mood: "Culture, souks et désert",
-    activities: [
-      "Balade dans les souks",
-      "Excursion désert",
-      "Dîner marocain"
-    ]
-  },
-
-  "Costa Rica": {
-    transport: "Vol Paris → San José",
-    hebergement: "Eco-lodge en pleine nature",
-    mood: "Aventure, jungle et surf",
-    activities: [
-      "Surf",
-      "Randonnée volcan",
-      "Tyrolienne jungle"
-    ]
-  },
-
-  "Barcelone": {
-    transport: "Train ou vol Paris → Barcelone",
-    hebergement: "Appartement de groupe",
-    mood: "Tapas, plage et nightlife",
-    activities: [
-      "Tour tapas",
-      "Plage Barceloneta",
-      "Soirée rooftop"
-    ]
-  },
-
-  "Chamonix": {
-    transport: "Train Paris → Chamonix",
-    hebergement: "Chalet de groupe",
-    mood: "Montagne, sport et nature",
-    activities: [
-      "Randonnée",
-      "Ski",
-      "Spa montagne"
-    ]
-  },
-
-  "Road Trip Portugal": {
-    transport: "Van ou voiture de location",
-    hebergement: "Auberges + logements étapes",
-    mood: "Road trip, plage et liberté",
-    activities: [
-      "Lisbonne",
-      "Algarve",
-      "Food tour portugais"
-    ]
   }
-};
 
-function renderDestinationDetail() {
+  if (searchBtn) searchBtn.addEventListener("click", doSearch);
+  if (searchInput) {
+    searchInput.addEventListener("keydown", e => {
+      if (e.key === "Enter") doSearch();
+    });
+  }
+}
 
-  const page =
-    document.getElementById("destinationDetailPage");
-
+// ── DESTINATION DETAIL ────────────────────────────────────
+async function renderDestinationDetail() {
+  const page = document.getElementById("destinationDetailPage");
   if (!page) return;
 
-  const params =
-    new URLSearchParams(window.location.search);
+  const params = new URLSearchParams(window.location.search);
+  const id     = params.get("id");
+  const name   = params.get("destination"); // fallback ancien lien
 
-  const name =
-    params.get("destination") || "Bali";
+  // Loader
+  page.innerHTML = `<div style="text-align:center;padding:120px;font-size:3rem">✈️</div>`;
 
-  const dest =
-    destinations.find(
-      d => d.name.toLowerCase() === name.toLowerCase()
-    );
+  try {
+    let dest = null;
 
-  if (!dest) {
-    window.location.href = "404.html";
-    return;
+    if (id) {
+      const res  = await fetch(`${API_BASE}api_destination_detail.php?id=${id}`, { credentials: 'include' });
+      const json = await res.json();
+      if (json.success) dest = json.data;
+    }
+
+    // Fallback par nom (ancien système)
+    if (!dest && name) {
+      dest = destinations.find(d => d.name.toLowerCase() === name.toLowerCase());
+      if (dest) {
+        const res  = await fetch(`${API_BASE}api_destination_detail.php?id=${dest.id}`, { credentials: 'include' });
+        const json = await res.json();
+        if (json.success) dest = json.data;
+      }
+    }
+
+    if (!dest) { window.location.href = "404.html"; return; }
+
+    const hebs  = dest.hebergements || [];
+    const acts  = dest.activites    || [];
+    const cats  = dest.categorie    ? [dest.categorie] : [];
+    const img   = resolveImg(dest.image_url);
+
+    page.innerHTML = `
+      <section class="detail-hero">
+        <img src="${img}" alt="${dest.nom}">
+        <div class="detail-overlay">
+          <p class="tag">DESTINATION MATCHÉE</p>
+          <h1>${dest.nom}</h1>
+          <p>${dest.description || ''}</p>
+          <div class="badges">${createBadges(cats)}</div>
+          <div class="detail-meta">
+            <span>${dest.budget || ''} • dès ${dest.prix_base || 0}€</span>
+            <span>⭐ ${dest.note_moyenne || ''}</span>
+            <span>📍 ${dest.pays || ''}</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="detail-content">
+        <div class="detail-main-card">
+          <h2>Pourquoi ça matche avec ta team ?</h2>
+          <p>${dest.description || ''}</p>
+
+          <div class="detail-options">
+            <div>
+              <h3>🏨 Hébergements disponibles</h3>
+              ${hebs.length > 0
+                ? hebs.map(h => `
+                    <div class="activity-line">
+                      <span>✨</span>
+                      <p><a href="detail-hebergement.html?id=${h.id}" style="color:#4a68a6;font-weight:600">${h.nom}</a>
+                      — ${h.prix_nuit}€/nuit</p>
+                    </div>`).join('')
+                : '<p>Aucun hébergement disponible pour cette destination.</p>'}
+            </div>
+            <div>
+              <h3>💸 Budget estimé</h3>
+              <p>À partir de ${dest.prix_base || 0}€ par personne</p>
+            </div>
+            <div>
+              <h3>🌍 Région</h3>
+              <p>${dest.region || ''} — ${dest.pays || ''}</p>
+            </div>
+          </div>
+
+          <button class="add-cart-btn">Ajouter au panier voyage</button>
+        </div>
+
+        <div class="detail-side-card">
+          <h2>Activités à ne pas rater</h2>
+          ${acts.length > 0
+            ? acts.map(a => `
+                <a class="activity-line clickable-activity"
+                   href="activite-detail.html?id=${a.id}">
+                  <span>✨</span>
+                  <p>${a.nom} — ${a.prix}€</p>
+                </a>`).join('')
+            : '<p>Découvrez nos activités sur la page dédiée.</p>'}
+        </div>
+      </section>
+
+      <section class="next-step-section">
+        <h2>Ok… le voyage prend forme ✈️🌴</h2>
+        <div class="next-step-grid">
+          <a href="activites.html">🎉 Choisir les activités</a>
+          <a href="hebergements.html">🏨 Choisir l'hébergement</a>
+          <a href="transports.html">✈ Choisir le transport</a>
+        </div>
+        <p class="back-catalogue-text">
+          Finalement c'était pas le bon mood ? 👀
+          <a href="destination.html">Retourner swiper d'autres destinations</a>
+        </p>
+      </section>`;
+
+  } catch(err) {
+    console.error('Erreur destination detail :', err);
+    page.innerHTML = `<section class="error-page"><h1>Destination introuvable 😢</h1></section>`;
   }
-
-  const extra = detailExtras[dest.name];
-  if (!extra || !extra.activities) {
-  page.innerHTML = `
-    <section class="detail-content">
-      <div class="detail-main-card">
-        <h2>${dest.name}</h2>
-        <p>Les détails de cette destination arrivent bientôt.</p>
-        <a href="destination.html" class="detail-link">Retour aux destinations</a>
-      </div>
-    </section>
-  `;
-  return;
-}
-const availableActivities = activities.map(item => item.name);
-  page.innerHTML = `
-    <section class="detail-hero">
-
-      <img src="assets/images/${dest.image}" alt="${dest.name}">
-
-      <div class="detail-overlay">
-
-        <p class="tag">DESTINATION MATCHÉE</p>
-
-        <h1>${dest.name}</h1>
-
-        <p>${dest.description}</p>
-
-        <div class="badges">
-          ${createBadges(dest.categories)}
-        </div>
-
-        <div class="detail-meta">
-          <span>${dest.budget} • dès ${dest.price}€</span>
-          <span>👥 ${dest.group}</span>
-          <span>⭐ ${dest.rating}</span>
-        </div>
-
-      </div>
-
-    </section>
-
-    <section class="detail-content">
-
-      <div class="detail-main-card">
-
-        <h2>Pourquoi ça matche avec ta team ?</h2>
-
-        <p>${extra.mood}</p>
-
-        <div class="detail-options">
-
-          <div>
-            <h3>✈ Transport conseillé</h3>
-            <p>${extra.transport}</p>
-          </div>
-
-          <div>
-            <h3>🏨 Hébergement conseillé</h3>
-            <p>${extra.hebergement}</p>
-          </div>
-
-          <div>
-            <h3>💸 Budget estimé</h3>
-            <p>À partir de ${dest.price}€ par personne</p>
-          </div>
-
-        </div>
-
-        <button class="add-cart-btn">
-          Ajouter au panier voyage
-        </button>
-
-      </div>
-
-      <div class="detail-side-card">
-
-        <h2>Activités à ne pas rater</h2>
-
-  ${extra.activities.map(activity => {
-  if (availableActivities.includes(activity)) {
-    return `
-      <a
-        class="activity-line clickable-activity"
-        href="activite-detail.html?activite=${encodeURIComponent(activity)}"
-      >
-        <span>✨</span>
-        <p>${activity}</p>
-      </a>
-    `;
-  }
-
-  return `
-    <div class="activity-line">
-      <span>✨</span>
-      <p>${activity}</p>
-    </div>
-  `;
-}).join("")}
-      </div>
-
-    </section>
-
-    <section class="next-step-section">
-
-      <h2>
-        Ok… le voyage prend forme ✈️🌴
-      </h2>
-
-      <div class="next-step-grid">
-        <a href="activites.html">🎉 Choisir les activités</a>
-        <a href="hebergements.html">🏨 Choisir l’hébergement</a>
-        <a href="transports.html">✈ Choisir le transport</a>
-      </div>
-
-      <p class="back-catalogue-text">
-        Finalement c’était pas le bon mood ? 👀
-        <a href="destination.html">
-          Retourner swiper d’autres destinations
-        </a>
-      </p>
-
-    </section>
-  `;
 }
 
-
-const activities = [
-  {
-    name: "Cours de surf",
-    image: "surf.png",
-    destination: "Bali",
-    category: "Sport",
-    price: 45,
-    duration: "2h",
-    rating: 4.8,
-reviews: 124,
-date: "18 juin",
-places: 6,
-comment1: "Super activité à faire en groupe, l’ambiance était incroyable.",
-comment2: "Simple à réserver et vraiment un des meilleurs moments du voyage.",
-    vibe: "🌊 Sport • fun • plage",
-    description: "Apprends à surfer avec ta team sur une plage incroyable. Parfait pour commencer le voyage avec de l’énergie."
-  },
-  {
-    name: "Balade en bateau",
-    image: "boat.png",
-    destination: "Ibiza",
-    category: "Détente",
-    price: 65,
-    duration: "3h",
-    rating: 4.7,
-reviews: 126,
-date: "20 juin",
-places: 8,
-comment1: "Le sunset sur le bateau était incroyable.",
-comment2: "Activité parfaite pour chill avec le groupe.",
-    vibe: "🛥️ Mer • chill • sunset",
-    description: "Une sortie en bateau pour profiter de la mer, du soleil et des meilleurs spots photo."
-  },
-  {
-    name: "Visite de temple",
-    image: "temple.png",
-    destination: "Bali",
-    category: "Culture",
-    price: 25,
-    duration: "1h30",
-    rating: 4.6,
-reviews: 93,
-date: "21 juin",
-places: 12,
-comment1: "Super beau et hyper apaisant.",
-comment2: "Ça change vraiment des activités classiques.",
-    vibe: "🏛️ Culture • découverte",
-    description: "Découvre un lieu iconique, calme et magnifique pour ajouter une vraie touche culturelle au séjour."
-  },
-  {
-    name: "Food tour",
-    image: "food-tour.png",
-    destination: "Tokyo",
-    category: "Gastronomie",
-    price: 55,
-    duration: "2h",
-    rating: 4.9,
-reviews: 214,
-date: "17 juin",
-places: 5,
-comment1: "On a trop mangé 😭 mais c’était incroyable.",
-comment2: "Le meilleur moyen de découvrir Tokyo.",
-    vibe: "🍜 Food • ville • découverte",
-    description: "Teste les meilleurs spots food locaux et découvre la ville à travers ses saveurs."
-  },
-  {
-    name: "Beach party",
-    image: "beach-party.png",
-    destination: "Ibiza",
-    category: "Nightlife",
-    price: 70,
-    duration: "Soirée",
-    rating: 4.8,
-reviews: 301,
-date: "22 juin",
-places: 18,
-comment1: "Meilleure soirée du voyage clairement.",
-comment2: "L’ambiance était folle du début à la fin.",
-    vibe: "🎉 Nightlife • plage • musique",
-    description: "Ambiance festive, musique et coucher de soleil : l’activité parfaite pour une team qui veut kiffer."
-  },
-  {
-    name: "Randonnée nature",
-    image: "hiking.png",
-    destination: "Chamonix",
-    category: "Nature",
-    price: 30,
-    duration: "4h",
-    rating: 4.5,
-reviews: 87,
-date: "19 juin",
-places: 10,
-comment1: "Les paysages étaient magnifiques.",
-comment2: "Très bonne activité pour déconnecter un peu.",
-    vibe: "🥾 Nature • aventure",
-    description: "Un moment en pleine nature pour respirer, marcher et profiter de paysages incroyables."
-  },
-  {
-    name: "Spa chill",
-    image: "spa.png",
-    destination: "Santorin",
-    category: "Détente",
-    price: 80,
-    duration: "2h",
-    rating: 4.9,
-reviews: 144,
-date: "23 juin",
-places: 4,
-comment1: "On voulait plus repartir 😭",
-comment2: "Le moment le plus relax du séjour.",
-    vibe: "🧘 Détente • bien-être",
-    description: "Pause détente obligatoire : spa, calme et recharge totale avant de repartir explorer."
-  },
-  {
-    name: "Musée immersif",
-    image: "museum.png",
-    destination: "Barcelone",
-    category: "Culture",
-    price: 20,
-    duration: "1h",
-    rating: 4.4,
-reviews: 68,
-date: "18 juin",
-places: 20,
-comment1: "Très stylé pour les photos.",
-comment2: "Petit musée mais expérience super sympa.",
-    vibe: "🎨 Culture • photo • indoor",
-    description: "Une activité simple, visuelle et sympa à faire entre deux sorties en ville."
-  },
- 
-{
-  name: "Visite d’Oia",
-  image: "oia.png",
-  destination: "Santorin",
-  category: "Culture",
-  price: 30,
-  duration: "2h",
-  rating: 4.9,
-reviews: 246,
-date: "21 juin",
-places: 7,
-comment1: "On comprend pourquoi tout le monde en parle.",
-comment2: "Les photos là-bas sont incroyables.",
-  vibe: "🏛️ Culture • sunset • photos",
-  description: "Découvre les ruelles blanches d’Oia, les vues iconiques et les spots parfaits pour les photos."
-},
- {
-    name: "Rooftop sunset",
-    image: "rooftop.png",
-    destination: "Marrakech",
-    category: "Détente",
-    price: 35,
-    duration: "Soirée",
-    rating: 4.8,
-reviews: 173,
-date: "24 juin",
-places: 9,
-comment1: "La vue au coucher du soleil était dingue.",
-comment2: "Hyper bonne vibe pour finir la journée.",
-    vibe: "🌅 Sunset • chill • photos",
-    description: "Un rooftop stylé pour profiter du coucher de soleil et finir la journée en beauté."
-  },
-{
-  name: "Dégustation locale",
-  image: "degustation-locale.png",
-  destination: "Santorin",
-  category: "Gastronomie",
-  price: 45,
-  duration: "1h30",
-  rating: 4.6,
-reviews: 91,
-date: "20 juin",
-places: 11,
-comment1: "Très bonne surprise franchement.",
-comment2: "On a découvert plein de spécialités.",
-  vibe: "🍽️ Food • local • chill",
-  description: "Une pause gourmande pour goûter les spécialités locales et profiter d’un moment simple avec ta team."
-},
-{
-  name: "Croisière sunset",
-  image: "croisiere-sunset.png",
-  destination: "Santorin",
-  category: "Détente",
-  price: 80,
-  duration: "3h",
-  rating: 5.0,
-reviews: 318,
-date: "22 juin",
-places: 3,
-comment1: "Le coucher de soleil était irréel 😭",
-comment2: "Moment préféré du voyage.",
-  vibe: "🌅 Sunset • mer • premium",
-  description: "Une croisière au coucher du soleil pour finir la journée avec une vraie vibe carte postale."
-},
-{
-  name: "Temple Senso-ji",
-  image: "sensoji.png",
-  destination: "Tokyo",
-  category: "Culture",
-  price: 20,
-  duration: "1h30",
-  rating: 4.7,
-reviews: 141,
-date: "19 juin",
-places: 15,
-comment1: "Très beau temple et super ambiance.",
-comment2: "À faire absolument à Tokyo.",
-  vibe: "🏮 Culture • Japon • découverte",
-  description: "Explore un temple iconique de Tokyo et plonge dans une ambiance traditionnelle au cœur de la ville."
-},
-{
-  name: "Ski",
-  image: "ski.png",
-  destination: "Chamonix",
-  category: "Sport",
-  price: 75,
-  duration: "Journée",
-  rating: 4.8,
-reviews: 224,
-date: "17 juin",
-places: 12,
-comment1: "Les pistes étaient parfaites.",
-comment2: "On a passé une journée incroyable.",
-  vibe: "⛷️ Sport • neige • montagne",
-  description: "Une journée ski pour profiter des pistes, de la montagne et d’un bon mood sportif avec ta team."
-},
-{
-  name: "Shibuya by night",
-  image: "shibuya-night.png",
-  destination: "Tokyo",
-  category: "Nightlife",
-  price: 35,
-  duration: "2h",
-  rating: 4.9,
-reviews: 278,
-date: "18 juin",
-places: 9,
-comment1: "Tokyo la nuit c’est une folie.",
-comment2: "On avait l’impression d’être dans un film.",
-  vibe: "🌃 Néons • ville • nightlife",
-  description: "Découvre Shibuya de nuit, ses lumières, son énergie et ses spots parfaits pour sortir entre amis."
-},
-{
-  name: "Excursion dans les souks",
-  image: "souk.png",
-  destination: "Marrakech",
-  category: "Culture",
-  price: 25,
-  duration: "2h",
-  rating: 4.5,
-reviews: 117,
-date: "20 juin",
-places: 14,
-comment1: "Trop de choses à voir partout.",
-comment2: "Les couleurs et l’ambiance sont incroyables.",
-  vibe: "🧺 Souks • culture • couleurs",
-  description: "Balade dans les souks, entre artisanat, épices, ruelles vivantes et ambiance marocaine."
-},
-{
-  name: "Tyrolienne jungle",
-  image: "tyrolienne-jungle.png",
-  destination: "Costa Rica",
-  category: "Aventure",
-  price: 70,
-  duration: "2h",
-  rating: 4.9,
-reviews: 167,
-date: "19 juin",
-places: 6,
-comment1: "Adrénaline maximale 😭",
-comment2: "La jungle vue d’en haut c’était fou.",
-  vibe: "🌿 Jungle • adrénaline • fun",
-  description: "Traverse la jungle en tyrolienne pour une activité pleine de sensations et parfaite pour les groupes."
-},
-{
-  name: "Dîner marocain",
-  image: "diner-marocain.png",
-  destination: "Marrakech",
-  category: "Gastronomie",
-  price: 40,
-  duration: "Soirée",
-  rating: 4.7,
-reviews: 102,
-date: "22 juin",
-places: 10,
-comment1: "Le repas était incroyable.",
-comment2: "Très bonne ambiance avec musique et déco.",
-  vibe: "🍽️ Food • ambiance • partage",
-  description: "Un dîner marocain convivial avec plats traditionnels, ambiance chaleureuse et vraie vibe locale."
-},
-{
-  name: "Algarve",
-  image: "algarve.png",
-  destination: "Road Trip Portugal",
-  category: "Plage",
-  price: 35,
-  duration: "Journée",rating: 4.9,
-reviews: 242,
-date: "21 juin",
-places: 7,
-comment1: "Les plages étaient incroyables.",
-comment2: "Clairement un highlight du road trip.",
-  vibe: "🌊 Plage • road trip • soleil",
-  description: "Cap sur l’Algarve pour profiter des plages, falaises et spots parfaits pendant le road trip."
-},
-{
-  name: "Randonnée volcan",
-  image: "randonnee-volcan.png",
-  destination: "Costa Rica",
-  category: "Nature",
-  price: 45,
-  duration: "4h",
-  rating: 4.6,
-reviews: 95,
-date: "18 juin",
-places: 8,
-comment1: "Paysages incroyables tout le long.",
-comment2: "Bonne activité si on aime marcher.",
-  vibe: "🌋 Nature • marche • aventure",
-  description: "Une randonnée autour d’un volcan pour profiter de paysages impressionnants et d’une vraie pause nature."
-},
-
-{
-  name: "Balade désert",
-  image: "desert.png",
-  destination: "Marrakech",
-  category: "Aventure",
-  price: 65,
-  duration: "Demi-journée",
-  rating: 4.8,
-reviews: 189,
-date: "21 juin",
-places: 5,
-comment1: "Le coucher de soleil dans le désert 😭",
-comment2: "Expérience vraiment mémorable.",
-  vibe: "🐪 Désert • aventure • golden hour",
-  description: "Une sortie dans le désert pour vivre un moment dépaysant, entre paysages dorés et souvenirs de groupe."
-},
-{
-  name: "Spa montagne",
-  image: "spa-montagne.png",
-  destination: "Chamonix",
-  category: "Détente",
-  price: 60,
-  duration: "2h",
-  rating: 4.9,
-reviews: 133,
-date: "18 juin",
-places: 4,
-comment1: "Le spa avec vue montagne 😭",
-comment2: "Ultra relaxant après le ski.",
-  vibe: "🧖 Détente • montagne • chill",
-  description: "Après l’effort, place au chill : spa, calme et vue montagne pour recharger tout le groupe."
-},
-{
-  name: "Lisbonne",
-  image: "lisbonne.png",
-  destination: "Road Trip Portugal",
-  category: "Culture",
-  price: 30,
-  duration: "Journée",
-  rating: 4.7,
-reviews: 158,
-date: "20 juin",
-places: 13,
-comment1: "Ville trop agréable à visiter.",
-comment2: "Les points de vue sont magnifiques.",
-  vibe: "🚋 Ville • culture • food",
-  description: "Découvre Lisbonne entre ruelles, tramways, points de vue et pauses gourmandes."
-},
-];
-
+// ── ACTIVITÉS FEED ────────────────────────────────────────
 function renderActivitiesFeed() {
   const feed = document.getElementById("activityFeed");
   if (!feed) return;
 
-  feed.innerHTML = activities.map(activity => `
+  if (activities.length === 0) {
+    feed.innerHTML = `<div class="empty-message">Aucune activité disponible pour le moment.</div>`;
+    return;
+  }
+
+  feed.innerHTML = activities.map(a => `
     <article class="activity-post">
-      <img src="assets/images/${activity.image}" alt="${activity.name}">
-
+      <img src="${resolveImg(a.image, 'boat.png')}" alt="${a.name}">
       <div class="activity-post-content">
-        <p class="tag">${activity.vibe}</p>
-        <h2>${activity.name}</h2>
-        <p>${activity.description}</p>
-
+        <p class="tag">${a.vibe}</p>
+        <h2>${a.name}</h2>
+        <p>${a.description}</p>
         <div class="activity-info">
-          <span>📍 ${activity.destination}</span>
-          <span>⏱️ ${activity.duration}</span>
-          <span>💸 ${activity.price}€</span>
+          <span>📍 ${a.destination}</span>
+          <span>⏱️ ${a.duration}</span>
+          <span>💸 ${a.price}€</span>
         </div>
-
         <div class="activity-actions">
-          <a href="activite-detail.html?activite=${encodeURIComponent(activity.name)}">
-            Voir l’activité
-          </a>
+          <a href="activite-detail.html?id=${a.id}">Voir l'activité</a>
           <button>♥</button>
         </div>
       </div>
-    </article>
-  `).join("");
+    </article>`).join("");
 }
 
-function renderActivityDetail() {
+// ── ACTIVITÉ DETAIL ───────────────────────────────────────
+async function renderActivityDetail() {
   const page = document.getElementById("activityDetailPage");
   if (!page) return;
 
   const params = new URLSearchParams(window.location.search);
-  const name = params.get("activite") || "Cours de surf";
+  const id     = params.get("id");
+  const name   = params.get("activite"); // fallback
 
-  const activity = activities.find(a =>
-    a.name.toLowerCase() === name.toLowerCase()
-  );
+  page.innerHTML = `<div style="text-align:center;padding:120px;font-size:3rem">✈️</div>`;
 
-  if (!activity) {
-    window.location.href = "404.html";
-    return;
-  }
+  try {
+    let activity = null;
 
-  page.innerHTML = `
-    <section class="activity-detail-hero">
-      <img src="assets/images/${activity.image}" alt="${activity.name}">
-
-      <div class="activity-detail-content">
-        <p class="tag">${activity.vibe}</p>
-        <h1>${activity.name}</h1>
-        <p>${activity.description}</p>
-
-        <div class="activity-info">
-          <span>📍 ${activity.destination}</span>
-          <span>⏱️ ${activity.duration}</span>
-          <span>💸 ${activity.price}€</span>
-        </div>
-
-        <button class="add-cart-btn">Ajouter au panier voyage</button>
-      </div>
-    </section>
-
-    <section class="activity-detail-boxes">
-
-  <div class="activity-detail-box">
-    <h3>Pourquoi on valide ?</h3>
-
-    <p>
-      Parce que c’est simple à réserver, visuel, fun et parfait pour créer des souvenirs de groupe.
-    </p>
-  </div>
-
-  <div class="activity-detail-box">
-    <h3>Avis voyageurs</h3>
-
-    <p>
-      ⭐ ${activity.rating}/5 — ${activity.reviews} avis
-    </p>
-
-    <p>
-      “${activity.comment1}”
-    </p>
-
-    <p>
-      “${activity.comment2}”
-    </p>
-  </div>
-
-  <div class="activity-detail-box">
-    <h3>Disponibilités</h3>
-
-    <p>
-      📅 Prochaine date : ${activity.date}
-    </p>
-
-    <p>
-      👥 ${activity.places} places restantes
-    </p>
-  </div>
-
-</section>
-
-<section class="same-destination-section">
-  <div class="same-destination-header">
-    <h2>À la même destination 🌴</h2>
-
-    <div class="same-destination-arrows">
-      <button onclick="document.querySelector('.same-activity-grid').scrollBy({ left: -320, behavior: 'smooth' })">
-        ‹
-      </button>
-      <button onclick="document.querySelector('.same-activity-grid').scrollBy({ left: 320, behavior: 'smooth' })">
-        ›
-      </button>
-    </div>
-  </div>
-
-  <div class="same-activity-grid">
-    ${activities
-      .filter(item =>
-        item.destination === activity.destination &&
-        item.name !== activity.name
-      )
-      .map(item => `
-        <a
-          href="activite-detail.html?activite=${encodeURIComponent(item.name)}"
-          class="same-activity-card"
-        >
-          <img src="assets/images/${item.image}" alt="${item.name}">
-
-          <div class="same-activity-content">
-            <h3>${item.name}</h3>
-            <p>${item.vibe}</p>
-            <span>⭐ ${item.rating} • ${item.price}€</span>
-          </div>
-        </a>
-      `).join("")}
-  </div>
-</section>
-    </section>
-
-    <section class="activity-detail-cta">
-      <h2>Ok… cette activité part dans le moodboard du voyage ✨</h2>
-      <a href="activites.html" class="detail-link">Retour aux activités</a>
-      <a href="destination.html" class="detail-link">Voir les destinations</a>
-    </section>
-  `;
-}
-
-renderActivitiesFeed();
-renderActivityDetail();
-renderDestinationDetail();
-const typeFilter = document.getElementById("typeFilter");
-const budgetFilter = document.getElementById("budgetFilter");
-const ambianceFilter = document.getElementById("ambianceFilter");
-const voyageurFilter = document.getElementById("voyageurFilter");
-const hebergementSearch = document.getElementById("hebergementSearch");
-
-const cards = document.querySelectorAll(".hebergement-card");
-
-function filterHebergements() {
-
-  const typeValue =
-    typeFilter?.value.toLowerCase() || "";
-
-  const budgetValue =
-    budgetFilter?.value.toLowerCase() || "";
-
-  const ambianceValue =
-    ambianceFilter?.value.toLowerCase() || "";
-
-  const voyageurValue =
-    voyageurFilter?.value.toLowerCase() || "";
-
-  const searchValue =
-    hebergementSearch?.value.toLowerCase() || "";
-
-  cards.forEach(card => {
-
-    const type =
-      card.querySelector(".type")
-      ?.textContent.toLowerCase() || "";
-
-    const title =
-      card.querySelector("h3")
-      ?.textContent.toLowerCase() || "";
-
-    const text =
-      card.textContent.toLowerCase();
-
-    const matchType =
-      typeValue.includes("tous") ||
-      type.includes(typeValue);
-
-    const matchBudget =
-      budgetValue.includes("tous") ||
-      text.includes(budgetValue);
-
-    const matchAmbiance =
-      ambianceValue.includes("ambiance") ||
-      text.includes(ambianceValue);
-
-    const matchVoyageur =
-      voyageurValue.includes("voyageurs") ||
-      text.includes(voyageurValue);
-
-    const matchSearch =
-      title.includes(searchValue);
-
-    if (
-      matchType &&
-      matchBudget &&
-      matchAmbiance &&
-      matchVoyageur &&
-      matchSearch
-    ) {
-      card.style.display = "block";
-    } else {
-      card.style.display = "none";
+    if (id) {
+      const res  = await fetch(`${API_BASE}api_activites.php?id=${id}`, { credentials: 'include' });
+      const json = await res.json();
+      if (json.success && json.data.length > 0) activity = json.data[0];
     }
 
-  });
-
-}
-
-typeFilter?.addEventListener("change", filterHebergements);
-budgetFilter?.addEventListener("change", filterHebergements);
-ambianceFilter?.addEventListener("change", filterHebergements);
-voyageurFilter?.addEventListener("change", filterHebergements);
-hebergementSearch?.addEventListener("input", filterHebergements);
-
-const transportFilters =
-  document.querySelectorAll(".transport-filter");
-
-const transportCards =
-  document.querySelectorAll(".transport-card");
-
-const transportSearch =
-  document.getElementById("transportSearch");
-
-let currentTransportFilter = "all";
-
-function filterTransports() {
-
-  const searchValue =
-    transportSearch?.value.toLowerCase() || "";
-
-  transportCards.forEach(card => {
-
-    const type =
-      card.dataset.type;
-
-    const text =
-      card.textContent.toLowerCase();
-
-    const matchFilter =
-      currentTransportFilter === "all" ||
-      type === currentTransportFilter;
-
-    const matchSearch =
-      text.includes(searchValue);
-
-    if (matchFilter && matchSearch) {
-
-      card.style.display = "block";
-
-    } else {
-
-      card.style.display = "none";
-
+    // Fallback par nom
+    if (!activity && name) {
+      activity = activities.find(a => a.name.toLowerCase() === name.toLowerCase());
     }
 
-  });
+    if (!activity) { window.location.href = "404.html"; return; }
 
-}
-
-transportFilters.forEach(button => {
-
-  button.addEventListener("click", () => {
-
-    transportFilters.forEach(btn =>
-      btn.classList.remove("active")
-    );
-
-    button.classList.add("active");
-
-    currentTransportFilter =
-      button.dataset.type;
-
-    filterTransports();
-
-  });
-
-});
-
-transportSearch?.addEventListener(
-  "input",
-  filterTransports
-);
-
-const hebergementsData = {
-
-  "Bali Paradise Resort": {
-    image: "hotel1.jpg",
-    type: "Resort",
-    price: "320€ / nuit",
-    rating: "4.9",
-    location: "Bali",
-    description:
-      "Resort tropical avec piscine privée, jungle luxuriante et sunset incroyable.",
-
-    services: [
-      "Piscine privée",
-      "Spa & massages",
-      "Petit-déjeuner inclus",
-      "Vue jungle"
-    ]
-  },
-
-  "Maldives Escape": {
-    image: "hotel2.jpg",
-    type: "Hotel",
-    price: "540€ / nuit",
-    rating: "5.0",
-    location: "Maldives",
-    description:
-      "Villa premium au-dessus de l’eau turquoise avec expérience VIP.",
-
-    services: [
-      "Villa sur l’eau",
-      "Accès plage privée",
-      "Restaurant gastronomique",
-      "Service VIP"
-    ]
-  },
-
-  "Santorini Skyline": {
-    image: "hotel3.jpg",
-    type: "Hotel",
-    price: "280€ / nuit",
-    rating: "4.8",
-    location: "Santorin",
-    description:
-      "Architecture minimaliste avec vue magique sur le coucher de soleil.",
-
-    services: [
-      "Vue mer",
-      "Piscine rooftop",
-      "Suite romantique",
-      "Petit-déjeuner inclus"
-    ]
-  },
-
-  "Jungle Villa Bali": {
-    image: "villachill.jpg",
-    type: "Villa",
-    price: "420€ / nuit",
-    rating: "4.9",
-    location: "Bali",
-    description:
-      "Villa luxueuse au cœur de la jungle avec piscine privée.",
-
-    services: [
-      "Piscine privée",
-      "Vue jungle",
-      "Cuisine équipée",
-      "Terrasse tropicale"
-    ]
-  },
-
-  "Ocean Villa Maldives": {
-    image: "maldivevilla.jpg",
-    type: "Villa",
-    price: "350€ / nuit",
-    rating: "4.7",
-    location: "Maldives",
-    description:
-      "Villa premium avec accès direct à la mer turquoise.",
-
-    services: [
-      "Accès mer",
-      "Suite premium",
-      "Terrasse privée",
-      "Sunset view"
-    ]
-  },
-
-  "Maison Cyclades": {
-    image: "maisongrecquetypique.jpg",
-    type: "Maison Grecque",
-    price: "400€ / nuit",
-    rating: "5.0",
-    location: "Santorin",
-    description:
-      "Maison typique des Cyclades avec vue panoramique sur la mer.",
-
-    services: [
-      "Vue mer",
-      "Maison traditionnelle",
-      "Terrasse sunset",
-      "Cuisine équipée"
-    ]
-  },
-
-  "Ibiza Sunset Hotel": {
-  image: "hotel4.jpg",
-  type: "Hotel",
-  price: "300€ / nuit",
-  rating: "4.6",
-  location: "Ibiza",
-  description:
-    "Hôtel avec rooftop et vue incroyable sur les sunsets d’Ibiza.",
-
-  services: [
-    "Rooftop sunset",
-    "Piscine extérieure",
-    "Petit-déjeuner inclus",
-    "Vue mer"
-  ]
-},
-
-"Tokyo Luxury Hotel": {
-  image: "hotel5.jpg",
-  type: "Hotel",
-  price: "500€ / nuit",
-  rating: "4.9",
-  location: "Tokyo",
-  description:
-    "Hôtel design premium au cœur de Tokyo avec vue panoramique sur la ville.",
-
-  services: [
-    "Vue panoramique",
-    "Spa premium",
-    "Salle de sport",
-    "Room service"
-  ]
-},
-
-"Marrakech Luxury Hotel": {
-  image: "hotel6.jpg",
-  type: "Hotel",
-  price: "280€ / nuit",
-  rating: "4.9",
-  location: "Marrakech",
-  description:
-    "Hôtel luxueux avec piscine et spa au cœur de Marrakech.",
-
-  services: [
-    "Spa oriental",
-    "Piscine privée",
-    "Restaurant marocain",
-    "Terrasse rooftop"
-  ]
-},
-
-"Ibiza Villa": {
-  image: "ibizavilla.jpg",
-  type: "Villa",
-  price: "320€ / nuit",
-  rating: "4.9",
-  location: "Ibiza",
-  description:
-    "Villa avec piscine privée et vue mer parfaite pour les groupes.",
-
-  services: [
-    "Piscine privée",
-    "Vue mer",
-    "Cuisine équipée",
-    "Terrasse lounge"
-  ]
-},
-
-"Tokyo Forest Location": {
-  image: "tokyoloc.jpg",
-  type: "Location",
-  price: "420€ / nuit",
-  rating: "4.7",
-  location: "Tokyo",
-  description:
-    "Location moderne au cœur d’une forêt urbaine à Tokyo.",
-
-  services: [
-    "Vue forêt",
-    "Wi-Fi premium",
-    "Cuisine moderne",
-    "Espace détente"
-  ]
-},
-
-"Marrakech Luxury Villa": {
-  image: "villamarrakech.jpg",
-  type: "Villa",
-  price: "280€ / nuit",
-  rating: "4.9",
-  location: "Marrakech",
-  description:
-    "Villa luxueuse avec piscine privée et jardin tropical.",
-
-  services: [
-    "Piscine privée",
-    "Jardin luxuriant",
-    "Suite premium",
-    "Terrasse extérieure"
-  ]
-},
-
-"Costa Rica Luxury Hotel": {
-  image: "hotel7.jpg",
-  type: "Hotel",
-  price: "450€ / nuit",
-  rating: "5.0",
-  location: "Costa Rica",
-  description:
-    "Hôtel premium avec accès direct à la plage et ambiance tropicale.",
-
-  services: [
-    "Accès plage",
-    "Piscine infinity",
-    "Spa tropical",
-    "Petit-déjeuner inclus"
-  ]
-},
-
-"Barcelona City Hotel": {
-  image: "hotel8.jpg",
-  type: "Hotel",
-  price: "500€ / nuit",
-  rating: "4.8",
-  location: "Barcelone",
-  description:
-    "Hôtel moderne au cœur de Barcelone avec rooftop et vue ville.",
-
-  services: [
-    "Rooftop",
-    "Vue ville",
-    "Salle fitness",
-    "Petit-déjeuner inclus"
-  ]
-},
-
-"Chamonix Alpine Lodge": {
-  image: "hotel9.jpg",
-  type: "Hotel",
-  price: "550€ / nuit",
-  rating: "5.0",
-  location: "Chamonix",
-  description:
-    "Lodge alpin avec vue montagne et accès direct aux pistes.",
-
-  services: [
-    "Vue montagne",
-    "Accès ski",
-    "Spa montagne",
-    "Chambres premium"
-  ]
-},
-
-"Costa Rica Luxury Villa": {
-  image: "villacosta.jpg",
-  type: "Villa",
-  price: "480€ / nuit",
-  rating: "4.8",
-  location: "Costa Rica",
-  description:
-    "Villa tropicale avec piscine privée et accès plage.",
-
-  services: [
-    "Piscine privée",
-    "Accès plage",
-    "Jardin tropical",
-    "Cuisine équipée"
-  ]
-},
-
-"Barcelone Luxury Villa": {
-  image: "barcelonevilla.jpg",
-  type: "Villa",
-  price: "600€ / nuit",
-  rating: "4.8",
-  location: "Barcelone",
-  description:
-    "Villa moderne avec piscine privée au cœur de Barcelone.",
-
-  services: [
-    "Piscine privée",
-    "Terrasse rooftop",
-    "Cuisine design",
-    "Suite premium"
-  ]
-},
-
-"Chamonix Alpine Loft": {
-  image: "loftchamonix.jpg",
-  type: "Loft",
-  price: "550€ / nuit",
-  rating: "5.0",
-  location: "Chamonix",
-  description:
-    "Loft design avec rooftop et vue incroyable sur les montagnes.",
-
-  services: [
-    "Vue montagne",
-    "Rooftop",
-    "Cheminée moderne",
-    "Accès pistes"
-  ]
-}
-
-};
-
-function renderHebergementDetail() {
-
-  const page =
-    document.getElementById("hebergementDetailPage");
-
-  if (!page) return;
-
-  const params =
-    new URLSearchParams(window.location.search);
-
-  const name =
-    params.get("hebergement");
-
-  const hebergement =
-    hebergementsData[name];
-
-  if (!hebergement) {
+    const a   = activity;
+    const img = resolveImg(a.image || a.image_url, 'boat.png');
 
     page.innerHTML = `
-      <section class="error-page">
-        <h1>Hébergement introuvable 😢</h1>
+      <section class="activity-detail-hero">
+        <img src="${img}" alt="${a.name || a.nom}">
+        <div class="activity-detail-content">
+          <p class="tag">${a.vibe || (categoryIcons[a.categorie] || '✨') + ' ' + (a.categorie || '')}</p>
+          <h1>${a.name || a.nom}</h1>
+          <p>${a.description || ''}</p>
+          <div class="activity-info">
+            <span>📍 ${a.destination || a.destination_nom || ''}</span>
+            <span>⏱️ ${a.duration || (a.duree_heures ? a.duree_heures + 'h' : '—')}</span>
+            <span>💸 ${a.price || a.prix || 0}€</span>
+          </div>
+          <button class="add-cart-btn">Ajouter au panier voyage</button>
+        </div>
       </section>
-    `;
 
-    return;
+      <section class="activity-detail-boxes">
+        <div class="activity-detail-box">
+          <h3>Pourquoi on valide ?</h3>
+          <p>Simple à réserver, visuel, fun et parfait pour créer des souvenirs de groupe.</p>
+        </div>
+        <div class="activity-detail-box">
+          <h3>Avis voyageurs</h3>
+          <p>⭐ ${a.rating || a.note_moyenne || 4.5}/5</p>
+          <p>"${a.comment1 || 'Super activité à faire en groupe.'}"</p>
+          <p>"${a.comment2 || 'Une expérience mémorable avec toute la team.'}"</p>
+        </div>
+        <div class="activity-detail-box">
+          <h3>Infos pratiques</h3>
+          <p>📍 ${a.destination || a.destination_nom || '—'}</p>
+          <p>⏱️ Durée : ${a.duration || (a.duree_heures ? a.duree_heures + 'h' : '—')}</p>
+          <p>💸 Prix : ${a.price || a.prix || 0}€ / personne</p>
+        </div>
+      </section>
+
+      <section class="next-step-section">
+        <h2>Cette activité te parle ? ✈️</h2>
+        <div class="next-step-grid">
+          <a href="activites.html">🎉 Voir toutes les activités</a>
+          <a href="destination.html">🌍 Explorer les destinations</a>
+          <a href="hebergements.html">🏨 Choisir un hébergement</a>
+        </div>
+      </section>`;
+
+  } catch(err) {
+    console.error('Erreur activité detail :', err);
+    page.innerHTML = `<section class="error-page"><h1>Activité introuvable 😢</h1></section>`;
   }
-
-  page.innerHTML = `
-
-<section class="hebergement-detail-hero">
-
-  <img
-    src="assets/images/${hebergement.image}"
-    alt="${name}"
-  >
-
-  <div class="hebergement-detail-overlay">
-
-    <p class="tag">
-      ${hebergement.type}
-    </p>
-
-    <h1>
-      ${name}
-    </h1>
-
-    <p>
-      ${hebergement.description}
-    </p>
-
-    <div class="detail-meta">
-
-      <span>
-        ⭐ ${hebergement.rating}
-      </span>
-
-      <span>
-        📍 ${hebergement.location}
-      </span>
-
-      <span>
-        💸 ${hebergement.price}
-      </span>
-
-    </div>
-
-  </div>
-
-</section>
-
-<section class="hebergement-detail-content">
-
-  <div class="detail-main-card">
-
-    <h2>
-      Pourquoi choisir cet hébergement ? ✨
-    </h2>
-
-    <p>
-      Cet hébergement est parfait pour profiter
-      d’un séjour premium avec une ambiance
-      immersive et relaxante.
-    </p>
-
-    <div class="detail-options">
-
-      <div>
-        <h3>🏝 Ambiance</h3>
-        <p>
-          Luxe, détente et expérience instagrammable.
-        </p>
-      </div>
-
-      <div>
-        <h3>🍽 Restauration</h3>
-        <p>
-          Restaurants premium et petit-déjeuner inclus.
-        </p>
-      </div>
-
-      <div>
-        <h3>🛏 Confort</h3>
-        <p>
-          Chambres modernes avec équipements haut de gamme.
-        </p>
-      </div>
-
-    </div>
-
-  </div>
-
-  <div class="detail-side-card">
-
-    <h2>
-      Services inclus ✨
-    </h2>
-
-    ${hebergement.services.map(service => `
-      <div class="activity-line">
-        <span>✔</span>
-        <p>${service}</p>
-      </div>
-    `).join("")}
-
-  </div>
-
-</section>
-
-<section class="next-step-section">
-
-  <h2>
-    Votre hébergement est trouvé 🏨
-  </h2>
-
-  <div class="next-step-grid">
-
-    <a href="transports.html">
-      ✈ Choisir le transport
-    </a>
-
-    <a href="hebergements.html">
-      🏨 Retour aux hébergements
-    </a>
-
-    <a href="activites.html">
-      🎉 Voir les activités
-    </a>
-
-  </div>
-
-  <button class="add-cart-btn">
-    Ajouter au panier voyage
-  </button>
-
-</section>
-
-`;
 }
 
-renderHebergementDetail();
+// ── HÉBERGEMENT DETAIL ────────────────────────────────────
+async function renderHebergementDetail() {
+  const page = document.getElementById("hebergementDetailPage");
+  if (!page) return;
 
-const showMoreBtn =
-  document.getElementById("showMoreBtn");
+  const params = new URLSearchParams(window.location.search);
+  const id     = params.get("id");
 
-const hiddenCards =
-  document.querySelectorAll(".hidden-card");
+  if (!id) { page.innerHTML = `<section class="error-page"><h1>Hébergement introuvable 😢</h1></section>`; return; }
 
-let isExpanded = false;
+  page.innerHTML = `<div style="text-align:center;padding:120px;font-size:3rem">✈️</div>`;
 
-if (showMoreBtn) {
+  try {
+    const res  = await fetch(`${API_BASE}api_hebergement_detail.php?id=${id}`, { credentials: 'include' });
+    const json = await res.json();
 
-  showMoreBtn.addEventListener("click", () => {
+    if (!json.success) { window.location.href = "404.html"; return; }
 
-    isExpanded = !isExpanded;
+    const h   = json.data;
+    const img = resolveImg(h.image_url, 'hebergement-bg.jpg');
 
-    hiddenCards.forEach(card => {
+    page.innerHTML = `
+      <section class="hebergement-detail-hero">
+        <img src="${img}" alt="${h.nom}" onerror="this.src='${IMAGES_PATH}hebergement-bg.jpg'">
+        <div class="hebergement-detail-overlay">
+          <p class="tag">${h.type || 'Hébergement'}</p>
+          <h1>${h.nom}</h1>
+          <p>${h.description || ''}</p>
+          <div class="detail-meta">
+            <span>⭐ ${h.note_moyenne}</span>
+            <span>📍 ${h.destination_nom}</span>
+            <span>💸 ${h.prix_nuit}€ / nuit</span>
+            <span>👥 ${h.capacite} pers. max</span>
+          </div>
+        </div>
+      </section>
 
-      if (isExpanded) {
+      <section class="hebergement-detail-content">
+        <div class="detail-main-card">
+          <h2>Pourquoi choisir cet hébergement ? ✨</h2>
+          <p>${h.description || ''}</p>
 
-        card.style.display = "block";
+          ${h.disponibilites && h.disponibilites.length > 0 ? `
+          <h3 style="margin-top:30px;color:#4a68a6">📅 Disponibilités</h3>
+          ${h.disponibilites.map(d => `
+            <div class="activity-line">
+              <span>✔</span>
+              <p>Du ${d.date_debut} au ${d.date_fin} — ${d.places_dispo} place(s) disponible(s)</p>
+            </div>`).join('')}
+          ` : '<p style="margin-top:20px;color:#466789">Contactez le prestataire pour les disponibilités.</p>'}
 
-      } else {
+          <button class="add-cart-btn">Ajouter au panier voyage</button>
+        </div>
 
-        card.style.display = "none";
+        <div class="detail-side-card">
+          <h2>Infos pratiques ✨</h2>
+          <div class="activity-line"><span>✔</span><p>Type : ${h.type || '—'}</p></div>
+          <div class="activity-line"><span>✔</span><p>Capacité : ${h.capacite} personnes</p></div>
+          <div class="activity-line"><span>✔</span><p>Région : ${h.region || '—'}</p></div>
+          <div class="activity-line"><span>✔</span><p>Destination : ${h.destination_nom}</p></div>
+          <div class="activity-line"><span>✔</span><p>Prix : ${h.prix_nuit}€ / nuit</p></div>
+          <div class="activity-line"><span>✔</span><p>Note : ⭐ ${h.note_moyenne}/5</p></div>
+          <div class="activity-line"><span>✔</span><p>Prestataire : ${h.prestataire_nom}</p></div>
+          <button data-signaler="hebergement" data-id="${h.id}"
+                  style="margin-top:20px;background:none;border:1.5px solid #ffc5cb;
+                         color:#e64b5d;padding:10px 18px;border-radius:20px;
+                         cursor:pointer;font-weight:700;font-size:13px;width:100%">
+            🚩 Signaler cet hébergement
+          </button>
+        </div>
+      </section>
 
-      }
+      <section class="next-step-section">
+        <h2>Votre hébergement est trouvé 🏨</h2>
+        <div class="next-step-grid">
+          <a href="transports.html">✈ Choisir le transport</a>
+          <a href="hebergements.html">🏨 Retour aux hébergements</a>
+          <a href="activites.html">🎉 Voir les activités</a>
+        </div>
+      </section>`;
 
-    });
-
-    showMoreBtn.textContent = isExpanded
-      ? "Voir moins ✨"
-      : "Voir plus ✨";
-
-  });
-
+  } catch(err) {
+    console.error('Erreur hébergement detail :', err);
+    page.innerHTML = `<section class="error-page"><h1>Hébergement introuvable 😢</h1></section>`;
+  }
 }
+
+// ── DONNÉES FALLBACK (si API non disponible) ──────────────
+const destinationsFallback = [
+  { id:0, name:"Bali",          image:"bali.png",       categories:["Plage","Nature"],      region:"Asie",    budget:"€€",  price:780,  rating:4.8, group:"9+", popular:98, trend:95, isNew:false, description:"Plages turquoise, temples, surf et sunsets parfaits avec ta team." },
+  { id:0, name:"Ibiza",         image:"ibiza.png",       categories:["Nightlife","Plage"],   region:"Europe",  budget:"€€",  price:520,  rating:4.6, group:"5-8",popular:96, trend:99, isNew:false, description:"Le spot idéal pour alterner plage, musique et soirées entre potes." },
+  { id:0, name:"Barcelone",     image:"barcelone.png",   categories:["Nightlife","Culture"], region:"Europe",  budget:"€€",  price:430,  rating:4.6, group:"5-8",popular:97, trend:94, isNew:false, description:"Ville solaire, tapas, plage et soirées faciles à organiser." },
+  { id:0, name:"Chamonix",      image:"chamonix.png",    categories:["Aventure","Sport"],    region:"Europe",  budget:"€€",  price:560,  rating:4.4, group:"2-4",popular:83, trend:86, isNew:true,  description:"Montagne, ski, randonnées et sensations fortes au grand air." },
+  { id:0, name:"Costa Rica",    image:"costarica.png",   categories:["Aventure","Nature"],   region:"Amerique",budget:"€€",  price:890,  rating:4.7, group:"9+", popular:90, trend:92, isNew:false, description:"Jungle, volcans, surf et aventures nature pour un groupe motivé." },
+  { id:0, name:"Marrakech",     image:"diner-marocain.png",categories:["Culture","Gastronomie"],region:"Afrique",budget:"€", price:390,  rating:4.5, group:"5-8",popular:89, trend:90, isNew:true,  description:"Souks, riads, désert et vibes orientales pour un séjour dépaysant." },
+];
+
+const activitesFallback = [
+  { id:0, name:"Balade en bateau", image:"boat.png",           destination:"Ibiza",    category:"Détente",    price:65, duration:"3h",  rating:4.7, reviews:126, vibe:"🛥️ Mer • chill • sunset",       description:"Une sortie en bateau pour profiter de la mer, du soleil et des meilleurs spots photo.", comment1:"Le sunset sur le bateau était incroyable.", comment2:"Activité parfaite pour chill avec le groupe." },
+  { id:0, name:"Croisière sunset", image:"croisiere-sunset.png",destination:"Santorin", category:"Détente",    price:80, duration:"3h",  rating:5.0, reviews:318, vibe:"🌅 Sunset • mer • premium",      description:"Une croisière au coucher du soleil pour finir la journée avec une vraie vibe carte postale.", comment1:"Le coucher de soleil était irréel.", comment2:"Moment préféré du voyage." },
+  { id:0, name:"Food tour",        image:"food-tour.png",       destination:"Tokyo",    category:"Gastronomie",price:55, duration:"2h",  rating:4.9, reviews:214, vibe:"🍜 Food • ville • découverte",   description:"Teste les meilleurs spots food locaux et découvre la ville à travers ses saveurs.", comment1:"On a trop mangé 😭 mais c'était incroyable.", comment2:"Le meilleur moyen de découvrir Tokyo." },
+  { id:0, name:"Dîner marocain",   image:"diner-marocain.png",  destination:"Marrakech",category:"Gastronomie",price:40, duration:"Soirée",rating:4.7,reviews:102, vibe:"🍽️ Food • ambiance • partage",  description:"Un dîner marocain convivial avec plats traditionnels, ambiance chaleureuse.", comment1:"Le repas était incroyable.", comment2:"Très bonne ambiance avec musique et déco." },
+];
