@@ -1,13 +1,9 @@
 <?php
+session_name('VOYAGEVISTA_SESSION');
+session_set_cookie_params(['lifetime'=>0,'path'=>'/','domain'=>'','secure'=>false,'httponly'=>true,'samesite'=>'Lax']);
 session_start();
 session_unset();
 session_destroy();
-
-// Supprime le cookie "remember me" si présent
-if (isset($_COOKIE['remember_token'])) {
-    setcookie('remember_token', '', time() - 3600, '/');
-}
-
 header("Location: ../frontend/index.html");
 exit;
 ?>

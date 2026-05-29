@@ -3,6 +3,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     header("Location: login.php"); exit;
 }
 require_once 'configuration.php';
+session_name('VOYAGEVISTA_SESSION');
+session_set_cookie_params(['lifetime'=>0,'path'=>'/','domain'=>'','secure'=>false,'httponly'=>true,'samesite'=>'Lax']);
 session_start();
 
 $total_users          = $pdo->query("SELECT COUNT(*) FROM utilisateurs")->fetchColumn();
