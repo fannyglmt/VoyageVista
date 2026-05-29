@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoyageVista — Mes Favoris</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/favoris.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="brand">
+      <a href="index.html"><img src="assets/images/logo-voyagevista.png" alt="VoyageVista"></a>
+    </div>
+    <nav>
+      <a href="index.html">Accueil</a>
+      <a href="destination.html">Destinations</a>
+      <a href="activites.html">Activités</a>
+    </nav>
+    <div class="nav-icons">
+      <span class="heart-icon">♥</span>
+      <a href="notifications.html"><span class="notif-bell">🔔<span class="notif-count">6</span></span></a>
+      <a href="profil.html"><span>👤</span></a>
+    </div>
+  </header>
+
+  <main class="favoris-main">
+
+    <!-- HERO -->
+    <section class="favoris-hero">
+      <div class="favoris-hero-bg"></div>
+      <div class="favoris-hero-content">
+        <a href="profil.html" class="btn-retour">← Retour au profil</a>
+        <h1>❤️ Mes destinations favorites</h1>
+        <p>Les destinations qui ont fait battre ton cœur plus vite.</p>
+        <div class="favoris-count-wrap">
+          <span id="totalFavoris">3</span> destination(s) sauvegardée(s)
+        </div>
+      </div>
+    </section>
+
+    <div class="favoris-container">
+
+      <!-- FILTRES -->
+      <div class="favoris-filters">
+        <button class="filter-btn active" data-filter="all">Toutes</button>
+        <button class="filter-btn" data-filter="Plage">🌊 Plage</button>
+        <button class="filter-btn" data-filter="Nightlife">🎉 Nightlife</button>
+        <button class="filter-btn" data-filter="Culture">🏛️ Culture</button>
+        <button class="filter-btn" data-filter="Nature">🌿 Nature</button>
+        <button class="filter-btn" data-filter="Aventure">🏔️ Aventure</button>
+      </div>
+
+      <!-- GRILLE -->
+      <div class="favoris-grid" id="favorisGrid">
+
+        <div class="favori-card" data-id="1" data-categorie="Plage">
+          <div class="favori-card-img" style="background: linear-gradient(135deg,#79a9df,#9bdff4)">
+            <span class="favori-emoji">🏝️</span>
+            <button class="btn-unfav active" data-id="1" title="Retirer des favoris">♥</button>
+            <span class="favori-categorie">🌊 Plage</span>
+          </div>
+          <div class="favori-card-content">
+            <div class="favori-header">
+              <h3>Bali</h3>
+              <span class="favori-pays">🇮🇩 Indonésie</span>
+            </div>
+            <p class="favori-desc">Plage, chill, activités et sunsets inoubliables.</p>
+            <div class="favori-meta">
+              <span>👥 Idéal en groupe</span>
+              <span class="favori-prix">dès 780€</span>
+            </div>
+            <div class="favori-actions">
+              <a href="destination-detail.html" class="favori-btn-primary">Voir la destination</a>
+              <a href="panier.html" class="favori-btn-secondary">Ajouter au panier</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="favori-card" data-id="2" data-categorie="Nightlife">
+          <div class="favori-card-img" style="background: linear-gradient(135deg,#f3b27d,#f39b5f)">
+            <span class="favori-emoji">🎉</span>
+            <button class="btn-unfav active" data-id="2" title="Retirer des favoris">♥</button>
+            <span class="favori-categorie">🎉 Nightlife</span>
+          </div>
+          <div class="favori-card-content">
+            <div class="favori-header">
+              <h3>Ibiza</h3>
+              <span class="favori-pays">🇪🇸 Espagne</span>
+            </div>
+            <p class="favori-desc">Soirées épiques, mer turquoise et souvenirs entre potes.</p>
+            <div class="favori-meta">
+              <span>👥 Team vibe</span>
+              <span class="favori-prix">dès 520€</span>
+            </div>
+            <div class="favori-actions">
+              <a href="destination-detail.html" class="favori-btn-primary">Voir la destination</a>
+              <a href="panier.html" class="favori-btn-secondary">Ajouter au panier</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="favori-card" data-id="3" data-categorie="Plage">
+          <div class="favori-card-img" style="background: linear-gradient(135deg,#9bdff4,#57c5b6)">
+            <span class="favori-emoji">🌊</span>
+            <button class="btn-unfav active" data-id="3" title="Retirer des favoris">♥</button>
+            <span class="favori-categorie">🌊 Plage</span>
+          </div>
+          <div class="favori-card-content">
+            <div class="favori-header">
+              <h3>Santorin</h3>
+              <span class="favori-pays">🇬🇷 Grèce</span>
+            </div>
+            <p class="favori-desc">Vue imprenable sur la caldeira et mood été garanti.</p>
+            <div class="favori-meta">
+              <span>📸 Spot photo</span>
+              <span class="favori-prix">dès 640€</span>
+            </div>
+            <div class="favori-actions">
+              <a href="destination-detail.html" class="favori-btn-primary">Voir la destination</a>
+              <a href="panier.html" class="favori-btn-secondary">Ajouter au panier</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ÉTAT VIDE -->
+      <div class="favoris-empty hidden" id="favorisEmpty">
+        <div class="empty-icon">💔</div>
+        <h2>Aucune destination sauvegardée</h2>
+        <p>Swipe des destinations et clique sur ♥ pour les retrouver ici !</p>
+        <a href="destination.html" class="btn-primary" style="margin-top:20px; display:inline-block;">
+          Explorer les destinations
+        </a>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer>
+    <p>© 2026 VoyageVista — Explore, swipe, travel together.</p>
+  </footer>
+
+  <script src="js/favoris.js"></script>
+</body>
+</html>
