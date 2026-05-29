@@ -2,6 +2,8 @@
 // =============================================
 // Statistiques Plateforme - VoyageVista
 // =============================================
+session_name('VOYAGEVISTA_SESSION');
+session_set_cookie_params(['lifetime'=>0,'path'=>'/','domain'=>'','secure'=>false,'httponly'=>true,'samesite'=>'Lax']);
 session_start();
 
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
