@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoyageVista — Mon Panier</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/panier.css">
+</head>
+
+<body>
+
+  <header class="navbar">
+    <div class="brand">
+      <a href="index.html">
+        <img src="assets/images/logo-voyagevista.png" alt="VoyageVista">
+      </a>
+    </div>
+    <nav>
+      <a href="index.html">Accueil</a>
+      <a href="destination.html">Destinations</a>
+      <a href="activites.html">Activités</a>
+    </nav>
+    <div class="nav-icons">
+      <span class="heart-icon">♥</span>
+      <a href="notifications.html"><span class="notif-bell">🔔<span class="notif-count">6</span></span></a>
+      <a href="login.html"><span>👤</span></a>
+    </div>
+  </header>
+
+  <main class="panier-main">
+
+    <!-- HERO -->
+    <section class="panier-hero">
+      <div class="panier-hero-bg"></div>
+      <div class="panier-hero-content">
+        <h1>🧳 Mon panier de séjour</h1>
+        <p>Compose ton voyage parfait — transport, hébergement, activités.</p>
+      </div>
+    </section>
+
+    <div class="panier-layout">
+
+      <!-- ================================
+           COLONNE GAUCHE — Éléments
+      ================================ -->
+      <div class="panier-col-left">
+
+        <!-- INFOS GROUPE -->
+        <div class="panier-card">
+          <div class="panier-card-header">
+            <span class="panier-card-icon">👥</span>
+            <h2>Informations du groupe</h2>
+          </div>
+          <div class="groupe-grid">
+            <div class="groupe-field">
+              <label>Nombre de voyageurs</label>
+              <div class="counter-wrap">
+                <button class="counter-btn" id="btnMoins">−</button>
+                <span class="counter-val" id="nbVoyageurs">4</span>
+                <button class="counter-btn" id="btnPlus">+</button>
+              </div>
+            </div>
+            <div class="groupe-field">
+              <label>Destination</label>
+              <p class="groupe-value">🏝️ Bali, Indonésie</p>
+            </div>
+            <div class="groupe-field">
+              <label>Dates</label>
+              <p class="groupe-value">📅 15 Juil → 25 Juil 2026</p>
+            </div>
+            <div class="groupe-field">
+              <label>Durée</label>
+              <p class="groupe-value">⏱ 10 nuits</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- TRANSPORT -->
+        <div class="panier-card" id="cardTransport">
+          <div class="panier-card-header">
+            <span class="panier-card-icon">✈️</span>
+            <h2>Transport</h2>
+            <button class="btn-supprimer" data-section="transport">Supprimer</button>
+          </div>
+          <div class="panier-item-content">
+            <div class="item-main">
+              <div class="item-emoji">✈️</div>
+              <div class="item-info">
+                <h3>Vol Paris CDG → Bali DPS</h3>
+                <p>🗓 15 juillet 2026 • Départ 08h30 • Arrivée 06h15 (+1)</p>
+                <p>🏢 Air France • Vol direct</p>
+                <div class="item-tags">
+                  <span>Bagage inclus</span>
+                  <span>Annulation gratuite</span>
+                </div>
+              </div>
+            </div>
+            <div class="item-prix">
+              <span class="prix-unit">320€ <small>/pers.</small></span>
+              <span class="prix-total" data-base="320" id="prixTransport">1 280€</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- HÉBERGEMENT -->
+        <div class="panier-card" id="cardHebergement">
+          <div class="panier-card-header">
+            <span class="panier-card-icon">🏨</span>
+            <h2>Hébergement</h2>
+            <button class="btn-supprimer" data-section="hebergement">Supprimer</button>
+          </div>
+          <div class="panier-item-content">
+            <div class="item-main">
+              <div class="item-emoji">🌴</div>
+              <div class="item-info">
+                <h3>Villa Sunrise Ubud</h3>
+                <p>🗓 15 → 25 juillet 2026 • 10 nuits</p>
+                <p>📍 Ubud, Bali • Piscine privée • Petit-déjeuner inclus</p>
+                <div class="item-tags">
+                  <span>Piscine privée</span>
+                  <span>Petit-déjeuner</span>
+                  <span>Wifi</span>
+                </div>
+              </div>
+            </div>
+            <div class="item-prix">
+              <span class="prix-unit">180€ <small>/nuit</small></span>
+              <span class="prix-total" data-base="1800" id="prixHebergement">1 800€</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACTIVITÉS -->
+        <div class="panier-card" id="cardActivites">
+          <div class="panier-card-header">
+            <span class="panier-card-icon">🎯</span>
+            <h2>Activités <span class="activites-count" id="activitesCount">3</span></h2>
+            <a href="activites.html" class="btn-ajouter">+ Ajouter</a>
+          </div>
+
+          <div class="activites-list" id="activitesList">
+
+            <div class="activite-item" data-id="1" data-prix="45">
+              <div class="activite-emoji">🤿</div>
+              <div class="activite-info">
+                <h4>Plongée sous-marine</h4>
+                <p>🗓 17 juillet • 👥 4 pers. • ⏱ 3h</p>
+              </div>
+              <div class="activite-prix">
+                <span class="prix-unit-sm">45€/pers.</span>
+                <span class="activite-prix-total" id="prixActiv1">180€</span>
+              </div>
+              <button class="btn-suppr-activite" data-id="1">✕</button>
+            </div>
+
+            <div class="activite-item" data-id="2" data-prix="30">
+              <div class="activite-emoji">🌋</div>
+              <div class="activite-info">
+                <h4>Randonnée volcan Batur</h4>
+                <p>🗓 19 juillet • 👥 4 pers. • ⏱ 5h</p>
+              </div>
+              <div class="activite-prix">
+                <span class="prix-unit-sm">30€/pers.</span>
+                <span class="activite-prix-total" id="prixActiv2">120€</span>
+              </div>
+              <button class="btn-suppr-activite" data-id="2">✕</button>
+            </div>
+
+            <div class="activite-item" data-id="3" data-prix="60">
+              <div class="activite-emoji">🧘</div>
+              <div class="activite-info">
+                <h4>Retraite yoga & spa</h4>
+                <p>🗓 22 juillet • 👥 4 pers. • ⏱ Journée</p>
+              </div>
+              <div class="activite-prix">
+                <span class="prix-unit-sm">60€/pers.</span>
+                <span class="activite-prix-total" id="prixActiv3">240€</span>
+              </div>
+              <button class="btn-suppr-activite" data-id="3">✕</button>
+            </div>
+
+          </div>
+
+          <div class="activites-vide hidden" id="activitesVide">
+            <p>Aucune activité ajoutée pour l'instant.</p>
+            <a href="activites.html" class="btn-primary" style="margin-top:12px; display:inline-block;">
+              Explorer les activités
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ================================
+           COLONNE DROITE — Récapitulatif
+      ================================ -->
+      <div class="panier-col-right">
+        <div class="recap-card">
+
+          <h2>📋 Récapitulatif</h2>
+
+          <div class="recap-destination">
+            <span class="recap-dest-icon">🏝️</span>
+            <div>
+              <strong>Bali, Indonésie</strong>
+              <p>15 → 25 juillet 2026</p>
+            </div>
+          </div>
+
+          <div class="recap-lines">
+            <div class="recap-line" id="recapTransport">
+              <span>✈️ Transport <small id="recapNbPers">(×4)</small></span>
+              <span id="recapPrixTransport">1 280€</span>
+            </div>
+            <div class="recap-line" id="recapHebergement">
+              <span>🏨 Hébergement <small>(10 nuits)</small></span>
+              <span id="recapPrixHebergement">1 800€</span>
+            </div>
+            <div class="recap-line" id="recapActivites">
+              <span>🎯 Activités <small id="recapNbActivites">(×3)</small></span>
+              <span id="recapPrixActivites">540€</span>
+            </div>
+          </div>
+
+          <div class="recap-divider"></div>
+
+          <div class="recap-total">
+            <span>Total</span>
+            <span id="totalGeneral">3 620€</span>
+          </div>
+
+          <div class="recap-par-pers">
+            soit <strong id="totalParPers">905€</strong> / personne
+          </div>
+
+          <a href="validation-reservation.html" class="btn-valider" id="btnValider">
+            Valider la réservation ✈️
+          </a>
+
+          <button class="btn-vider" id="btnVider">
+            🗑 Vider le panier
+          </button>
+
+          <div class="recap-garanties">
+            <div class="garantie">✅ Paiement sécurisé</div>
+            <div class="garantie">✅ Annulation gratuite sous 24h</div>
+            <div class="garantie">✅ Support 7j/7</div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer>
+    <p>© 2026 VoyageVista — Explore, swipe, travel together.</p>
+  </footer>
+
+  <script src="js/panier.js"></script>
+
+</body>
+</html>
