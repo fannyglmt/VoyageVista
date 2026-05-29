@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoyageVista — Validation Réservation</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/panier.css">
+  <link rel="stylesheet" href="css/validation.css">
+</head>
+
+<body>
+
+  <header class="navbar">
+    <div class="brand">
+      <a href="index.html">
+        <img src="assets/images/logo-voyagevista.png" alt="VoyageVista">
+      </a>
+    </div>
+    <nav>
+      <a href="index.html">Accueil</a>
+      <a href="destination.html">Destinations</a>
+      <a href="activites.html">Activités</a>
+    </nav>
+    <div class="nav-icons">
+      <span class="heart-icon">♥</span>
+      <a href="notifications.html"><span class="notif-bell">🔔<span class="notif-count">6</span></span></a>
+      <a href="login.html"><span>👤</span></a>
+    </div>
+  </header>
+
+  <main class="valid-main">
+
+    <!-- ÉTAPES -->
+    <div class="steps-bar">
+      <div class="step done">
+        <span class="step-num">✓</span>
+        <span class="step-label">Panier</span>
+      </div>
+      <div class="step-line done"></div>
+      <div class="step active">
+        <span class="step-num">2</span>
+        <span class="step-label">Validation</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step">
+        <span class="step-num">3</span>
+        <span class="step-label">Confirmation</span>
+      </div>
+    </div>
+
+    <div class="valid-layout">
+
+      <!-- COLONNE GAUCHE -->
+      <div class="valid-col-left">
+
+        <!-- RÉCAP DU SÉJOUR -->
+        <div class="valid-card">
+          <h2>🧳 Récapitulatif du séjour</h2>
+
+          <div class="recap-sejour">
+            <div class="recap-dest-banner">
+              <span class="recap-dest-big">🏝️</span>
+              <div>
+                <h3>Bali, Indonésie</h3>
+                <p>15 → 25 juillet 2026 • 10 nuits • 4 voyageurs</p>
+              </div>
+            </div>
+
+            <div class="recap-items">
+              <div class="recap-item-row">
+                <span>✈️ Vol Paris CDG → Bali DPS</span>
+                <span>1 280€</span>
+              </div>
+              <div class="recap-item-row">
+                <span>🏨 Villa Sunrise Ubud — 10 nuits</span>
+                <span>1 800€</span>
+              </div>
+              <div class="recap-item-row">
+                <span>🤿 Plongée sous-marine</span>
+                <span>180€</span>
+              </div>
+              <div class="recap-item-row">
+                <span>🌋 Randonnée volcan Batur</span>
+                <span>120€</span>
+              </div>
+              <div class="recap-item-row">
+                <span>🧘 Retraite yoga & spa</span>
+                <span>240€</span>
+              </div>
+            </div>
+
+            <div class="recap-total-row">
+              <span>Total</span>
+              <span class="recap-total-prix">3 620€</span>
+            </div>
+            <p class="recap-par-pers-small">soit <strong>905€ / personne</strong></p>
+          </div>
+        </div>
+
+        <!-- INFOS CONTACT -->
+        <div class="valid-card">
+          <h2>👤 Informations de contact</h2>
+          <form class="valid-form" id="validForm" method="POST" action="../backend/valider_reservation.php">
+
+            <div class="form-row-valid">
+              <div class="form-group-valid">
+                <label>Prénom</label>
+                <input type="text" name="prenom" value="Marie-Zoé" required>
+              </div>
+              <div class="form-group-valid">
+                <label>Nom</label>
+                <input type="text" name="nom" value="D." required>
+              </div>
+            </div>
+
+            <div class="form-group-valid">
+              <label>Email de confirmation</label>
+              <input type="email" name="email" value="marie-zoe@email.com" required>
+            </div>
+
+            <div class="form-group-valid">
+              <label>Téléphone</label>
+              <input type="tel" name="telephone" placeholder="+33 6 00 00 00 00">
+            </div>
+
+            <div class="form-group-valid">
+              <label>Demandes spéciales <span class="optional">(optionnel)</span></label>
+              <textarea name="demandes" placeholder="Chambre non-fumeur, allergies alimentaires, lit bébé..." rows="3"></textarea>
+            </div>
+
+            <div class="form-divider-valid"></div>
+
+            <h2>💳 Paiement</h2>
+            <p class="paiement-note">Le paiement sera simulé — aucune donnée bancaire réelle n'est collectée.</p>
+
+            <div class="paiement-options">
+              <label class="paiement-option active" id="optCarte">
+                <input type="radio" name="paiement" value="carte" checked>
+                <span class="option-icon">💳</span>
+                <span>Carte bancaire</span>
+              </label>
+              <label class="paiement-option" id="optPaypal">
+                <input type="radio" name="paiement" value="paypal">
+                <span class="option-icon">🅿️</span>
+                <span>PayPal</span>
+              </label>
+              <label class="paiement-option" id="optVirement">
+                <input type="radio" name="paiement" value="virement">
+                <span class="option-icon">🏦</span>
+                <span>Virement</span>
+              </label>
+            </div>
+
+            <div class="carte-fields" id="carteFields">
+              <div class="form-group-valid">
+                <label>Numéro de carte</label>
+                <input type="text" id="numCarte" name="num_carte" placeholder="0000 0000 0000 0000" maxlength="19">
+              </div>
+              <div class="form-row-valid">
+                <div class="form-group-valid">
+                  <label>Expiration</label>
+                  <input type="text" name="expiration" placeholder="MM/AA" maxlength="5">
+                </div>
+                <div class="form-group-valid">
+                  <label>CVV</label>
+                  <input type="text" name="cvv" placeholder="123" maxlength="3">
+                </div>
+              </div>
+            </div>
+
+            <div class="cgu-check">
+              <label class="checkbox-label-valid">
+                <input type="checkbox" name="cgu" id="cguCheck" required>
+                <span class="checkbox-custom-valid"></span>
+                J'accepte les <a href="#">Conditions Générales de Vente</a> et la <a href="#">Politique d'annulation</a>
+              </label>
+            </div>
+
+            <div id="validAlert"></div>
+
+            <button type="submit" class="btn-confirmer" id="btnConfirmer">
+              Confirmer la réservation ✈️
+            </button>
+
+            <a href="panier.html" class="btn-retour-panier">← Retour au panier</a>
+
+          </form>
+        </div>
+
+      </div>
+
+      <!-- COLONNE DROITE -->
+      <div class="valid-col-right">
+        <div class="valid-recap-sticky">
+
+          <div class="recap-mini-card">
+            <h3>🌟 Votre séjour</h3>
+            <div class="recap-mini-dest">
+              <span>🏝️</span>
+              <div>
+                <strong>Bali, Indonésie</strong>
+                <p>15 → 25 juil. 2026</p>
+              </div>
+            </div>
+            <div class="recap-mini-lines">
+              <div class="recap-mini-line"><span>✈️ Transport</span><span>1 280€</span></div>
+              <div class="recap-mini-line"><span>🏨 Hébergement</span><span>1 800€</span></div>
+              <div class="recap-mini-line"><span>🎯 Activités (×3)</span><span>540€</span></div>
+            </div>
+            <div class="recap-mini-total">
+              <span>Total</span>
+              <span>3 620€</span>
+            </div>
+            <p class="recap-mini-pers">905€ / personne</p>
+          </div>
+
+          <div class="garanties-card">
+            <h3>🔒 Réservation sécurisée</h3>
+            <div class="garantie-item">✅ Paiement 100% sécurisé</div>
+            <div class="garantie-item">✅ Annulation gratuite sous 24h</div>
+            <div class="garantie-item">✅ Confirmation par email immédiate</div>
+            <div class="garantie-item">✅ Support client 7j/7</div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer>
+    <p>© 2026 VoyageVista — Explore, swipe, travel together.</p>
+  </footer>
+
+  <script src="js/validation.js"></script>
+
+</body>
+</html>
