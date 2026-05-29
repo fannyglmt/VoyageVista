@@ -4,15 +4,18 @@
 // BDD + Session partagée frontend/backend
 // =============================================
 
-// ── SESSION COOKIE : chemin global ───────────────────────
-// Fix MAMP : le cookie de session doit être valide pour
-// tout le site (frontend ET backend), pas juste /backend/
+// ── SESSION : configuration AVANT session_start() ────────
 if (session_status() === PHP_SESSION_NONE) {
+
+    // Nom unique pour éviter les conflits avec d'autres apps MAMP
+    session_name('VOYAGEVISTA_SESSION');
+
+    // Cookie valide pour tout le site (frontend ET backend)
     session_set_cookie_params([
         'lifetime' => 0,
-        'path'     => '/',          // ← clé du fix : accessible depuis tout le site
+        'path'     => '/',
         'domain'   => '',
-        'secure'   => false,        // true si HTTPS
+        'secure'   => false,
         'httponly' => true,
         'samesite' => 'Lax',
     ]);
@@ -21,7 +24,7 @@ if (session_status() === PHP_SESSION_NONE) {
 // ── BASE DE DONNÉES ───────────────────────────────────────
 $servername = "localhost";
 $username   = "root";
-$password   = "root";             // MAMP : "root" par défaut
+$password   = "root";
 $dbname     = "voyagevista";
 
 try {
@@ -37,10 +40,7 @@ try {
     );
 } catch (PDOException $e) {
     error_log("Erreur BDD : " . $e->getMessage());
-    die(json_encode([
-        'success' => false,
-        'error'   => 'Erreur de connexion à la base de données.'
-    ]));
+    die("Une erreur est survenue. Veuillez réessayer plus tard.");
 }
 ?>
  
