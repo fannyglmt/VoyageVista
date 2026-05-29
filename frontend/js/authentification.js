@@ -7,23 +7,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // -----------------------------------------------
   // 1. AFFICHAGE DES ERREURS DEPUIS L'URL (?error=)
-  // Le backend redirige avec ?error=code, on affiche
-  // le bon message ici sans PHP
   // -----------------------------------------------
   const errorMessages = {
-    champs_vides:           'Merci de remplir tous les champs.',
-    email_invalide:         'Adresse email invalide.',
-    identifiants_incorrects:'Email ou mot de passe incorrect.',
-    email_deja_utilise:     'Cette adresse email est déjà utilisée.',
-    mdp_trop_court:         'Le mot de passe doit contenir au moins 8 caractères.',
-    mdp_non_identiques:     'Les mots de passe ne correspondent pas.',
+    champs_vides:            'Merci de remplir tous les champs.',
+    email_invalide:          'Adresse email invalide.',
+    identifiants_incorrects: 'Email ou mot de passe incorrect.',
+    email_deja_utilise:      'Cette adresse email est déjà utilisée.',
+    mdp_trop_court:          'Le mot de passe doit contenir au moins 8 caractères.',
+    mdp_non_identiques:      'Les mots de passe ne correspondent pas.',
+    // ── Ajout : codes username ──
+    username_trop_court:     "Le nom d'utilisateur doit faire au moins 3 caractères.",
+    username_deja_utilise:   "Ce nom d'utilisateur est déjà pris.",
   };
 
   const successMessages = {
     compte_cree: 'Compte créé avec succès ! Tu peux maintenant te connecter.',
   };
 
-  const params = new URLSearchParams(window.location.search);
+  const params      = new URLSearchParams(window.location.search);
   const errorCode   = params.get('error');
   const successCode = params.get('success');
   const container   = document.getElementById('auth-alert-container');
@@ -51,8 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const input = document.getElementById(inputId);
     if (!btn || !input) return;
     btn.addEventListener('click', () => {
-      const hidden = input.type === 'password';
-      input.type   = hidden ? 'text' : 'password';
+      const hidden    = input.type === 'password';
+      input.type      = hidden ? 'text' : 'password';
       btn.textContent = hidden ? '🙈' : '👁';
     });
   }
@@ -63,18 +64,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // -----------------------------------------------
   // 3. INDICATEUR DE FORCE DU MOT DE PASSE (register)
   // -----------------------------------------------
-  const passwordInput  = document.getElementById('password');
-  const strengthFill   = document.querySelector('.strength-fill');
-  const strengthText   = document.querySelector('.strength-text');
+  const passwordInput = document.getElementById('password');
+  const strengthFill  = document.querySelector('.strength-fill');
+  const strengthText  = document.querySelector('.strength-text');
 
   if (passwordInput && strengthFill && strengthText) {
     passwordInput.addEventListener('input', () => {
       const val = passwordInput.value;
       let score = 0;
-      if (val.length >= 8)           score++;
-      if (/[A-Z]/.test(val))         score++;
-      if (/[0-9]/.test(val))         score++;
-      if (/[^A-Za-z0-9]/.test(val))  score++;
+      if (val.length >= 8)          score++;
+      if (/[A-Z]/.test(val))        score++;
+      if (/[0-9]/.test(val))        score++;
+      if (/[^A-Za-z0-9]/.test(val)) score++;
 
       const levels = [
         { pct: '0%',   label: '',             color: '' },
@@ -111,27 +112,33 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // Animation bouton
       animateBtn(loginForm);
     });
   }
 
   // -----------------------------------------------
   // 5. VALIDATION CÔTÉ CLIENT — REGISTER
+  // CORRECTION : username remplace prenom + nom
   // -----------------------------------------------
   const registerForm = document.getElementById('registerForm');
 
   if (registerForm) {
     registerForm.addEventListener('submit', (e) => {
-      const prenom = document.getElementById('prenom')?.value.trim();
-      const nom    = document.getElementById('nom')?.value.trim();
-      const email  = document.getElementById('email')?.value.trim();
-      const pw     = document.getElementById('password')?.value;
-      const pw2    = document.getElementById('confirm_password')?.value;
 
-      if (!prenom || !nom || !email || !pw || !pw2) {
+      // username remplace prenom + nom
+      const username = document.getElementById('username')?.value.trim();
+      const email    = document.getElementById('email')?.value.trim();
+      const pw       = document.getElementById('password')?.value;
+      const pw2      = document.getElementById('confirm_password')?.value;
+
+      if (!username || !email || !pw || !pw2) {
         e.preventDefault();
         showClientError('Merci de remplir tous les champs.');
+        return;
+      }
+      if (username.length < 3) {
+        e.preventDefault();
+        showClientError("Le nom d'utilisateur doit faire au moins 3 caractères.");
         return;
       }
       if (!isValidEmail(email)) {
@@ -157,7 +164,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // -----------------------------------------------
   // HELPERS
   // -----------------------------------------------
-
   function isValidEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
@@ -178,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function animateBtn(form) {
     const btn = form.querySelector('.btn-auth');
     if (!btn) return;
-    btn.style.opacity = '0.7';
+    btn.style.opacity       = '0.7';
     btn.style.pointerEvents = 'none';
     const txt = btn.querySelector('.btn-text');
     if (txt) txt.textContent = 'Chargement…';
