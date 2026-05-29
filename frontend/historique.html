@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoyageVista — Historique des voyages</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/historique.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="brand">
+      <a href="index.html"><img src="assets/images/logo-voyagevista.png" alt="VoyageVista"></a>
+    </div>
+    <nav>
+      <a href="index.html">Accueil</a>
+      <a href="destination.html">Destinations</a>
+      <a href="activites.html">Activités</a>
+    </nav>
+    <div class="nav-icons">
+      <span class="heart-icon">♥</span>
+      <a href="notifications.html"><span class="notif-bell">🔔<span class="notif-count">6</span></span></a>
+      <a href="profil.html"><span>👤</span></a>
+    </div>
+  </header>
+
+  <main class="historique-main">
+
+    <!-- HERO -->
+    <section class="historique-hero">
+      <div class="historique-hero-bg"></div>
+      <div class="historique-hero-content">
+        <a href="profil.html" class="btn-retour">← Retour au profil</a>
+        <h1>🕐 Historique des voyages</h1>
+        <p>Tous tes séjours passés et en cours, au même endroit.</p>
+        <div class="historique-stats">
+          <div class="histo-stat"><span>3</span><p>Voyages effectués</p></div>
+          <div class="histo-stat"><span>13</span><p>Pays visités</p></div>
+          <div class="histo-stat"><span>24</span><p>Nuits à l'étranger</p></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="historique-container">
+
+      <!-- FILTRES -->
+      <div class="historique-filters">
+        <button class="filter-btn active" data-filter="all">Tous</button>
+        <button class="filter-btn" data-filter="terminee">✅ Terminés</button>
+        <button class="filter-btn" data-filter="confirmee">✈️ À venir</button>
+        <button class="filter-btn" data-filter="annulee">❌ Annulés</button>
+      </div>
+
+      <!-- LISTE -->
+      <div class="historique-list" id="historiqueList">
+
+        <!-- Voyage 1 — À venir -->
+        <div class="histo-card" data-statut="confirmee">
+          <div class="histo-card-img" style="background: linear-gradient(135deg,#79a9df,#9bdff4)">
+            <span>🏝️</span>
+            <div class="histo-statut confirmee">✈️ À venir</div>
+          </div>
+          <div class="histo-card-content">
+            <div class="histo-card-header">
+              <div>
+                <h3>Bali, Indonésie</h3>
+                <p class="histo-dates">📅 15 → 25 juillet 2026 • 10 nuits</p>
+                <p class="histo-groupe">👥 4 voyageurs</p>
+              </div>
+              <div class="histo-prix">3 620€</div>
+            </div>
+            <div class="histo-tags">
+              <span>✈️ Vol A/R</span>
+              <span>🏨 Villa</span>
+              <span>🤿 Plongée</span>
+              <span>🌋 Randonnée</span>
+              <span>🧘 Yoga</span>
+            </div>
+            <div class="histo-actions">
+              <a href="panier.html" class="histo-btn-primary">Voir le séjour</a>
+              <a href="destination-detail.html" class="histo-btn-secondary">Détails destination</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Voyage 2 — Terminé -->
+        <div class="histo-card" data-statut="terminee">
+          <div class="histo-card-img" style="background: linear-gradient(135deg,#4a68a6,#79a9df)">
+            <span>🗼</span>
+            <div class="histo-statut terminee">✅ Terminé</div>
+          </div>
+          <div class="histo-card-content">
+            <div class="histo-card-header">
+              <div>
+                <h3>Paris, France</h3>
+                <p class="histo-dates">📅 10 → 13 mars 2026 • 3 nuits</p>
+                <p class="histo-groupe">👥 3 voyageurs</p>
+              </div>
+              <div class="histo-prix">780€</div>
+            </div>
+            <div class="histo-tags">
+              <span>🚄 Train</span>
+              <span>🏨 Hôtel</span>
+              <span>🍽️ Gastronomie</span>
+              <span>🎭 Culture</span>
+            </div>
+            <div class="histo-actions">
+              <button class="histo-btn-primary" onclick="ouvrirAvis(this)" data-dest="Paris">Laisser un avis ⭐</button>
+              <a href="destination-detail.html" class="histo-btn-secondary">Réserver à nouveau</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Voyage 3 — Terminé -->
+        <div class="histo-card" data-statut="terminee">
+          <div class="histo-card-img" style="background: linear-gradient(135deg,#f3b27d,#f39b5f)">
+            <span>🎉</span>
+            <div class="histo-statut terminee">✅ Terminé</div>
+          </div>
+          <div class="histo-card-content">
+            <div class="histo-card-header">
+              <div>
+                <h3>Ibiza, Espagne</h3>
+                <p class="histo-dates">📅 3 → 10 août 2025 • 7 nuits</p>
+                <p class="histo-groupe">👥 6 voyageurs</p>
+              </div>
+              <div class="histo-prix">3 120€</div>
+            </div>
+            <div class="histo-tags">
+              <span>✈️ Vol A/R</span>
+              <span>🏠 Appartement</span>
+              <span>🎶 Nightlife</span>
+              <span>🌊 Plage</span>
+            </div>
+            <div class="histo-actions">
+              <button class="histo-btn-primary" onclick="ouvrirAvis(this)" data-dest="Ibiza">Laisser un avis ⭐</button>
+              <a href="destination-detail.html" class="histo-btn-secondary">Réserver à nouveau</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Voyage 4 — Annulé -->
+        <div class="histo-card" data-statut="annulee">
+          <div class="histo-card-img" style="background: linear-gradient(135deg,#9bdff4,#57c5b6)">
+            <span>🏔️</span>
+            <div class="histo-statut annulee">❌ Annulé</div>
+          </div>
+          <div class="histo-card-content">
+            <div class="histo-card-header">
+              <div>
+                <h3>Alpes, Suisse</h3>
+                <p class="histo-dates">📅 20 → 27 janvier 2025 • 7 nuits</p>
+                <p class="histo-groupe">👥 2 voyageurs</p>
+              </div>
+              <div class="histo-prix annule-prix">1 840€ <small>remboursé</small></div>
+            </div>
+            <div class="histo-tags">
+              <span>🚗 Voiture</span>
+              <span>🏔️ Chalet</span>
+              <span>⛷️ Ski</span>
+            </div>
+            <div class="histo-actions">
+              <a href="destination.html" class="histo-btn-secondary">Trouver un autre voyage</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ÉTAT VIDE -->
+      <div class="histo-empty hidden" id="histoEmpty">
+        <div class="empty-icon">🗺️</div>
+        <h2>Aucun voyage trouvé</h2>
+        <p>Tu n'as pas encore de voyage dans cette catégorie.</p>
+        <a href="destination.html" class="btn-primary" style="margin-top:20px; display:inline-block;">
+          Explorer les destinations
+        </a>
+      </div>
+
+    </div>
+
+    <!-- MODALE AVIS -->
+    <div class="avis-modal hidden" id="avisModal">
+      <div class="avis-modal-content">
+        <button class="avis-modal-close" id="fermerAvis">✕</button>
+        <h2>⭐ Laisser un avis</h2>
+        <p id="avisDestNom" class="avis-dest-nom"></p>
+        <form class="avis-form" method="POST" action="../backend/ajouter_avis.php">
+          <div class="etoiles" id="etoilesWrap">
+            <span class="etoile" data-val="1">⭐</span>
+            <span class="etoile" data-val="2">⭐</span>
+            <span class="etoile" data-val="3">⭐</span>
+            <span class="etoile" data-val="4">⭐</span>
+            <span class="etoile" data-val="5">⭐</span>
+          </div>
+          <input type="hidden" name="note" id="noteInput" value="0">
+          <input type="hidden" name="destination_nom" id="destNomInput">
+          <textarea name="commentaire" placeholder="Raconte ton expérience..." rows="4" required></textarea>
+          <button type="submit" class="btn-envoyer-avis">Envoyer l'avis ✓</button>
+        </form>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>© 2026 VoyageVista — Explore, swipe, travel together.</p>
+  </footer>
+
+  <script src="js/historique.js"></script>
+</body>
+</html>
