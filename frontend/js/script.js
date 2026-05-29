@@ -228,7 +228,7 @@ function renderCatalogue(list) {
 
   catalogueGrid.innerHTML = list.map(dest => `
     <article class="catalogue-card">
-      <button class="fav-btn" data-fav-id="${dest.id}">♥</button>
+      <button class="fav-btn" data-fav-id="${dest.id}" title="Ajouter aux favoris">♥</button>
       <img src="${resolveImg(dest.image)}" alt="${dest.name}">
       <div class="catalogue-content">
         <h3>${dest.name}</h3>
@@ -244,6 +244,8 @@ function renderCatalogue(list) {
         </a>
       </div>
     </article>`).join("");
+
+  // Favoris gérés par favoris.js
 }
 
 // ── FILTRES ───────────────────────────────────────────────
