@@ -9,7 +9,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
 
     try {
-        const res  = await fetch('../backend/api_session.php');
+        const res  = await fetch('../backend/api_session.php', { credentials: 'include' });
         const json = await res.json();
 
         const navIcons = document.querySelector('.nav-icons');

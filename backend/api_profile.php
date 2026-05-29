@@ -7,6 +7,8 @@ session_start();
 // Retourne les données du profil utilisateur connecté
 // =============================================
 header('Content-Type: application/json; charset=utf-8');
+header('Access-Control-Allow-Origin: http://localhost:8888');
+header('Access-Control-Allow-Credentials: true');
 
 
 if (!isset($_SESSION['user_id'])) {

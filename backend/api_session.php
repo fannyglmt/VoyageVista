@@ -5,7 +5,8 @@
 // Appelé par le JS de la navbar
 // =============================================
 header('Content-Type: application/json; charset=utf-8');
-header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Origin: http://localhost:8888');
+header('Access-Control-Allow-Credentials: true');
 
 session_name('VOYAGEVISTA_SESSION');
 session_set_cookie_params(['lifetime'=>0,'path'=>'/','domain'=>'','secure'=>false,'httponly'=>true,'samesite'=>'Lax']);

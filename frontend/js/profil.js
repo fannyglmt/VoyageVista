@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 // ── CHARGEMENT PROFIL DEPUIS LA BDD ───────────────────────
 async function chargerProfil() {
     try {
-        const res  = await fetch(API_PROFIL);
+        const res  = await fetch(API_PROFIL, { credentials: 'include' });
         const json = await res.json();
 
         if (!json.success && json.error === 'non_connecte') {
