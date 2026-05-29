@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoyageVista — Réservation confirmée !</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/confirmation.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="brand">
+      <a href="index.html"><img src="assets/images/logo-voyagevista.png" alt="VoyageVista"></a>
+    </div>
+    <nav>
+      <a href="index.html">Accueil</a>
+      <a href="destination.html">Destinations</a>
+      <a href="activites.html">Activités</a>
+    </nav>
+    <div class="nav-icons">
+      <span class="heart-icon">♥</span>
+      <a href="notifications.html"><span class="notif-bell">🔔<span class="notif-count">6</span></span></a>
+      <a href="profil.html"><span>👤</span></a>
+    </div>
+  </header>
+
+  <main class="confirm-main">
+
+    <!-- BARRE D'ÉTAPES -->
+    <div class="steps-bar">
+      <div class="step done"><span class="step-num">✓</span><span class="step-label">Panier</span></div>
+      <div class="step-line done"></div>
+      <div class="step done"><span class="step-num">✓</span><span class="step-label">Validation</span></div>
+      <div class="step-line done"></div>
+      <div class="step active"><span class="step-num">3</span><span class="step-label">Confirmation</span></div>
+    </div>
+
+    <!-- HERO CONFIRMATION -->
+    <div class="confirm-hero">
+      <div class="confirm-animation">
+        <div class="confirm-circle">
+          <span class="confirm-check">✓</span>
+        </div>
+        <div class="plane-anim">✈️</div>
+      </div>
+      <h1>Réservation confirmée !</h1>
+      <p>Ton aventure commence maintenant. Un email de confirmation t'a été envoyé.</p>
+    </div>
+
+    <!-- DÉTAILS -->
+    <div class="confirm-grid">
+
+      <!-- Récap séjour -->
+      <div class="confirm-card">
+        <h2>🧳 Ton séjour</h2>
+        <div class="confirm-sejour-banner">
+          <span>🏝️</span>
+          <div>
+            <h3>Bali, Indonésie</h3>
+            <p>15 → 25 juillet 2026 • 10 nuits • 4 voyageurs</p>
+          </div>
+        </div>
+        <div class="confirm-lines">
+          <div class="confirm-line"><span>✈️ Transport</span><span>1 280€</span></div>
+          <div class="confirm-line"><span>🏨 Hébergement</span><span>1 800€</span></div>
+          <div class="confirm-line"><span>🎯 Activités (×3)</span><span>540€</span></div>
+          <div class="confirm-line total">
+            <span>Total payé</span>
+            <span class="confirm-total-prix">3 620€</span>
+          </div>
+        </div>
+        <p class="confirm-ref">📋 Référence : <strong>VV-2026-07-4821</strong></p>
+      </div>
+
+      <!-- Prochaines étapes -->
+      <div class="confirm-card">
+        <h2>📋 Prochaines étapes</h2>
+        <div class="etapes-list">
+          <div class="etape-item">
+            <div class="etape-num">1</div>
+            <div class="etape-info">
+              <h4>Email de confirmation</h4>
+              <p>Vérifie ta boîte mail — un récapitulatif complet t'a été envoyé.</p>
+            </div>
+          </div>
+          <div class="etape-item">
+            <div class="etape-num">2</div>
+            <div class="etape-info">
+              <h4>Documents de voyage</h4>
+              <p>Pense à vérifier ta carte d'identité ou passeport avant le départ.</p>
+            </div>
+          </div>
+          <div class="etape-item">
+            <div class="etape-num">3</div>
+            <div class="etape-info">
+              <h4>Préparation du séjour</h4>
+              <p>Retrouve toutes les infos dans ton espace profil, section "Historique".</p>
+            </div>
+          </div>
+          <div class="etape-item">
+            <div class="etape-num">4</div>
+            <div class="etape-info">
+              <h4>Support disponible</h4>
+              <p>En cas de question, notre équipe est disponible 7j/7 pour t'aider.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CTA -->
+    <div class="confirm-cta">
+      <a href="historique.html" class="btn-primary">Voir mon historique de voyages</a>
+      <a href="destination.html" class="confirm-btn-sec">Explorer d'autres destinations →</a>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>© 2026 VoyageVista — Explore, swipe, travel together.</p>
+  </footer>
+
+  <script src="js/confirmation.js"></script>
+</body>
+</html>
