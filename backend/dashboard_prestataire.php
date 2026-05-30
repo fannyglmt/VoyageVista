@@ -176,11 +176,32 @@ foreach ($services as &$s) {
   <?php else:?>
   <div class="services-grid">
     <?php
-    $svcImg=['hebergement'=>'../frontend/assets/images/hebergement-bg.jpg','activite'=>'../frontend/assets/images/boat.png','transport'=>'../frontend/assets/images/barcelone.png'];
+    $svcImg = [
+    'Appartement Barceloneta' => '../frontend/assets/images/barcelonevilla.png',
+    'Bali Beach Resort'       => '../frontend/assets/images/hotel1.png',
+    'Chalet Mont-Blanc'       => '../frontend/assets/images/loftchamonix.png',
+    'Eco Lodge Costa Rica'    => '../frontend/assets/images/villacosta.png',
+    'Riad Majorelle'          => '../frontend/assets/images/villamarrakech.png',
+    'Villa Sunrise Ubud'      => '../frontend/assets/images/villachill.png',
+
+    'Balade en bateau'        => '../frontend/assets/images/boat.png',
+    'Croisière sunset'        => '../frontend/assets/images/croisiere-sunset.png',
+    'Food tour'               => '../frontend/assets/images/food-tour.png',
+    'Surf'                    => '../frontend/assets/images/surf.png',
+    'Randonnée volcan Batur'  => '../frontend/assets/images/randonnee-volcan.png',
+    'Retraite yoga et spa'    => '../frontend/assets/images/spa.png',
+
+    'Train Paris → Barcelone' => '../frontend/assets/images/transport-train.png',
+    'Vol Premium Paris → Bali'=> '../frontend/assets/images/transport-avion.png',
+    'Van Road Trip Portugal'  => '../frontend/assets/images/transport-van.png',
+    'Ferry Bordeaux → Barcelone' => '../frontend/assets/images/transport-ferry.png'
+];
+
     $sc_map=['actif'=>'pill-green','inactif'=>'pill-red','en_attente'=>'pill-amber'];
     $tc_map=['hebergement'=>'pill-teal','activite'=>'pill-purple','transport'=>'pill-amber'];
     foreach($services as $s):
-      $img=$svcImg[$s['type']??'hebergement']??'../frontend/assets/images/hebergement-bg.jpg';
+      $img = $svcImg[$s['nom']]
+      ?? '../frontend/assets/images/default.jpg';
       $sc2=$sc_map[$s['statut']??'en_attente']??'pill-amber';
       $tc2=$tc_map[$s['type']??'hebergement']??'pill-teal';
     ?>
