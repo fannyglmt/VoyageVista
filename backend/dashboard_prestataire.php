@@ -177,24 +177,28 @@ foreach ($services as &$s) {
   <div class="services-grid">
     <?php
     $svcImg = [
-    'Appartement Barceloneta' => '../frontend/assets/images/barcelonevilla.png',
-    'Bali Beach Resort'       => '../frontend/assets/images/hotel1.png',
-    'Chalet Mont-Blanc'       => '../frontend/assets/images/loftchamonix.png',
-    'Eco Lodge Costa Rica'    => '../frontend/assets/images/villacosta.png',
-    'Riad Majorelle'          => '../frontend/assets/images/villamarrakech.png',
+    'Appartement Barceloneta' => '../frontend/assets/images/barcelonevilla.jpg',
+    'Bali Beach Resort'       => '../frontend/assets/images/hotel1.jpg',
+    'Chalet Mont-Blanc'       => '../frontend/assets/images/loftchamonix.jpg',
+    'Eco Lodge Costa Rica'    => '../frontend/assets/images/villacosta.jpg',
+    'Riad Majorelle'          => '../frontend/assets/images/villamarrakech.jpg',
     'Villa Sunrise Ubud'      => '../frontend/assets/images/villachill.png',
 
     'Balade en bateau'        => '../frontend/assets/images/boat.png',
     'Croisière sunset'        => '../frontend/assets/images/croisiere-sunset.png',
     'Food tour'               => '../frontend/assets/images/food-tour.png',
-    'Surf'                    => '../frontend/assets/images/surf.png',
+    'Plongée sous-marine'     => '../frontend/assets/images/plongée sous-marine.jpg',
     'Randonnée volcan Batur'  => '../frontend/assets/images/randonnee-volcan.png',
     'Retraite yoga et spa'    => '../frontend/assets/images/spa.png',
+    'Zipline dans la jungle'   => '../frontend/assets/images/tyrolienne-jungle.png',
+    'Dîner marocain traditionnel' => '../frontend/assets/images/diner-marocain.png',
 
-    'Train Paris → Barcelone' => '../frontend/assets/images/transport-train.png',
-    'Vol Premium Paris → Bali'=> '../frontend/assets/images/transport-avion.png',
-    'Van Road Trip Portugal'  => '../frontend/assets/images/transport-van.png',
-    'Ferry Bordeaux → Barcelone' => '../frontend/assets/images/transport-ferry.png'
+    'Train Paris → Barcelone' => '../frontend/assets/images/transport-train.jpg',
+    'Vol Premium Paris → Bali'=> '../frontend/assets/images/transport-avion.jpg',
+    'Vol Paris → Santorin'     => '../frontend/assets/images/transport-avion.jpg',
+    'Van Road Trip Portugal'  => '../frontend/assets/images/transport-van.jpg',
+    'Ferry Bordeaux → Barcelone' => '../frontend/assets/images/transport-ferry.jpg',
+    'Vélo Chamonix → Barcelone' => '../frontend/assets/images/transport-velo.jpg'
 ];
 
     $sc_map=['actif'=>'pill-green','inactif'=>'pill-red','en_attente'=>'pill-amber'];
