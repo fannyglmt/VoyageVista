@@ -254,21 +254,24 @@ function truncate(str, len) {
     return str.length > len ? str.slice(0, len) + '...' : str;
 }
 
-// Associe un nom de destination à une image locale
+// Associe une image selon la destination ou le nom de l'hébergement
 function resolveImage(imageUrl, destinationNom) {
-    if (imageUrl) return IMAGES_PATH + imageUrl;
+    // Si l'image n'est pas la générique, l'utiliser directement
+    if (imageUrl && imageUrl !== 'hebergement-bg.jpg') return IMAGES_PATH + imageUrl;
 
+    // Sinon associer selon la destination
     const map = {
         'bali':       'bali.png',
-        'algarve':    'algarve.png',
         'barcelone':  'barcelone.png',
         'chamonix':   'chamonix.png',
         'costa rica': 'costarica.png',
         'ibiza':      'ibiza.png',
         'santorin':   'santorin.png',
+        'marrakech':  'diner-marocain.png',
         'tokyo':      'food-tour.png',
         'maroc':      'diner-marocain.png',
-        'maldives':   'boat.png',
+        'portugal':   'algarve.png',
+        'algarve':    'algarve.png',
     };
 
     if (destinationNom) {
