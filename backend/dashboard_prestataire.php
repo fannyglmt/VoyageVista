@@ -177,7 +177,7 @@ foreach ($services as &$s) {
   <div class="services-grid">
     <?php
     $svcImg = [
-    1  => '../frontend/assets/images/villachill.png',
+    1  => '../frontend/assets/images/villachill.jpg',
     2  => '../frontend/assets/images/hotel1.jpg',
     3  => '../frontend/assets/images/barcelonevilla.jpg',
     4  => '../frontend/assets/images/loftchamonix.jpg',
