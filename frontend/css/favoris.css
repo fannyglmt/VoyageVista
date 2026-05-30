@@ -254,3 +254,106 @@
 @media screen and (max-width: 600px) {
   .favoris-grid { grid-template-columns: 1fr; }
 }
+
+/* =========================================
+   ONGLETS FAVORIS
+========================================= */
+
+.favoris-counts {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.fav-count-item {
+  background: white;
+  border-radius: 20px;
+  padding: 14px 24px;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(69,139,202,0.12);
+  transition: 0.3s;
+}
+
+.fav-count-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(69,139,202,0.18);
+}
+
+.fav-count-item span {
+  display: block;
+  font-size: 32px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #79a9df, #f3b27d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 4px;
+}
+
+.fav-count-item p {
+  font-size: 13px;
+  color: #8aabb8;
+  font-weight: 600;
+}
+
+/* Onglets */
+.favoris-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  animation: fadeUp 0.7s ease both;
+}
+
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 24px;
+  border-radius: 25px;
+  border: 2px solid rgba(121,169,223,0.22);
+  background: white;
+  color: #466789;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 4px 12px rgba(69,139,202,0.08);
+}
+
+.tab-btn:hover {
+  border-color: #79a9df;
+  color: #4a68a6;
+  transform: translateY(-3px);
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, #79a9df, #f3b27d);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 8px 22px rgba(95,144,200,0.28);
+}
+
+.tab-count {
+  background: rgba(255,255,255,0.3);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.tab-btn:not(.active) .tab-count {
+  background: rgba(121,169,223,0.15);
+  color: #4a68a6;
+}
+
+/* Sections */
+.tab-section {
+  display: none;
+  animation: fadeUp 0.5s ease both;
+}
+
+.tab-section.active {
+  display: block;
+}
