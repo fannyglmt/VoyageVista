@@ -93,7 +93,7 @@ function afficherTransports(transports) {
                 </div>
                 <div class="transport-bottom">
                     <strong>${t.prix.toLocaleString('fr-FR')}€</strong>
-                    <button class="btn-choisir-transport"
+                    <button class="detail-link btn-choisir-transport"
                             data-id="${t.id}"
                             data-service-id="${t.service_id || ''}"
                             data-nom="${esc(t.nom)}"
