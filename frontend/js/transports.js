@@ -107,7 +107,11 @@ function afficherTransports(transports) {
 
     // Attacher les boutons "Choisir"
     document.querySelectorAll('.btn-choisir-transport').forEach(btn => {
-        btn.addEventListener('click', () => ajouterTransportAuPanier(btn));
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            ajouterTransportAuPanier(btn);
+        });
     });
 }
 
