@@ -35,15 +35,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     ">${initiale}</span>`;
             }
 
-            // Ajouter "Mon Profil" dans la nav
-            const nav = document.querySelector('nav');
-            if (nav && !nav.querySelector('a[href="profil.html"]')) {
-                const profilLink       = document.createElement('a');
-                profilLink.href        = 'profil.html';
-                profilLink.textContent = 'Mon Profil';
-                nav.appendChild(profilLink);
-            }
-
             // ── Cloche 🔔 → notifications.html ───────────
             const bellLink = navIcons.querySelector('a[href*="notification"]');
 
