@@ -70,5 +70,5 @@ $_SESSION['panier'] = [
     'transport'=>null,'hebergement'=>null,'activites'=>[],'total'=>0,
 ];
 
-header("Location: ../frontend/confirmation.html?id=$reservation_id&success=reservation_confirmee");
+header("Location: http://localhost:8888/Web2026/VoyageVista/frontend/confirmation.html?id=$reservation_id&success=reservation_confirmee");
 exit;
