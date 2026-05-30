@@ -128,7 +128,7 @@ function creerCardHebergement(h) {
                 onerror="this.src='${IMAGES_PATH}hebergement-bg.jpg'"
             >
             <span class="favorite" data-id="${h.id}" title="Ajouter aux favoris">♥</span>
-            ${h.budget ? `<span class="budget-tag ${budgetClass}">${h.budget}</span>` : ''}
+            ${''} 
         </div>
         <div class="card-content">
             <div class="card-top">
