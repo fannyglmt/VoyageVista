@@ -128,7 +128,7 @@ function creerCardHebergement(h) {
                 onerror="this.src='${IMAGES_PATH}hebergement-bg.jpg'"
             >
             <span class="favorite" data-id="${h.id}" title="Ajouter aux favoris">♥</span>
-            ${''} 
+            ${h.budget ? `<span class="budget-tag ${budgetClass}">${h.budget}</span>` : ''}
         </div>
         <div class="card-content">
             <div class="card-top">
@@ -165,14 +165,16 @@ function ecouterFiltres() {
 function appliquerFiltres() {
     const filtres = {};
 
-    const typeSelect = document.querySelector('select[data-filter="type"]');
-    const budgetSelect = document.querySelector('select[data-filter="budget"]');
+    const typeSelect    = document.getElementById('typeFilter');
+    const budgetSelect  = document.getElementById('budgetFilter');
+    const searchInput   = document.getElementById('hebergementSearch');
 
-    if (typeSelect && typeSelect.value !== 'all') filtres.type = typeSelect.value;
-    if (budgetSelect && budgetSelect.value !== 'all') filtres.budget = budgetSelect.value;
-
-    // Recherche en cours
-    const searchInput = document.querySelector('.hebergement-search input');
+    if (typeSelect && typeSelect.value !== 'Tous les types') {
+        filtres.type = typeSelect.value.toLowerCase();
+    }
+    if (budgetSelect && budgetSelect.value !== 'Tous les budgets') {
+        filtres.budget = budgetSelect.value;
+    }
     if (searchInput && searchInput.value.trim()) {
         filtres.search = searchInput.value.trim();
     }
@@ -182,8 +184,8 @@ function appliquerFiltres() {
 
 // ── RECHERCHE ─────────────────────────────────────────────
 function ecouterRecherche() {
-    const searchBtn = document.querySelector('.hebergement-search button');
-    const searchInput = document.querySelector('.hebergement-search input');
+    const searchBtn   = document.querySelector('.hebergement-search button');
+    const searchInput = document.getElementById('hebergementSearch');
 
     if (searchBtn) {
         searchBtn.addEventListener('click', () => {
