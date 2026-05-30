@@ -34,9 +34,16 @@ async function chargerPanier() {
 // ── AFFICHER LE PANIER DEPUIS LA SESSION ──────────────────
 function afficherPanier(panier) {
     // ── Destination ──
-    const destEl = document.querySelector('.groupe-value');
-    if (destEl && panier.destination_nom) {
-        destEl.textContent = '🌍 ' + panier.destination_nom;
+    const destEl      = document.getElementById('panierDestination');
+    const recapDestEl = document.getElementById('recapDestNom');
+
+    if (destEl) {
+        destEl.textContent = panier.destination_nom
+            ? `🌍 ${panier.destination_nom}`
+            : '🌍 —';
+    }
+    if (recapDestEl) {
+        recapDestEl.textContent = panier.destination_nom || '—';
     }
 
     // ── Nombre de voyageurs ──
@@ -234,10 +241,12 @@ function mettreAJourRecap(panier) {
     }
 
     // Nuits dans recap hébergement
-    const recapHebLabel = document.querySelector('#recapHebergement span:first-child small');
-    if (recapHebLabel && panier.date_debut && panier.date_fin) {
+    const recapNuitsEl = document.getElementById('recapNuits');
+    if (recapNuitsEl && panier.date_debut && panier.date_fin) {
         const nuits = Math.round((new Date(panier.date_fin) - new Date(panier.date_debut)) / 86400000);
-        recapHebLabel.textContent = `(${nuits} nuit${nuits > 1 ? 's' : ''})`;
+        recapNuitsEl.textContent = `(${nuits} nuit${nuits > 1 ? 's' : ''})`;
+    } else if (recapNuitsEl) {
+        recapNuitsEl.textContent = '(— nuits)';
     }
 
     // Total général
