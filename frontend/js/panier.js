@@ -44,22 +44,24 @@ function afficherPanier(panier) {
     if (nbEl) nbEl.textContent = panier.nb_voyageurs || 1;
 
     // ── Dates ──
-    const datesEls = document.querySelectorAll('.groupe-value');
-    if (datesEls[2]) {
+    const datesEl = document.getElementById('panierDates');
+    const dureeEl = document.getElementById('panierDuree');
+
+    if (datesEl) {
         if (panier.date_debut && panier.date_fin) {
             const debut = formaterDate(panier.date_debut);
             const fin   = formaterDate(panier.date_fin);
-            datesEls[2].textContent = `📅 ${debut} → ${fin}`;
+            datesEl.textContent = `📅 ${debut} → ${fin}`;
         } else {
-            datesEls[2].innerHTML = `📅 <span style="color:#e64b5d;font-size:13px">Aucune date sélectionnée — choisissez un hébergement avec dates</span>`;
+            datesEl.innerHTML = `📅 <span style="color:#e64b5d;font-size:13px">Non sélectionnées</span>`;
         }
     }
-    if (datesEls[3]) {
+    if (dureeEl) {
         if (panier.date_debut && panier.date_fin) {
             const nuits = Math.round((new Date(panier.date_fin) - new Date(panier.date_debut)) / 86400000);
-            datesEls[3].textContent = `⏱ ${nuits} nuit${nuits > 1 ? 's' : ''}`;
+            dureeEl.textContent = `⏱ ${nuits} nuit${nuits > 1 ? 's' : ''}`;
         } else {
-            datesEls[3].textContent = '⏱ —';
+            dureeEl.textContent = '⏱ —';
         }
     }
 
