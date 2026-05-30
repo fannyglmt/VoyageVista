@@ -145,6 +145,7 @@ document.addEventListener('click', async (e) => {
             btn.textContent      = '✅ Dans le panier';
             btn.style.background = '#16a34a';
             btn.disabled         = false;
+            setTimeout(() => window.location.href = 'panier.html', 1200);
         } else {
             afficherToast(json.error || 'Erreur', 'error');
             btn.textContent = 'Ajouter au panier voyage';
