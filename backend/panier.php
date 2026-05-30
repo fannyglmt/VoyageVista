@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 // =========================================
 // BACKEND/PANIER.PHP — VOYAGEVISTA
 // =========================================
@@ -10,6 +12,8 @@ require_once 'configuration.php';
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: http://localhost:8888');
+header('Access-Control-Allow-Credentials: true');
+header('Access-Control-Allow-Methods: GET, POST');
 header('Access-Control-Allow-Credentials: true');
 
 if (!isset($_SESSION['user_id'])) {
@@ -83,7 +87,13 @@ switch ($action) {
     case 'set_transport':
         $service_id = (int)($_POST['service_id'] ?? 0);
         if ($service_id) {
-            $stmt = $pdo->prepare('SELECT * FROM services WHERE id=? AND type="transport" LIMIT 1');
+            $stmt = $pdo->prepare('
+                SELECT s.*, t.nom, t.depart, t.arrivee, t.duree, t.type AS transport_type
+                FROM services s
+                JOIN transports t ON s.ref_id = t.id
+                WHERE s.id = ? AND s.type = "transport"
+                LIMIT 1
+            ');
             $stmt->execute([$service_id]);
             $service = $stmt->fetch();
             if ($service) {
