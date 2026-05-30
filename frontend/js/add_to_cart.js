@@ -8,79 +8,105 @@
 
 const API_PANIER = '../backend/panier.php';
 
-document.addEventListener('DOMContentLoaded', () => {
+// ── Délégation d'événement — fonctionne même si les boutons
+// sont créés dynamiquement par script.js après le chargement
+document.addEventListener('click', async (e) => {
+    const btn = e.target.closest('.add-cart-btn');
+    if (!btn) return;
 
-    // Récupérer l'ID depuis l'URL
-    const params     = new URLSearchParams(window.location.search);
-    const page       = window.location.pathname;
+    e.preventDefault();
+
+    const params = new URLSearchParams(window.location.search);
+    const page   = window.location.pathname;
 
     // ── Sur destination-detail.html ───────────────────────
     if (page.includes('destination-detail')) {
         const destId = params.get('id');
-        document.querySelectorAll('.add-cart-btn').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                if (!destId) { afficherToast('Destination introuvable', 'error'); return; }
-                const json = await callPanier('set_destination', { destination_id: destId });
-                if (!json.success && json.error === 'non_connecte') {
-                    afficherToast('Connecte-toi pour ajouter au panier !', 'warning');
-                    setTimeout(() => window.location.href = 'login.html', 1500);
-                    return;
-                }
-                if (json.success) {
-                    afficherToast('✅ Destination ajoutée au panier !', 'success');
-                    btn.textContent = '✅ Dans le panier';
-                    btn.style.background = '#16a34a';
-                    setTimeout(() => window.location.href = 'panier.html', 1200);
-                }
-            });
-        });
+        if (!destId) { afficherToast('Destination introuvable', 'error'); return; }
+
+        btn.textContent = '⏳ Ajout en cours...';
+        btn.disabled    = true;
+
+        const json = await callPanier('set_destination', { destination_id: destId });
+
+        if (!json.success && json.error === 'non_connecte') {
+            afficherToast('Connecte-toi pour ajouter au panier !', 'warning');
+            setTimeout(() => window.location.href = 'login.html', 1500);
+            btn.textContent = 'Ajouter au panier voyage';
+            btn.disabled    = false;
+            return;
+        }
+        if (json.success) {
+            afficherToast('✅ Destination ajoutée au panier !', 'success');
+            btn.textContent      = '✅ Dans le panier';
+            btn.style.background = '#16a34a';
+            btn.disabled         = false;
+            setTimeout(() => window.location.href = 'panier.html', 1200);
+        } else {
+            afficherToast(json.error || 'Erreur', 'error');
+            btn.textContent = 'Ajouter au panier voyage';
+            btn.disabled    = false;
+        }
     }
 
     // ── Sur detail-hebergement.html ───────────────────────
-    if (page.includes('detail-hebergement')) {
+    else if (page.includes('detail-hebergement')) {
         const hebId = params.get('id');
-        document.querySelectorAll('.add-cart-btn').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                if (!hebId) { afficherToast('Hébergement introuvable', 'error'); return; }
-                const json = await callPanier('set_hebergement', { hebergement_id: hebId });
-                if (!json.success && json.error === 'non_connecte') {
-                    afficherToast('Connecte-toi pour ajouter au panier !', 'warning');
-                    setTimeout(() => window.location.href = 'login.html', 1500);
-                    return;
-                }
-                if (json.success) {
-                    afficherToast('✅ Hébergement ajouté au panier !', 'success');
-                    btn.textContent = '✅ Dans le panier';
-                    btn.style.background = '#16a34a';
-                    setTimeout(() => window.location.href = 'panier.html', 1200);
-                }
-            });
-        });
+        if (!hebId) { afficherToast('Hébergement introuvable', 'error'); return; }
+
+        btn.textContent = '⏳ Ajout en cours...';
+        btn.disabled    = true;
+
+        const json = await callPanier('set_hebergement', { hebergement_id: hebId });
+
+        if (!json.success && json.error === 'non_connecte') {
+            afficherToast('Connecte-toi pour ajouter au panier !', 'warning');
+            setTimeout(() => window.location.href = 'login.html', 1500);
+            btn.textContent = 'Ajouter au panier voyage';
+            btn.disabled    = false;
+            return;
+        }
+        if (json.success) {
+            afficherToast('✅ Hébergement ajouté au panier !', 'success');
+            btn.textContent      = '✅ Dans le panier';
+            btn.style.background = '#16a34a';
+            btn.disabled         = false;
+            setTimeout(() => window.location.href = 'panier.html', 1200);
+        } else {
+            afficherToast(json.error || 'Erreur', 'error');
+            btn.textContent = 'Ajouter au panier voyage';
+            btn.disabled    = false;
+        }
     }
 
     // ── Sur activite-detail.html ──────────────────────────
-    if (page.includes('activite-detail')) {
+    else if (page.includes('activite-detail')) {
         const actId = params.get('id');
-        document.querySelectorAll('.add-cart-btn').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                if (!actId) { afficherToast('Activité introuvable', 'error'); return; }
-                const json = await callPanier('add_activite', { activite_id: actId });
-                if (!json.success && json.error === 'non_connecte') {
-                    afficherToast('Connecte-toi pour ajouter au panier !', 'warning');
-                    setTimeout(() => window.location.href = 'login.html', 1500);
-                    return;
-                }
-                if (json.success) {
-                    afficherToast(`✅ ${json.message || 'Activité ajoutée au panier !'}`, 'success');
-                    btn.textContent = '✅ Dans le panier';
-                    btn.style.background = '#16a34a';
-                } else {
-                    afficherToast(json.error || 'Erreur', 'error');
-                }
-            });
-        });
-    }
+        if (!actId) { afficherToast('Activité introuvable', 'error'); return; }
 
+        btn.textContent = '⏳ Ajout en cours...';
+        btn.disabled    = true;
+
+        const json = await callPanier('add_activite', { activite_id: actId });
+
+        if (!json.success && json.error === 'non_connecte') {
+            afficherToast('Connecte-toi pour ajouter au panier !', 'warning');
+            setTimeout(() => window.location.href = 'login.html', 1500);
+            btn.textContent = 'Ajouter au panier voyage';
+            btn.disabled    = false;
+            return;
+        }
+        if (json.success) {
+            afficherToast(`✅ ${json.message || 'Activité ajoutée au panier !'}`, 'success');
+            btn.textContent      = '✅ Dans le panier';
+            btn.style.background = '#16a34a';
+            btn.disabled         = false;
+        } else {
+            afficherToast(json.error || 'Erreur', 'error');
+            btn.textContent = 'Ajouter au panier voyage';
+            btn.disabled    = false;
+        }
+    }
 });
 
 // ── APPEL API ─────────────────────────────────────────────
