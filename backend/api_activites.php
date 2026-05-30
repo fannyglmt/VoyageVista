@@ -16,7 +16,7 @@ $limit     = min((int)($_GET['limit'] ?? 50), 100);
 $query  = "
     SELECT
         a.id, a.nom, a.description, a.categorie,
-        a.prix, a.duree_heures, a.image_url, a.note_moyenne,
+        a.prix, a.duree_heures, a.capacite_max, a.image_url, a.note_moyenne,
         d.nom AS destination_nom, d.region,
         u.username AS prestataire_nom
     FROM activites a
@@ -61,6 +61,7 @@ $result = array_map(function($a) {
         'categorie'       => $a['categorie'],
         'prix'            => (float)$a['prix'],
         'duree_heures'    => (float)$a['duree_heures'],
+        'capacite_max'    => (int)($a['capacite_max'] ?? 10),
         'image_url'       => $a['image_url'] ?: null,
         'note_moyenne'    => (float)$a['note_moyenne'],
         'destination_nom' => $a['destination_nom'],

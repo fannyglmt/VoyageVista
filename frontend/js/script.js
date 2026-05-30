@@ -112,21 +112,22 @@ async function chargerDonnees() {
     if (jsonA.success && jsonA.data.length > 0) {
       // Activités depuis la BDD
       const activitesBDD = jsonA.data.map(a => ({
-        id:          a.id,
-        name:        a.nom,
-        image:       a.image_url || 'boat.png',
-        destination: a.destination_nom || '',
-        category:    a.categorie || '',
-        price:       a.prix || 0,
-        duration:    a.duree_heures ? a.duree_heures + 'h' : '2h',
-        rating:      a.note_moyenne || 4.5,
-        reviews:     0,
-        vibe:        (categoryIcons[a.categorie] || '✨') + ' ' + (a.categorie || 'Activité'),
-        description: a.description || '',
-        comment1:    'Super activité à faire en groupe.',
-        comment2:    'Une expérience mémorable avec toute la team.',
-        date:        '',
-        places:      10,
+        id:           a.id,
+        name:         a.nom,
+        image:        a.image_url || 'boat.png',
+        destination:  a.destination_nom || '',
+        category:     a.categorie || '',
+        price:        a.prix || 0,
+        duration:     a.duree_heures ? a.duree_heures + 'h' : '2h',
+        capacite_max: a.capacite_max || 10,
+        rating:       a.note_moyenne || 4.5,
+        reviews:      0,
+        vibe:         (categoryIcons[a.categorie] || '✨') + ' ' + (a.categorie || 'Activité'),
+        description:  a.description || '',
+        comment1:     'Super activité à faire en groupe.',
+        comment2:     'Une expérience mémorable avec toute la team.',
+        date:         '',
+        places:       a.capacite_max || 10,
       }));
 
       // Fusionner BDD + suggestions Sofia (éviter les doublons par nom)
@@ -462,6 +463,7 @@ function renderActivitiesFeed() {
           <span>📍 ${a.destination}</span>
           <span>⏱️ ${a.duration}</span>
           <span>💸 ${a.price}€</span>
+          <span>👥 Max ${a.capacite_max || a.places || 10} pers.</span>
         </div>
         <div class="activity-actions">
           ${a.id > 0
@@ -504,6 +506,22 @@ async function renderActivityDetail() {
     const a   = activity;
     const img = resolveImg(a.image || a.image_url, 'boat.png');
 
+    // Récupérer le nb de voyageurs du panier pour vérifier la capacité
+    let nbVoyageurs = 1;
+    try {
+      const resP  = await fetch('../backend/panier.php?action=get', { credentials: 'include' });
+      const jsonP = await resP.json();
+      if (jsonP.success) nbVoyageurs = jsonP.panier.nb_voyageurs || 1;
+    } catch(e) {}
+
+    const capaciteMax  = a.capacite_max || a.places || 10;
+    const complet      = nbVoyageurs > capaciteMax;
+    const btnPanier    = complet
+      ? `<button class="add-cart-btn" disabled style="background:#ccc;cursor:not-allowed;opacity:.6">
+           ⛔ Complet pour ${nbVoyageurs} personnes (max ${capaciteMax})
+         </button>`
+      : `<button class="add-cart-btn">Ajouter au panier voyage</button>`;
+
     // Stocker l'ID dans la page pour add_to_cart.js
     page.dataset.actId = a.id;
 
@@ -518,8 +536,9 @@ async function renderActivityDetail() {
             <span>📍 ${a.destination || a.destination_nom || ''}</span>
             <span>⏱️ ${a.duration || (a.duree_heures ? a.duree_heures + 'h' : '—')}</span>
             <span>💸 ${a.price || a.prix || 0}€</span>
+            <span>👥 Max ${capaciteMax} pers.</span>
           </div>
-          <button class="add-cart-btn">Ajouter au panier voyage</button>
+          ${btnPanier}
         </div>
       </section>
 
