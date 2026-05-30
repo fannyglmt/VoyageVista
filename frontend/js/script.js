@@ -392,8 +392,14 @@ async function renderDestinationDetail() {
                 ? hebs.map(h => `
                     <div class="activity-line">
                       <span>✨</span>
-                      <p><a href="detail-hebergement.html?id=${h.id}" style="color:#4a68a6;font-weight:600">${h.nom}</a>
-                      — ${h.prix_nuit}€/nuit</p>
+                      <p>
+                        <a href="detail-hebergement.html?id=${h.id}" style="color:#4a68a6;font-weight:600">${h.nom}</a>
+                        — ${h.prix_nuit}€/nuit
+                        ${h.nb_disponibilites > 0
+                          ? `<span style="color:#16a34a;font-size:12px;margin-left:8px">✅ Disponible</span>`
+                          : `<span style="color:#e64b5d;font-size:12px;margin-left:8px">❌ Indisponible</span>`
+                        }
+                      </p>
                     </div>`).join('')
                 : '<p>Aucun hébergement disponible pour cette destination.</p>'}
             </div>
@@ -518,7 +524,7 @@ async function renderActivityDetail() {
     const complet      = nbVoyageurs > capaciteMax;
     const btnPanier    = complet
       ? `<button class="add-cart-btn" disabled style="background:#ccc;cursor:not-allowed;opacity:.6">
-           ⛔ Maximum ${capaciteMax} personnes 
+           ⛔ Complet pour ${nbVoyageurs} personnes (max ${capaciteMax})
          </button>`
       : `<button class="add-cart-btn">Ajouter au panier voyage</button>`;
 
@@ -643,12 +649,36 @@ async function renderHebergementDetail() {
 
           ${h.disponibilites && h.disponibilites.length > 0 ? `
           <h3 style="margin-top:30px;color:#4a68a6">📅 Disponibilités</h3>
-          ${h.disponibilites.map(d => `
-            <div class="activity-line">
-              <span>✔</span>
-              <p>Du ${d.date_debut} au ${d.date_fin} — ${d.places_dispo} place(s) disponible(s)</p>
-            </div>`).join('')}
-          ` : '<p style="margin-top:20px;color:#466789">Contactez le prestataire pour les disponibilités.</p>'}
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-top:12px">
+          ${h.disponibilites.map(d => {
+            const debut  = new Date(d.date_debut).toLocaleDateString('fr-FR', {day:'2-digit',month:'short',year:'numeric'});
+            const fin    = new Date(d.date_fin).toLocaleDateString('fr-FR', {day:'2-digit',month:'short',year:'numeric'});
+            const nuits  = Math.round((new Date(d.date_fin) - new Date(d.date_debut)) / 86400000);
+            const dispo  = parseInt(d.places_dispo);
+            const couleur = dispo <= 2 ? '#e64b5d' : dispo <= 5 ? '#f39b5f' : '#16a34a';
+            return `
+              <div style="
+                background:#f7fbff;border-radius:14px;padding:14px 16px;
+                border-left:4px solid ${couleur};
+              ">
+                <div style="font-weight:700;color:#4a68a6;font-size:14px">
+                  📅 ${debut} → ${fin}
+                </div>
+                <div style="font-size:13px;color:#466789;margin-top:4px">
+                  ⏱ ${nuits} nuit${nuits > 1 ? 's' : ''}
+                  &nbsp;•&nbsp;
+                  <span style="color:${couleur};font-weight:700">
+                    ${dispo} place${dispo > 1 ? 's' : ''} disponible${dispo > 1 ? 's' : ''}
+                  </span>
+                </div>
+              </div>`;
+          }).join('')}
+          </div>
+          ` : `
+          <div style="margin-top:20px;padding:16px;background:#fff8e1;border-radius:14px;border-left:4px solid #f39b5f">
+            <p style="color:#92400e;font-weight:600">⚠️ Aucune disponibilité pour le moment.</p>
+            <p style="color:#92400e;font-size:13px;margin-top:4px">Contactez le prestataire pour plus d'informations.</p>
+          </div>`}
 
           <button class="add-cart-btn">Ajouter au panier voyage</button>
         </div>

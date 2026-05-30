@@ -24,7 +24,17 @@ if (!$d) {
 }
 
 // Hébergements liés
-$hStmt = $pdo->prepare("SELECT id, nom, type, prix_nuit, image_url, note_moyenne FROM hebergements WHERE destination_id = ? AND est_actif = 1 ORDER BY note_moyenne DESC LIMIT 6");
+$hStmt = $pdo->prepare("
+    SELECT h.id, h.nom, h.type, h.prix_nuit, h.image_url, h.note_moyenne,
+        COUNT(d.id) AS nb_disponibilites
+    FROM hebergements h
+    LEFT JOIN services s ON s.ref_id = h.id AND s.type = 'hebergement'
+    LEFT JOIN disponibilites d ON d.service_id = s.id 
+        AND d.est_bloque = 0 AND d.date_fin >= CURDATE()
+    WHERE h.destination_id = ? AND h.est_actif = 1
+    GROUP BY h.id
+    ORDER BY h.note_moyenne DESC LIMIT 6
+");
 $hStmt->execute([$id]);
 $hebergements = $hStmt->fetchAll();
 
