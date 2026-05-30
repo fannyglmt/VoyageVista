@@ -351,6 +351,9 @@ async function renderDestinationDetail() {
     const cats  = dest.categorie    ? [dest.categorie] : [];
     const img   = resolveImg(dest.image_url);
 
+    // Stocker l'ID dans la page pour add_to_cart.js
+    page.dataset.destId = dest.id;
+
     page.innerHTML = `
       <section class="detail-hero">
         <img src="${img}" alt="${dest.nom}">
@@ -488,6 +491,9 @@ async function renderActivityDetail() {
 
     const a   = activity;
     const img = resolveImg(a.image || a.image_url, 'boat.png');
+
+    // Stocker l'ID dans la page pour add_to_cart.js
+    page.dataset.actId = a.id;
 
     page.innerHTML = `
       <section class="activity-detail-hero">

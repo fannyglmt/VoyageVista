@@ -21,7 +21,17 @@ document.addEventListener('click', async (e) => {
 
     // ── Sur destination-detail.html ───────────────────────
     if (page.includes('destination-detail')) {
-        const destId = params.get('id');
+        // Priorité 1 : ?id= dans l'URL
+        let destId = params.get('id');
+
+        // Priorité 2 : ID stocké par script.js dans la page
+        if (!destId) {
+            const pageEl = document.getElementById('destinationDetailPage');
+            if (pageEl && pageEl.dataset.destId) {
+                destId = pageEl.dataset.destId;
+            }
+        }
+
         if (!destId) { afficherToast('Destination introuvable', 'error'); return; }
 
         btn.textContent = '⏳ Ajout en cours...';
@@ -105,7 +115,17 @@ document.addEventListener('click', async (e) => {
 
     // ── Sur activite-detail.html ──────────────────────────
     else if (page.includes('activite-detail')) {
-        const actId = params.get('id');
+        // Priorité 1 : ?id= dans l'URL
+        let actId = params.get('id');
+
+        // Priorité 2 : ID stocké par script.js dans la page
+        if (!actId) {
+            const pageEl = document.getElementById('activityDetailPage');
+            if (pageEl && pageEl.dataset.actId) {
+                actId = pageEl.dataset.actId;
+            }
+        }
+
         if (!actId) { afficherToast('Activité introuvable', 'error'); return; }
 
         btn.textContent = '⏳ Ajout en cours...';
