@@ -2,48 +2,64 @@
 // =========================================
 // BACKEND/VALIDER_RESERVATION.PHP
 // =========================================
-
+session_name('VOYAGEVISTA_SESSION');
+session_set_cookie_params(0, '/', '', false, true);
 session_start();
+
 require_once 'configuration.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: ../frontend/login.html');
-    exit;
+    header('Location: ../frontend/login.html'); exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    $user_id   = $_SESSION['user_id'];
-    $prenom    = trim($_POST['prenom']    ?? '');
-    $nom       = trim($_POST['nom']       ?? '');
-    $email     = trim($_POST['email']     ?? '');
-    $telephone = trim($_POST['telephone'] ?? '');
-    $demandes  = trim($_POST['demandes']  ?? '');
-    $paiement  = trim($_POST['paiement']  ?? '');
-
-    if (empty($prenom) || empty($nom) || empty($email)) {
-        header('Location: ../frontend/validation-reservation.html?error=champs_vides');
-        exit;
-    }
-
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        header('Location: ../frontend/validation-reservation.html?error=email_invalide');
-        exit;
-    }
-
-    // Insertion de la réservation en BDD
-    // Adapte les colonnes selon ta table "reservations"
-    $stmt = $pdo->prepare('
-        INSERT INTO reservations (user_id, statut, mode_paiement, demandes_speciales, created_at)
-        VALUES (?, ?, ?, ?, NOW())
-    ');
-    $stmt->execute([$user_id, 'confirmee', $paiement, $demandes]);
-
-    // Redirige vers une page de confirmation (à créer)
-    header('Location: ../frontend/confirmation.html?success=reservation_confirmee');
-    exit;
-
-} else {
-    header('Location: ../frontend/validation-reservation.html');
-    exit;
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Location: ../frontend/validation-reservation.html'); exit;
 }
+
+$user_id = (int)$_SESSION['user_id'];
+$panier  = $_SESSION['panier'] ?? null;
+
+// ── Vérifications panier ──────────────────────────────────
+if (!$panier || !$panier['destination_id']) {
+    header('Location: ../frontend/panier.html?error=panier_vide'); exit;
+}
+
+// ── Récupérer les infos du formulaire ─────────────────────
+// CORRECTION : username + email au lieu de prenom + nom
+$email     = trim($_POST['email']     ?? '');
+$telephone = trim($_POST['telephone'] ?? '');
+$demandes  = trim($_POST['demandes']  ?? '');
+$paiement  = trim($_POST['paiement']  ?? 'carte');
+
+if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    header('Location: ../frontend/validation-reservation.html?error=email_invalide'); exit;
+}
+
+// ── Données du panier ─────────────────────────────────────
+$dest_id      = (int)$panier['destination_id'];
+$service_id   = $panier['hebergement']['id'] ?? null;
+$date_debut   = $panier['date_debut']        ?? date('Y-m-d');
+$date_fin     = $panier['date_fin']          ?? date('Y-m-d', strtotime('+7 days'));
+$nb_voyageurs = (int)($panier['nb_voyageurs'] ?? 1);
+$prix_total   = (float)($panier['total']      ?? 0);
+
+// ── INSERT réservation ────────────────────────────────────
+$stmt = $pdo->prepare("
+    INSERT INTO reservations
+        (user_id, destination_id, service_id, date_debut, date_fin,
+         nb_voyageurs, prix_total, statut, date_reservation)
+    VALUES (?, ?, ?, ?, ?, ?, ?, 'confirmee', NOW())
+");
+$stmt->execute([$user_id, $dest_id, $service_id, $date_debut, $date_fin, $nb_voyageurs, $prix_total]);
+
+$reservation_id = $pdo->lastInsertId();
+
+// ── Vider le panier ───────────────────────────────────────
+$_SESSION['panier'] = [
+    'destination_id'=>null,'destination_nom'=>null,'destination_img'=>null,
+    'date_debut'=>null,'date_fin'=>null,'nb_voyageurs'=>1,
+    'transport'=>null,'hebergement'=>null,'activites'=>[],'total'=>0,
+];
+
+header("Location: ../frontend/confirmation.html?id=$reservation_id&success=reservation_confirmee");
+exit;

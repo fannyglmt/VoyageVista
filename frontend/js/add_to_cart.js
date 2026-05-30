@@ -1,0 +1,128 @@
+// =============================================
+// ADD_TO_CART.JS — VoyageVista
+// Gère les boutons "Ajouter au panier voyage"
+// sur destination-detail, detail-hebergement,
+// activite-detail
+// À inclure dans toutes les pages de détail
+// =============================================
+
+const API_PANIER = '../backend/panier.php';
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    // Récupérer l'ID depuis l'URL
+    const params     = new URLSearchParams(window.location.search);
+    const page       = window.location.pathname;
+
+    // ── Sur destination-detail.html ───────────────────────
+    if (page.includes('destination-detail')) {
+        const destId = params.get('id');
+        document.querySelectorAll('.add-cart-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                if (!destId) { afficherToast('Destination introuvable', 'error'); return; }
+                const json = await callPanier('set_destination', { destination_id: destId });
+                if (!json.success && json.error === 'non_connecte') {
+                    afficherToast('Connecte-toi pour ajouter au panier !', 'warning');
+                    setTimeout(() => window.location.href = 'login.html', 1500);
+                    return;
+                }
+                if (json.success) {
+                    afficherToast('✅ Destination ajoutée au panier !', 'success');
+                    btn.textContent = '✅ Dans le panier';
+                    btn.style.background = '#16a34a';
+                    setTimeout(() => window.location.href = 'panier.html', 1200);
+                }
+            });
+        });
+    }
+
+    // ── Sur detail-hebergement.html ───────────────────────
+    if (page.includes('detail-hebergement')) {
+        const hebId = params.get('id');
+        document.querySelectorAll('.add-cart-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                if (!hebId) { afficherToast('Hébergement introuvable', 'error'); return; }
+                const json = await callPanier('set_hebergement', { hebergement_id: hebId });
+                if (!json.success && json.error === 'non_connecte') {
+                    afficherToast('Connecte-toi pour ajouter au panier !', 'warning');
+                    setTimeout(() => window.location.href = 'login.html', 1500);
+                    return;
+                }
+                if (json.success) {
+                    afficherToast('✅ Hébergement ajouté au panier !', 'success');
+                    btn.textContent = '✅ Dans le panier';
+                    btn.style.background = '#16a34a';
+                    setTimeout(() => window.location.href = 'panier.html', 1200);
+                }
+            });
+        });
+    }
+
+    // ── Sur activite-detail.html ──────────────────────────
+    if (page.includes('activite-detail')) {
+        const actId = params.get('id');
+        document.querySelectorAll('.add-cart-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                if (!actId) { afficherToast('Activité introuvable', 'error'); return; }
+                const json = await callPanier('add_activite', { activite_id: actId });
+                if (!json.success && json.error === 'non_connecte') {
+                    afficherToast('Connecte-toi pour ajouter au panier !', 'warning');
+                    setTimeout(() => window.location.href = 'login.html', 1500);
+                    return;
+                }
+                if (json.success) {
+                    afficherToast(`✅ ${json.message || 'Activité ajoutée au panier !'}`, 'success');
+                    btn.textContent = '✅ Dans le panier';
+                    btn.style.background = '#16a34a';
+                } else {
+                    afficherToast(json.error || 'Erreur', 'error');
+                }
+            });
+        });
+    }
+
+});
+
+// ── APPEL API ─────────────────────────────────────────────
+async function callPanier(action, data = {}) {
+    try {
+        const body = new URLSearchParams({ action, ...data });
+        const res  = await fetch(API_PANIER, {
+            method:      'POST',
+            credentials: 'include',
+            body,
+        });
+        return await res.json();
+    } catch (e) {
+        console.error('Erreur panier :', e);
+        return { success: false, error: 'Erreur réseau' };
+    }
+}
+
+// ── TOAST ─────────────────────────────────────────────────
+function afficherToast(message, type = 'success') {
+    document.querySelector('.vv-toast')?.remove();
+    const colors = {
+        success: { bg:'#eafff4', color:'#1e7e50', border:'#b7f0d4' },
+        warning: { bg:'#fff8e1', color:'#92400e', border:'#fde68a' },
+        error:   { bg:'#fff0f2', color:'#c0392b', border:'#f5c6cb' },
+    };
+    const c = colors[type] || colors.success;
+    const toast = document.createElement('div');
+    toast.className = 'vv-toast';
+    toast.style.cssText = `
+        position:fixed;bottom:24px;right:24px;z-index:9999;
+        padding:14px 22px;border-radius:16px;font-weight:700;font-size:15px;
+        background:${c.bg};color:${c.color};border:1.5px solid ${c.border};
+        box-shadow:0 8px 24px rgba(0,0,0,.12);animation:fadeIn .3s ease;
+    `;
+    toast.textContent = message;
+    if (!document.querySelector('#vv-toast-css')) {
+        const s = document.createElement('style');
+        s.id = 'vv-toast-css';
+        s.textContent = '@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}';
+        document.head.appendChild(s);
+    }
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 2500);
+}

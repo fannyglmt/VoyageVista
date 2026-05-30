@@ -1,113 +1,123 @@
-// =========================================
-// VALIDATION.JS — VOYAGEVISTA
-// =========================================
+// =============================================
+// VALIDATION.JS — VoyageVista
+// Page validation-reservation.html
+// =============================================
 
-document.addEventListener('DOMContentLoaded', () => {
-
-  // -----------------------------------------------
-  // 1. OPTIONS DE PAIEMENT
-  // -----------------------------------------------
-  const options      = document.querySelectorAll('.paiement-option');
-  const carteFields  = document.getElementById('carteFields');
-
-  options.forEach(opt => {
-    opt.addEventListener('click', () => {
-      options.forEach(o => o.classList.remove('active'));
-      opt.classList.add('active');
-
-      const val = opt.querySelector('input').value;
-      if (carteFields) {
-        carteFields.classList.toggle('hidden', val !== 'carte');
-      }
-    });
-  });
-
-  // -----------------------------------------------
-  // 2. FORMAT NUMÉRO DE CARTE (XXXX XXXX XXXX XXXX)
-  // -----------------------------------------------
-  const numCarte = document.getElementById('numCarte');
-  if (numCarte) {
-    numCarte.addEventListener('input', () => {
-      let val = numCarte.value.replace(/\D/g, '').substring(0, 16);
-      numCarte.value = val.match(/.{1,4}/g)?.join(' ') || val;
-    });
-  }
-
-  // -----------------------------------------------
-  // 3. VALIDATION + SOUMISSION
-  // -----------------------------------------------
-  const validForm   = document.getElementById('validForm');
-  const alertBox    = document.getElementById('validAlert');
-  const btnConfirmer = document.getElementById('btnConfirmer');
-
-  if (validForm) {
-    validForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-
-      const prenom  = validForm.querySelector('[name="prenom"]').value.trim();
-      const nom     = validForm.querySelector('[name="nom"]').value.trim();
-      const email   = validForm.querySelector('[name="email"]').value.trim();
-      const cgu     = document.getElementById('cguCheck').checked;
-      const paiement = validForm.querySelector('[name="paiement"]:checked')?.value;
-
-      if (!prenom || !nom || !email) {
-        showAlert('error', '⚠️ Merci de remplir tous les champs obligatoires.');
-        return;
-      }
-
-      if (!isValidEmail(email)) {
-        showAlert('error', '⚠️ Adresse email invalide.');
-        return;
-      }
-
-      if (!cgu) {
-        showAlert('error', '⚠️ Tu dois accepter les conditions générales de vente.');
-        return;
-      }
-
-      // Validation carte si paiement par carte
-      if (paiement === 'carte') {
-        const num  = numCarte?.value.replace(/\s/g, '');
-        const exp  = validForm.querySelector('[name="expiration"]')?.value;
-        const cvv  = validForm.querySelector('[name="cvv"]')?.value;
-
-        if (!num || num.length !== 16) {
-          showAlert('error', '⚠️ Numéro de carte invalide (16 chiffres requis).');
-          return;
-        }
-        if (!exp || !/^\d{2}\/\d{2}$/.test(exp)) {
-          showAlert('error', '⚠️ Date d\'expiration invalide (format MM/AA).');
-          return;
-        }
-        if (!cvv || cvv.length !== 3) {
-          showAlert('error', '⚠️ CVV invalide (3 chiffres requis).');
-          return;
-        }
-      }
-
-      // Animation bouton
-      if (btnConfirmer) {
-        btnConfirmer.textContent    = '⏳ Confirmation en cours…';
-        btnConfirmer.style.opacity  = '0.7';
-        btnConfirmer.style.pointerEvents = 'none';
-      }
-
-      // Soumission vers le backend
-      validForm.submit();
-    });
-  }
-
-  // -----------------------------------------------
-  // HELPERS
-  // -----------------------------------------------
-  function showAlert(type, message) {
-    if (!alertBox) return;
-    alertBox.innerHTML = `<div class="valid-alert valid-alert-${type}">${message}</div>`;
-    alertBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }
-
-  function isValidEmail(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  }
-
+document.addEventListener('DOMContentLoaded', async () => {
+    await preremplirDepuisSession();
+    setupPaiement();
+    setupFormatCarte();
+    setupValidation();
 });
+
+// ── Pré-remplir username + email depuis la session ────────
+async function preremplirDepuisSession() {
+    try {
+        const res  = await fetch('../backend/api_session.php', { credentials: 'include' });
+        const json = await res.json();
+
+        if (!json.connecte) {
+            window.location.href = 'login.html'; return;
+        }
+
+        const usernameEl = document.getElementById('inputUsername');
+        const emailEl    = document.getElementById('inputEmail');
+        if (usernameEl) usernameEl.value = json.username || '';
+
+        // Charger l'email depuis api_profil
+        const resP  = await fetch('../backend/api_profil.php', { credentials: 'include' });
+        const jsonP = await resP.json();
+        if (jsonP.success && emailEl) emailEl.value = jsonP.user.email || '';
+
+        // Charger le recap du panier
+        const resK  = await fetch('../backend/panier.php?action=get', { credentials: 'include' });
+        const jsonK = await resK.json();
+        if (jsonK.success) afficherRecapPanier(jsonK.panier);
+
+    } catch (e) {
+        console.warn('Pré-remplissage échoué:', e);
+    }
+}
+
+// ── Afficher le récap depuis le panier ────────────────────
+function afficherRecapPanier(panier) {
+    if (!panier) return;
+    const nb    = panier.nb_voyageurs || 1;
+    const total = panier.total || 0;
+
+    // Destination
+    const destEl = document.querySelector('.recap-dest-banner h3, .recap-mini-dest strong');
+    if (destEl && panier.destination_nom) destEl.textContent = panier.destination_nom;
+
+    // Total
+    document.querySelectorAll('.recap-total-prix, .recap-mini-total span:last-child').forEach(el => {
+        el.textContent = formatPrix(total);
+    });
+    document.querySelectorAll('.recap-par-pers-small strong, .recap-mini-pers').forEach(el => {
+        el.textContent = formatPrix(Math.round(total / nb)) + ' / personne';
+    });
+}
+
+// ── Sélection mode de paiement (original conservé) ────────
+function setupPaiement() {
+    document.querySelectorAll('.paiement-option').forEach(label => {
+        label.addEventListener('click', () => {
+            document.querySelectorAll('.paiement-option').forEach(l => l.classList.remove('active'));
+            label.classList.add('active');
+            const val = label.querySelector('input')?.value;
+            const carteFields = document.getElementById('carteFields');
+            if (carteFields) carteFields.style.display = val === 'carte' ? 'block' : 'none';
+        });
+    });
+}
+
+// ── Format numéro de carte (original conservé) ────────────
+function setupFormatCarte() {
+    const numCarte = document.getElementById('numCarte');
+    if (numCarte) {
+        numCarte.addEventListener('input', () => {
+            let val = numCarte.value.replace(/\D/g, '').slice(0, 16);
+            numCarte.value = val.replace(/(.{4})/g, '$1 ').trim();
+        });
+    }
+}
+
+// ── Validation formulaire ─────────────────────────────────
+function setupValidation() {
+    const form      = document.getElementById('validForm');
+    const alertBox  = document.getElementById('validAlert');
+    const params    = new URLSearchParams(window.location.search);
+
+    // Afficher erreur depuis URL
+    if (params.get('error') === 'email_invalide' && alertBox) {
+        alertBox.innerHTML = `<div class="valid-alert-error">⚠️ Email invalide. Vérifie ton adresse.</div>`;
+    }
+
+    if (!form) return;
+
+    form.addEventListener('submit', e => {
+        const email = document.getElementById('inputEmail')?.value.trim();
+        const cgu   = document.getElementById('cguCheck')?.checked;
+
+        if (!email || !email.includes('@')) {
+            e.preventDefault();
+            if (alertBox) alertBox.innerHTML = `<div class="valid-alert-error">⚠️ Email invalide.</div>`;
+            return;
+        }
+        if (!cgu) {
+            e.preventDefault();
+            if (alertBox) alertBox.innerHTML = `<div class="valid-alert-error">⚠️ Accepte les CGV pour continuer.</div>`;
+            return;
+        }
+
+        // Animation bouton
+        const btn = document.getElementById('btnConfirmer');
+        if (btn) {
+            btn.textContent      = 'Confirmation en cours...';
+            btn.style.opacity    = '0.7';
+            btn.style.pointerEvents = 'none';
+        }
+    });
+}
+
+function formatPrix(n) { return Number(n||0).toLocaleString('fr-FR') + '€'; }

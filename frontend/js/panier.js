@@ -1,203 +1,313 @@
 // =========================================
 // PANIER.JS — VOYAGEVISTA
+// Connecté à panier.php via session
 // =========================================
 
-document.addEventListener('DOMContentLoaded', () => {
+const API_PANIER = '../backend/panier.php';
 
-  // -----------------------------------------------
-  // DONNÉES DU PANIER
-  // -----------------------------------------------
-  let nbVoyageurs = 4;
+document.addEventListener('DOMContentLoaded', async () => {
+    await chargerPanier();
+    setupCompteurVoyageurs();
+    setupSupprimerSections();
+    setupSupprimerActivites();
+    setupViderPanier();
+});
 
-  const prix = {
-    transport:    320,   // par personne
-    hebergement:  1800,  // total fixe (10 nuits)
-    activites: [
-      { id: 1, base: 45 },
-      { id: 2, base: 30 },
-      { id: 3, base: 60 },
-    ]
-  };
+// ── CHARGER LE PANIER ─────────────────────────────────────
+async function chargerPanier() {
+    try {
+        const res  = await fetch(API_PANIER + '?action=get', { credentials: 'include' });
+        const json = await res.json();
 
-  let sections = {
-    transport:   true,
-    hebergement: true,
-  };
+        if (!json.success && json.error === 'non_connecte') {
+            window.location.href = 'login.html'; return;
+        }
 
-  // -----------------------------------------------
-  // 1. COMPTEUR VOYAGEURS
-  // -----------------------------------------------
-  const btnMoins = document.getElementById('btnMoins');
-  const btnPlus  = document.getElementById('btnPlus');
-  const nbEl     = document.getElementById('nbVoyageurs');
+        if (json.success) afficherPanier(json.panier);
 
-  if (btnMoins && btnPlus && nbEl) {
-    btnMoins.addEventListener('click', () => {
-      if (nbVoyageurs > 1) {
-        nbVoyageurs--;
-        nbEl.textContent = nbVoyageurs;
-        recalculer();
-      }
-    });
+    } catch (err) {
+        console.warn('API panier indisponible, mode statique');
+        recalculerStatic(); // fallback statique original
+    }
+}
 
-    btnPlus.addEventListener('click', () => {
-      nbVoyageurs++;
-      nbEl.textContent = nbVoyageurs;
-      recalculer();
-    });
-  }
+// ── AFFICHER LE PANIER DEPUIS LA SESSION ──────────────────
+function afficherPanier(panier) {
+    // ── Destination ──
+    const destEl = document.querySelector('.groupe-value');
+    if (destEl && panier.destination_nom) {
+        destEl.textContent = '🌍 ' + panier.destination_nom;
+    }
 
-  // -----------------------------------------------
-  // 2. SUPPRIMER TRANSPORT / HÉBERGEMENT
-  // -----------------------------------------------
-  document.querySelectorAll('.btn-supprimer').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const section = btn.getAttribute('data-section');
-      const card    = document.getElementById('card' + capitalize(section));
+    // ── Nombre de voyageurs ──
+    const nbEl = document.getElementById('nbVoyageurs');
+    if (nbEl) nbEl.textContent = panier.nb_voyageurs || 1;
 
-      if (card) {
-        card.classList.add('removed');
-        setTimeout(() => {
-          card.remove();
-          sections[section] = false;
-          recalculer();
-        }, 350);
-      }
-    });
-  });
+    // ── Dates ──
+    if (panier.date_debut && panier.date_fin) {
+        const datesEls = document.querySelectorAll('.groupe-value');
+        if (datesEls[2]) datesEls[2].textContent =
+            `📅 ${formaterDate(panier.date_debut)} → ${formaterDate(panier.date_fin)}`;
+        if (datesEls[3]) {
+            const nuits = Math.round((new Date(panier.date_fin) - new Date(panier.date_debut)) / 86400000);
+            datesEls[3].textContent = `⏱ ${nuits} nuit${nuits > 1 ? 's' : ''}`;
+        }
+    }
 
-  // -----------------------------------------------
-  // 3. SUPPRIMER UNE ACTIVITÉ
-  // -----------------------------------------------
-  document.querySelectorAll('.btn-suppr-activite').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const id   = parseInt(btn.getAttribute('data-id'));
-      const item = btn.closest('.activite-item');
+    // ── Hébergement ──
+    const cardHeb = document.getElementById('cardHebergement');
+    if (cardHeb) {
+        if (!panier.hebergement) {
+            // Pas d'hébergement → afficher un placeholder
+            const content = cardHeb.querySelector('.panier-item-content');
+            if (content) content.innerHTML = `
+                <div style="text-align:center;padding:20px;color:#8aabb8">
+                    <p>Aucun hébergement sélectionné.</p>
+                    <a href="hebergements.html"
+                       style="color:#4a68a6;font-weight:700;margin-top:8px;display:inline-block">
+                        Choisir un hébergement →
+                    </a>
+                </div>`;
+        } else {
+            const h = panier.hebergement;
+            const nomEl = cardHeb.querySelector('h3');
+            if (nomEl) nomEl.textContent = h.nom;
+            const nuits = panier.date_debut && panier.date_fin
+                ? Math.round((new Date(panier.date_fin) - new Date(panier.date_debut)) / 86400000) : 1;
+            const unitEl = cardHeb.querySelector('.prix-unit');
+            if (unitEl) unitEl.innerHTML = `${formatPrix(h.prix_nuit)} <small>/nuit</small>`;
+            const totEl = cardHeb.querySelector('.prix-total');
+            if (totEl) totEl.textContent = formatPrix(h.prix_nuit * nuits);
+        }
+    }
 
-      item.style.opacity   = '0';
-      item.style.transform = 'translateX(30px)';
-      item.style.transition = '0.3s';
+    // ── Transport ──
+    const cardTrans = document.getElementById('cardTransport');
+    if (cardTrans && !panier.transport) {
+        const content = cardTrans.querySelector('.panier-item-content');
+        if (content) content.innerHTML = `
+            <div style="text-align:center;padding:20px;color:#8aabb8">
+                <p>Aucun transport sélectionné.</p>
+                <a href="transports.html"
+                   style="color:#4a68a6;font-weight:700;margin-top:8px;display:inline-block">
+                    Choisir un transport →
+                </a>
+            </div>`;
+    }
 
-      setTimeout(() => {
-        item.remove();
-        // Retire du tableau
-        const idx = prix.activites.findIndex(a => a.id === id);
-        if (idx !== -1) prix.activites.splice(idx, 1);
+    // ── Activités ──
+    const list  = document.getElementById('activitesList');
+    const vide  = document.getElementById('activitesVide');
+    const count = document.getElementById('activitesCount');
+    const acts  = panier.activites || [];
 
-        updateActivitesCount();
-        recalculer();
-      }, 300);
-    });
-  });
+    if (count) count.textContent = acts.length;
 
-  // -----------------------------------------------
-  // 4. VIDER LE PANIER
-  // -----------------------------------------------
-  const btnVider = document.getElementById('btnVider');
-  if (btnVider) {
-    btnVider.addEventListener('click', () => {
-      if (!confirm('Vider tout le panier ?')) return;
+    if (list && acts.length > 0) {
+        list.style.display = 'flex';
+        vide?.classList.add('hidden');
+        list.innerHTML = acts.map(a => `
+            <div class="activite-item" data-id="${a.id}">
+                <div class="activite-emoji">🎯</div>
+                <div class="activite-info">
+                    <h4>${esc(a.nom)}</h4>
+                    <p>📍 ${esc(a.dest || '')} • ⏱ ${a.duree_heures ? a.duree_heures + 'h' : '—'}</p>
+                </div>
+                <div class="activite-prix">
+                    <span class="prix-unit-sm">${formatPrix(a.prix)}/pers.</span>
+                    <span class="activite-prix-total">${formatPrix(a.prix * (panier.nb_voyageurs || 1))}</span>
+                </div>
+                <button class="btn-suppr-activite" data-id="${a.id}">✕</button>
+            </div>`).join('');
 
-      ['cardTransport', 'cardHebergement', 'cardActivites'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.remove();
-      });
+        // Réattacher événements
+        list.querySelectorAll('.btn-suppr-activite').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const id   = parseInt(btn.dataset.id);
+                const item = btn.closest('.activite-item');
+                item.style.opacity = '0'; item.style.transition = '.3s';
+                setTimeout(async () => {
+                    const json = await callPanier('remove_activite', { activite_id: id });
+                    if (json.success) afficherPanier(json.panier);
+                }, 300);
+            });
+        });
 
-      sections = { transport: false, hebergement: false };
-      prix.activites = [];
-      recalculer();
-    });
-  }
+    } else if (list) {
+        list.style.display = 'none';
+        vide?.classList.remove('hidden');
+    }
 
-  // -----------------------------------------------
-  // 5. RECALCUL TOTAL
-  // -----------------------------------------------
-  function recalculer() {
-    let total = 0;
+    // ── Récapitulatif ──
+    mettreAJourRecap(panier);
+}
+
+// ── RÉCAPITULATIF ─────────────────────────────────────────
+function mettreAJourRecap(panier) {
+    const nb   = panier.nb_voyageurs || 1;
+    const total = panier.total || 0;
+
+    // Destination dans recap
+    const recapDestEl = document.querySelector('.recap-destination strong, .recap-dest-big + div strong');
+    if (recapDestEl && panier.destination_nom) recapDestEl.textContent = panier.destination_nom;
 
     // Transport
-    const prixTransportEl     = document.getElementById('prixTransport');
-    const recapTransportEl    = document.getElementById('recapTransport');
-    const recapPrixTransport  = document.getElementById('recapPrixTransport');
-    const recapNbPers         = document.getElementById('recapNbPers');
-
-    if (sections.transport && prixTransportEl) {
-      const t = prix.transport * nbVoyageurs;
-      prixTransportEl.textContent    = formatPrix(t);
-      if (recapPrixTransport) recapPrixTransport.textContent = formatPrix(t);
-      if (recapNbPers)        recapNbPers.textContent        = `(×${nbVoyageurs})`;
-      total += t;
-    } else if (recapTransportEl) {
-      recapTransportEl.style.display = 'none';
+    if (panier.transport) {
+        const el = document.getElementById('recapPrixTransport');
+        if (el) el.textContent = formatPrix(panier.transport.prix * nb);
+        const nbEl = document.getElementById('recapNbPers');
+        if (nbEl) nbEl.textContent = `(×${nb})`;
+    } else {
+        document.getElementById('recapTransport')?.style && (document.getElementById('recapTransport').style.opacity = '.4');
     }
 
     // Hébergement
-    const recapHebergement   = document.getElementById('recapHebergement');
-    const recapPrixHeberg    = document.getElementById('recapPrixHebergement');
-
-    if (sections.hebergement) {
-      if (recapPrixHeberg) recapPrixHeberg.textContent = formatPrix(prix.hebergement);
-      total += prix.hebergement;
-    } else if (recapHebergement) {
-      recapHebergement.style.display = 'none';
+    if (panier.hebergement) {
+        const nuits = panier.date_debut && panier.date_fin
+            ? Math.round((new Date(panier.date_fin) - new Date(panier.date_debut)) / 86400000) : 1;
+        const el = document.getElementById('recapPrixHebergement');
+        if (el) el.textContent = formatPrix(panier.hebergement.prix_nuit * nuits);
     }
 
     // Activités
-    let totalActivites = 0;
-    prix.activites.forEach(a => {
-      const t   = a.base * nbVoyageurs;
-      totalActivites += t;
-      const el  = document.getElementById('prixActiv' + a.id);
-      if (el) el.textContent = formatPrix(t);
+    const totalActs = (panier.activites || []).reduce((s,a) => s + a.prix * nb, 0);
+    const elA = document.getElementById('recapPrixActivites');
+    if (elA) elA.textContent = formatPrix(totalActs);
+    const elN = document.getElementById('recapNbActivites');
+    if (elN) elN.textContent = `(×${(panier.activites || []).length})`;
+
+    // Total
+    const totalEl = document.getElementById('totalGeneral');
+    if (totalEl) totalEl.textContent = formatPrix(total);
+    const parPersEl = document.getElementById('totalParPers');
+    if (parPersEl) parPersEl.textContent = formatPrix(nb > 0 ? Math.round(total / nb) : 0);
+}
+
+// ── COMPTEUR VOYAGEURS (original conservé + API) ──────────
+function setupCompteurVoyageurs() {
+    const btnMoins = document.getElementById('btnMoins');
+    const btnPlus  = document.getElementById('btnPlus');
+    const nbEl     = document.getElementById('nbVoyageurs');
+
+    btnMoins?.addEventListener('click', async () => {
+        const nb   = Math.max(1, parseInt(nbEl?.textContent || 1) - 1);
+        if (nbEl) nbEl.textContent = nb;
+        const json = await callPanier('set_voyageurs', { nb });
+        if (json.success) mettreAJourRecap(json.panier);
     });
 
-    const recapPrixActivites  = document.getElementById('recapPrixActivites');
-    const recapNbActivites    = document.getElementById('recapNbActivites');
-    if (recapPrixActivites)   recapPrixActivites.textContent = formatPrix(totalActivites);
-    if (recapNbActivites)     recapNbActivites.textContent   = `(×${prix.activites.length})`;
-    total += totalActivites;
+    btnPlus?.addEventListener('click', async () => {
+        const nb   = parseInt(nbEl?.textContent || 1) + 1;
+        if (nbEl) nbEl.textContent = nb;
+        const json = await callPanier('set_voyageurs', { nb });
+        if (json.success) mettreAJourRecap(json.panier);
+    });
+}
 
-    // Total général
-    const totalEl      = document.getElementById('totalGeneral');
-    const parPersEl    = document.getElementById('totalParPers');
+// ── SUPPRIMER SECTION (original conservé + API) ───────────
+function setupSupprimerSections() {
+    document.querySelectorAll('.btn-supprimer').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const section = btn.dataset.section;
+            const card    = document.getElementById('card' + capitalize(section));
+            const action  = section === 'transport' ? 'remove_transport' : 'remove_hebergement';
 
-    if (totalEl) totalEl.textContent    = formatPrix(total);
-    if (parPersEl && nbVoyageurs > 0)
-      parPersEl.textContent = formatPrix(Math.round(total / nbVoyageurs));
-  }
+            if (card) { card.style.opacity = '0'; card.style.transition = '.35s'; }
+            const json = await callPanier(action);
+            if (json.success) {
+                setTimeout(() => afficherPanier(json.panier), 350);
+            }
+        });
+    });
+}
 
-  // -----------------------------------------------
-  // 6. COMPTEUR ACTIVITÉS
-  // -----------------------------------------------
-  function updateActivitesCount() {
-    const countEl = document.getElementById('activitesCount');
-    const vide    = document.getElementById('activitesVide');
-    const list    = document.getElementById('activitesList');
-    const n       = prix.activites.length;
+// ── SUPPRIMER ACTIVITÉ ────────────────────────────────────
+function setupSupprimerActivites() {
+    document.addEventListener('click', async (e) => {
+        const btn = e.target.closest('.btn-suppr-activite');
+        if (!btn) return;
+        const id   = parseInt(btn.dataset.id);
+        const item = btn.closest('.activite-item');
+        if (item) { item.style.opacity = '0'; item.style.transition = '.3s'; }
+        setTimeout(async () => {
+            const json = await callPanier('remove_activite', { activite_id: id });
+            if (json.success) afficherPanier(json.panier);
+        }, 300);
+    });
+}
 
-    if (countEl) countEl.textContent = n;
+// ── VIDER (original conservé + API) ──────────────────────
+function setupViderPanier() {
+    document.getElementById('btnVider')?.addEventListener('click', async () => {
+        if (!confirm('Vider tout le panier ?')) return;
+        const json = await callPanier('vider');
+        if (json.success) afficherPanier(json.panier);
+    });
+}
 
-    if (n === 0) {
-      if (list) list.style.display = 'none';
-      if (vide) vide.classList.remove('hidden');
-    } else {
-      if (list) list.style.display = 'flex';
-      if (vide) vide.classList.add('hidden');
+// ── FALLBACK STATIQUE (si API indisponible) ───────────────
+function recalculerStatic() {
+    let nb   = 4;
+    const p  = { transport: 320, hebergement: 1800, activites: [{id:1,base:45},{id:2,base:30},{id:3,base:60}] };
+
+    function calc() {
+        let tot = p.transport * nb + p.hebergement;
+        p.activites.forEach(a => tot += a.base * nb);
+        const el = document.getElementById('totalGeneral');
+        if (el) el.textContent = formatPrix(tot);
+        const pp = document.getElementById('totalParPers');
+        if (pp) pp.textContent = formatPrix(Math.round(tot / nb));
+        const pT = document.getElementById('prixTransport');
+        if (pT) pT.textContent = formatPrix(p.transport * nb);
     }
-  }
 
-  // -----------------------------------------------
-  // HELPERS
-  // -----------------------------------------------
-  function formatPrix(n) {
-    return n.toLocaleString('fr-FR') + '€';
-  }
+    document.getElementById('btnMoins')?.addEventListener('click', () => {
+        if (nb > 1) { nb--; document.getElementById('nbVoyageurs').textContent = nb; calc(); }
+    });
+    document.getElementById('btnPlus')?.addEventListener('click', () => {
+        nb++; document.getElementById('nbVoyageurs').textContent = nb; calc();
+    });
+    document.querySelectorAll('.btn-suppr-activite').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const id = parseInt(btn.dataset.id);
+            const idx = p.activites.findIndex(a => a.id === id);
+            if (idx > -1) p.activites.splice(idx, 1);
+            btn.closest('.activite-item')?.remove();
+            calc();
+        });
+    });
+    document.querySelectorAll('.btn-supprimer').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const s = btn.dataset.section;
+            document.getElementById('card' + capitalize(s))?.remove();
+            if (s === 'transport')   p.transport   = 0;
+            if (s === 'hebergement') p.hebergement = 0;
+            calc();
+        });
+    });
+    document.getElementById('btnVider')?.addEventListener('click', () => {
+        if (!confirm('Vider tout le panier ?')) return;
+        ['cardTransport','cardHebergement'].forEach(id => document.getElementById(id)?.remove());
+        p.activites = []; p.transport = 0; p.hebergement = 0;
+        calc();
+    });
+    calc();
+}
 
-  function capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
+// ── APPEL API ─────────────────────────────────────────────
+async function callPanier(action, data = {}) {
+    try {
+        const body = new URLSearchParams({ action, ...data });
+        const res  = await fetch(API_PANIER, { method:'POST', credentials:'include', body });
+        return await res.json();
+    } catch (e) { return { success: false }; }
+}
 
-  // Init
-  recalculer();
-
-});
+// ── UTILITAIRES ───────────────────────────────────────────
+function formatPrix(n) { return Number(n||0).toLocaleString('fr-FR') + '€'; }
+function formaterDate(s) {
+    if (!s) return '—';
+    return new Date(s).toLocaleDateString('fr-FR', {day:'2-digit',month:'short',year:'numeric'});
+}
+function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
