@@ -54,6 +54,15 @@ $stmt->execute([$user_id, $dest_id, $service_id, $date_debut, $date_fin, $nb_voy
 
 $reservation_id = $pdo->lastInsertId();
 
+// ── Notification de confirmation ──────────────────────────
+$message_notif = "✈️ Ta réservation a été confirmée ! Bon voyage 🌴";
+
+$stmt_notif = $pdo->prepare("
+    INSERT INTO notifications (user_id, message, type, lu, date_envoi)
+    VALUES (?, ?, 'reservation', 0, NOW())
+");
+$stmt_notif->execute([$user_id, $message_notif]);
+
 // ── Vider le panier ───────────────────────────────────────
 $_SESSION['panier'] = [
     'destination_id'=>null,'destination_nom'=>null,'destination_img'=>null,
