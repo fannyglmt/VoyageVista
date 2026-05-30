@@ -136,37 +136,29 @@
 
           <div class="form-options">
           <div class="form-group">
-          <label>Je suis</label>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px"><label style="
-          display:flex;align-items:center;gap:12px;
-          background:#f7fbff;border:2px solid rgba(121,169,223,.25);
-          border-radius:18px;padding:14px 16px;cursor:pointer;
-          transition:.2s;font-size:14px;font-weight:600;color:#466789;
-          " class="role-label" id="labelVoyageur">
-          <input type="radio" name="role" value="utilisateur" checked
-          style="display:none" id="roleVoyageur">
-          <span style="
-           width:20px;height:20px;border-radius:50%;
-          border:2px solid #c5defa;flex-shrink:0;
-          transition:.2s;
-          " class="role-dot"></span>
-      <span>👤 Voyageur</span>
+  <label>Je suis</label>
+  <div style="display:flex;gap:10px;margin-top:8px">
+
+    <label id="labelVoyageur" style="
+      flex:1;display:flex;align-items:center;gap:8px;
+      background:#f7fbff;border:2px solid #79a9df;
+      border-radius:14px;padding:10px 14px;cursor:pointer;
+      font-size:13px;font-weight:700;color:#4a68a6;
+    ">
+      <input type="radio" name="role" value="utilisateur" checked
+        onchange="changerRole()" id="roleVoyageur">
+      👤 Voyageur
     </label>
 
-    <label style="
-      display:flex;align-items:center;gap:12px;
+    <label id="labelPrestataire" style="
+      flex:1;display:flex;align-items:center;gap:8px;
       background:#f7fbff;border:2px solid rgba(121,169,223,.25);
-      border-radius:18px;padding:14px 16px;cursor:pointer;
-      transition:.2s;font-size:14px;font-weight:600;color:#466789;
-    " class="role-label" id="labelPrestataire">
+      border-radius:14px;padding:10px 14px;cursor:pointer;
+      font-size:13px;font-weight:700;color:#466789;
+    ">
       <input type="radio" name="role" value="prestataire"
-        style="display:none" id="rolePrestataire">
-      <span style="
-        width:20px;height:20px;border-radius:50%;
-        border:2px solid #c5defa;flex-shrink:0;
-        transition:.2s;
-      " class="role-dot"></span>
-      <span>🏨 Prestataire</span>
+        onchange="changerRole()" id="rolePrestataire">
+      🏨 Prestataire
     </label>
 
   </div>
@@ -197,6 +189,23 @@
   </main>
 
   <script src="js/authentification.js"></script>
+   <script>
+    function changerRole() {
+      const v = document.getElementById('labelVoyageur');
+      const p = document.getElementById('labelPrestataire');
+      if (document.getElementById('roleVoyageur').checked) {
+        v.style.borderColor = '#79a9df';
+        v.style.color       = '#4a68a6';
+        p.style.borderColor = 'rgba(121,169,223,.25)';
+        p.style.color       = '#466789';
+      } else {
+        p.style.borderColor = '#79a9df';
+        p.style.color       = '#4a68a6';
+        v.style.borderColor = 'rgba(121,169,223,.25)';
+        v.style.color       = '#466789';
+      }
+    }
+  </script>
 
 </body>
 </html>
