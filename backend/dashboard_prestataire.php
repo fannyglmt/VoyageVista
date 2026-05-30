@@ -190,8 +190,8 @@ foreach ($services as &$s) {
     'Plongée sous-marine'     => '../frontend/assets/images/plongée sous-marine.jpg',
     'Randonnée volcan Batur'  => '../frontend/assets/images/randonnee-volcan.png',
     'Retraite yoga et spa'    => '../frontend/assets/images/spa.png',
-    'Zipline dans la jungle'   => '../frontend/assets/images/tyrolienne-jungle.png',
-    'Dîner marocain traditionnel' => '../frontend/assets/images/diner-marocain.png',
+    'Zip-line jungle'         => '../frontend/assets/images/tyrolienne-jungle.png',
+    'Dîner marocain'          => '../frontend/assets/images/diner-marocain.png',
 
     'Train Paris → Barcelone' => '../frontend/assets/images/transport-train.jpg',
     'Vol Premium Paris → Bali'=> '../frontend/assets/images/transport-avion.jpg',
