@@ -189,7 +189,7 @@ foreach ($services as &$s) {
     9  => '../frontend/assets/images/food-tour.png',
     10 => '../frontend/assets/images/diner-marocain.png',
     11 => '../frontend/assets/images/randonnee-volcan.png',
-    12 => '../frontend/assets/images/plongée sous-marine.jpg',
+    12 => '../frontend/assets/images/plongee-sous-marine.jpg',
     13 => '../frontend/assets/images/spa.png',
     14 => '../frontend/assets/images/tyrolienne-jungle.png',
 
