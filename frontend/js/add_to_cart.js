@@ -51,7 +51,22 @@ document.addEventListener('click', async (e) => {
 
     // ── Sur detail-hebergement.html ───────────────────────
     else if (page.includes('detail-hebergement')) {
-        const hebId = params.get('id');
+        let hebId = params.get('id');
+
+        // Fallback ancien système : ?hebergement=NomVilla
+        if (!hebId) {
+            const nom = params.get('hebergement');
+            if (nom) {
+                try {
+                    const res  = await fetch(`${API_PANIER.replace('panier.php', '')}api_hebergements.php?search=${encodeURIComponent(nom)}&limit=1`, { credentials: 'include' });
+                    const list = await res.json();
+                    if (list.success && list.data.length > 0) {
+                        hebId = list.data[0].id;
+                    }
+                } catch(e) {}
+            }
+        }
+
         if (!hebId) { afficherToast('Hébergement introuvable', 'error'); return; }
 
         btn.textContent = '⏳ Ajout en cours...';
