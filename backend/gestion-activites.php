@@ -355,5 +355,6 @@ $categories = ['Surf & Sports nautiques','Randonnée & Aventure','Gastronomie & 
 </div>
 
 <footer>© 2026 VoyageVista — Explore, swipe, travel together.</footer>
+<script src="js/navbar_session.js"></script>
 </body>
 </html>

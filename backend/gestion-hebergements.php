@@ -381,5 +381,7 @@ $destImages = ['Bali'=>'assets/images/bali.png','Algarve'=>'assets/images/algarv
 <footer style="text-align:center;padding:24px;background:#fff;color:var(--muted);font-size:13px;border-top:1px solid rgba(121,169,223,.15)">
   © 2026 VoyageVista — Host smarter 🌴
 </footer>
+
+<script src="js/navbar_session.js"></script>
 </body>
 </html>
