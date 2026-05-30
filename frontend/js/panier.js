@@ -44,13 +44,22 @@ function afficherPanier(panier) {
     if (nbEl) nbEl.textContent = panier.nb_voyageurs || 1;
 
     // ── Dates ──
-    if (panier.date_debut && panier.date_fin) {
-        const datesEls = document.querySelectorAll('.groupe-value');
-        if (datesEls[2]) datesEls[2].textContent =
-            `📅 ${formaterDate(panier.date_debut)} → ${formaterDate(panier.date_fin)}`;
-        if (datesEls[3]) {
+    const datesEls = document.querySelectorAll('.groupe-value');
+    if (datesEls[2]) {
+        if (panier.date_debut && panier.date_fin) {
+            const debut = formaterDate(panier.date_debut);
+            const fin   = formaterDate(panier.date_fin);
+            datesEls[2].textContent = `📅 ${debut} → ${fin}`;
+        } else {
+            datesEls[2].innerHTML = `📅 <span style="color:#e64b5d;font-size:13px">Aucune date sélectionnée — choisissez un hébergement avec dates</span>`;
+        }
+    }
+    if (datesEls[3]) {
+        if (panier.date_debut && panier.date_fin) {
             const nuits = Math.round((new Date(panier.date_fin) - new Date(panier.date_debut)) / 86400000);
             datesEls[3].textContent = `⏱ ${nuits} nuit${nuits > 1 ? 's' : ''}`;
+        } else {
+            datesEls[3].textContent = '⏱ —';
         }
     }
 
@@ -100,8 +109,7 @@ function afficherPanier(panier) {
             const dep  = t.depart || '';
             const arr  = t.arrivee || '';
             const dur  = t.duree || '—';
-            const nb2  = panier.nb_voyageurs || 1;
-            const prix = (parseFloat(t.prix) || 0) * nb2;
+            const prix = (parseFloat(t.prix) || 0) * nb;
 
             if (content) content.innerHTML = `
                 <div class="item-main">
@@ -109,7 +117,7 @@ function afficherPanier(panier) {
                     <div class="item-info">
                         <h3>${esc(nom)}</h3>
                         <p>${dep ? `📍 ${esc(dep)} → ${esc(arr)}` : ''}</p>
-                        <p>⏱ ${dur} • 👥 ${nb2} pers.</p>
+                        <p>⏱ ${dur} • 👥 ${nb} pers.</p>
                     </div>
                 </div>
                 <div class="item-prix">
@@ -209,6 +217,26 @@ function mettreAJourRecap(panier) {
     // Destination dans recap
     const recapDestEl = document.querySelector('.recap-destination strong');
     if (recapDestEl && panier.destination_nom) recapDestEl.textContent = panier.destination_nom;
+
+    // Dates dans recap
+    const recapDatesEl = document.querySelector('.recap-destination p');
+    if (recapDatesEl) {
+        if (panier.date_debut && panier.date_fin) {
+            const debut = formaterDate(panier.date_debut);
+            const fin   = formaterDate(panier.date_fin);
+            const nuits = Math.round((new Date(panier.date_fin) - new Date(panier.date_debut)) / 86400000);
+            recapDatesEl.textContent = `${debut} → ${fin} • ${nuits} nuit${nuits > 1 ? 's' : ''}`;
+        } else {
+            recapDatesEl.textContent = 'Dates non sélectionnées';
+        }
+    }
+
+    // Nuits dans recap hébergement
+    const recapHebLabel = document.querySelector('#recapHebergement span:first-child small');
+    if (recapHebLabel && panier.date_debut && panier.date_fin) {
+        const nuits = Math.round((new Date(panier.date_fin) - new Date(panier.date_debut)) / 86400000);
+        recapHebLabel.textContent = `(${nuits} nuit${nuits > 1 ? 's' : ''})`;
+    }
 
     // Total général
     const totalEl   = document.getElementById('totalGeneral');
