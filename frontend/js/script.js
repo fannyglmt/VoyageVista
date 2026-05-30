@@ -546,16 +546,36 @@ async function renderHebergementDetail() {
 
   const params = new URLSearchParams(window.location.search);
   const id     = params.get("id");
+  const nom    = params.get("hebergement"); // fallback ancien lien
 
-  if (!id) { page.innerHTML = `<section class="error-page"><h1>Hébergement introuvable 😢</h1></section>`; return; }
+  if (!id && !nom) {
+    page.innerHTML = `<section class="error-page"><h1>Hébergement introuvable 😢</h1></section>`;
+    return;
+  }
 
   page.innerHTML = `<div style="text-align:center;padding:120px;font-size:3rem">✈️</div>`;
 
   try {
-    const res  = await fetch(`${API_BASE}api_hebergement_detail.php?id=${id}`, { credentials: 'include' });
-    const json = await res.json();
+    let json = null;
 
-    if (!json.success) { window.location.href = "404.html"; return; }
+    if (id) {
+      // Nouveau système : ?id=1
+      const res = await fetch(`${API_BASE}api_hebergement_detail.php?id=${id}`, { credentials: 'include' });
+      json = await res.json();
+    } else if (nom) {
+      // Ancien système : ?hebergement=NomVilla → chercher par nom
+      const res  = await fetch(`${API_BASE}api_hebergements.php?search=${encodeURIComponent(nom)}&limit=1`, { credentials: 'include' });
+      const list = await res.json();
+      if (list.success && list.data.length > 0) {
+        const hId  = list.data[0].id;
+        const res2 = await fetch(`${API_BASE}api_hebergement_detail.php?id=${hId}`, { credentials: 'include' });
+        json = await res2.json();
+      }
+    }
+
+    if (!json || !json.success) {
+      window.location.href = "404.html"; return;
+    }
 
     const h   = json.data;
     const img = resolveImg(h.image_url, 'hebergement-bg.jpg');
