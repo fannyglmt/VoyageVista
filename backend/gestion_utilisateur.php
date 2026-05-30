@@ -11,6 +11,43 @@ require_once 'configuration.php';
 $message = ""; $error = "";
 if (empty($_SESSION['csrf_token'])) $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
+// ── CRÉER UN COMPTE ───────────────────────────────────────
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_user'])) {
+    if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'] ?? '')) {
+        $error = "Action non autorisée.";
+    } else {
+        $username = trim($_POST['new_username'] ?? '');
+        $email    = trim($_POST['new_email']    ?? '');
+        $password = $_POST['new_password']       ?? '';
+        $role     = $_POST['new_role']           ?? 'utilisateur';
+        $roles_valides = ['utilisateur', 'prestataire', 'admin'];
+
+        if (empty($username) || empty($email) || empty($password)) {
+            $error = "Tous les champs sont obligatoires.";
+        } elseif (strlen($username) < 3) {
+            $error = "Le nom d'utilisateur doit faire au moins 3 caractères.";
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $error = "Email invalide.";
+        } elseif (strlen($password) < 8) {
+            $error = "Le mot de passe doit faire au moins 8 caractères.";
+        } elseif (!in_array($role, $roles_valides)) {
+            $error = "Rôle invalide.";
+        } else {
+            // Vérifier email + username uniques
+            $chk = $pdo->prepare("SELECT id FROM utilisateurs WHERE email=? OR username=? LIMIT 1");
+            $chk->execute([$email, $username]);
+            if ($chk->fetch()) {
+                $error = "Cet email ou ce nom d'utilisateur est déjà utilisé.";
+            } else {
+                $hash = password_hash($password, PASSWORD_BCRYPT);
+                $pdo->prepare("INSERT INTO utilisateurs (username, email, password, role, est_actif, date_inscription) VALUES (?,?,?,?,1,NOW())")
+                    ->execute([$username, $email, $hash, $role]);
+                $message = "✅ Compte <strong>$username</strong> ($role) créé avec succès.";
+            }
+        }
+    }
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_user'])) {
     if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'] ?? '')) {
         $error = "Action non autorisée.";
@@ -134,7 +171,100 @@ $total_count = array_sum($counts);
       <option value="admin" <?php echo $role_filter==='admin'?'selected':'';?>>Admin</option>
     </select>
     <button type="submit" class="btn-search">Filtrer</button>
+    <button type="button" onclick="document.getElementById('modalCreer').style.display='flex'"
+      style="margin-left:auto;background:linear-gradient(135deg,#79a9df,#f3b27d);
+      color:#fff;border:none;padding:.65rem 1.4rem;border-radius:24px;
+      font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:700;
+      cursor:pointer;display:inline-flex;align-items:center;gap:.4rem">
+      ➕ Créer un compte
+    </button>
   </form>
+
+  <!-- MODALE CRÉER UN COMPTE -->
+  <div id="modalCreer" style="
+    display:none;position:fixed;inset:0;background:rgba(9,20,40,.55);
+    backdrop-filter:blur(4px);z-index:9999;
+    align-items:center;justify-content:center;
+  ">
+    <div style="
+      background:#fff;border-radius:28px;padding:40px;
+      max-width:480px;width:90%;box-shadow:0 24px 60px rgba(0,0,0,.2);
+      position:relative;
+    ">
+      <button onclick="document.getElementById('modalCreer').style.display='none'"
+        style="position:absolute;top:18px;right:18px;background:none;border:none;
+        font-size:22px;cursor:pointer;color:#8aabb8">✕</button>
+
+      <p style="color:#f39b5f;font-weight:800;letter-spacing:3px;font-size:11px;margin-bottom:8px">
+        ADMIN
+      </p>
+      <h2 style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;
+        color:#4a68a6;margin-bottom:20px">
+        Créer un nouveau compte
+      </h2>
+
+      <form method="POST">
+        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token'];?>">
+        <input type="hidden" name="create_user" value="1">
+
+        <div style="margin-bottom:14px">
+          <label style="font-size:13px;font-weight:700;color:#466789;display:block;margin-bottom:6px">
+            Nom d'utilisateur
+          </label>
+          <input type="text" name="new_username" required minlength="3"
+            placeholder="ex: john_doe"
+            style="width:100%;padding:12px 16px;border:1.5px solid rgba(121,169,223,.3);
+            border-radius:14px;font-size:14px;color:#17375e;background:#f7fbff;outline:none;
+            box-sizing:border-box">
+        </div>
+
+        <div style="margin-bottom:14px">
+          <label style="font-size:13px;font-weight:700;color:#466789;display:block;margin-bottom:6px">
+            Email
+          </label>
+          <input type="email" name="new_email" required
+            placeholder="exemple@email.com"
+            style="width:100%;padding:12px 16px;border:1.5px solid rgba(121,169,223,.3);
+            border-radius:14px;font-size:14px;color:#17375e;background:#f7fbff;outline:none;
+            box-sizing:border-box">
+        </div>
+
+        <div style="margin-bottom:14px">
+          <label style="font-size:13px;font-weight:700;color:#466789;display:block;margin-bottom:6px">
+            Mot de passe
+          </label>
+          <input type="password" name="new_password" required minlength="8"
+            placeholder="Min. 8 caractères"
+            style="width:100%;padding:12px 16px;border:1.5px solid rgba(121,169,223,.3);
+            border-radius:14px;font-size:14px;color:#17375e;background:#f7fbff;outline:none;
+            box-sizing:border-box">
+        </div>
+
+        <div style="margin-bottom:24px">
+          <label style="font-size:13px;font-weight:700;color:#466789;display:block;margin-bottom:6px">
+            Rôle
+          </label>
+          <select name="new_role"
+            style="width:100%;padding:12px 16px;border:1.5px solid rgba(121,169,223,.3);
+            border-radius:14px;font-size:14px;color:#17375e;background:#f7fbff;outline:none;
+            box-sizing:border-box">
+            <option value="utilisateur">👤 Voyageur</option>
+            <option value="prestataire">🏨 Prestataire</option>
+            <option value="admin">⚙️ Administrateur</option>
+          </select>
+        </div>
+
+        <button type="submit" style="
+          width:100%;padding:14px;border:none;border-radius:24px;
+          background:linear-gradient(135deg,#79a9df,#f3b27d);
+          color:#fff;font-size:15px;font-weight:800;cursor:pointer;
+          font-family:'DM Sans',sans-serif
+        ">
+          ➕ Créer le compte
+        </button>
+      </form>
+    </div>
+  </div>
 
   <p class="result-count"><?php echo count($users);?> utilisateur<?php echo count($users)>1?'s':'';?> trouvé<?php echo count($users)>1?'s':'';?></p>
 
@@ -192,5 +322,15 @@ $total_count = array_sum($counts);
 </div>
 
 <footer>© 2026 VoyageVista — Admin Dashboard</footer>
+<script>
+// Fermer la modale en cliquant sur l'overlay
+document.getElementById('modalCreer')?.addEventListener('click', function(e) {
+    if (e.target === this) this.style.display = 'none';
+});
+// Ouvrir la modale si erreur de création
+<?php if ($error && isset($_POST['create_user'])): ?>
+document.getElementById('modalCreer').style.display = 'flex';
+<?php endif; ?>
+</script>
 </body>
 </html>
