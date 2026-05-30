@@ -100,7 +100,8 @@ function afficherPanier(panier) {
             const dep  = t.depart || '';
             const arr  = t.arrivee || '';
             const dur  = t.duree || '—';
-            const prix = (parseFloat(t.prix) || 0) * nb;
+            const nb2  = panier.nb_voyageurs || 1;
+            const prix = (parseFloat(t.prix) || 0) * nb2;
 
             if (content) content.innerHTML = `
                 <div class="item-main">
@@ -108,7 +109,7 @@ function afficherPanier(panier) {
                     <div class="item-info">
                         <h3>${esc(nom)}</h3>
                         <p>${dep ? `📍 ${esc(dep)} → ${esc(arr)}` : ''}</p>
-                        <p>⏱ ${dur} • 👥 ${nb} pers.</p>
+                        <p>⏱ ${dur} • 👥 ${nb2} pers.</p>
                     </div>
                 </div>
                 <div class="item-prix">
