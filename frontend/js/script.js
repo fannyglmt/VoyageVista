@@ -648,7 +648,43 @@ async function renderHebergementDetail() {
           <p>${h.description || ''}</p>
 
           ${h.disponibilites && h.disponibilites.length > 0 ? `
-          <h3 style="margin-top:30px;color:#4a68a6">📅 Disponibilités</h3>
+          <h3 style="margin-top:30px;color:#4a68a6">📅 Choisir vos dates</h3>
+
+          <!-- Sélecteur de dates -->
+          <div id="datePicker" style="
+            background:#f7fbff;border-radius:18px;padding:20px;
+            margin-top:12px;border:1.5px solid rgba(121,169,223,.2)
+          ">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+              <div>
+                <label style="font-size:13px;font-weight:700;color:#466789;display:block;margin-bottom:6px">
+                  📅 Arrivée
+                </label>
+                <input type="date" id="dateDebut"
+                  min="${new Date().toISOString().split('T')[0]}"
+                  style="width:100%;padding:10px 14px;border:1.5px solid rgba(121,169,223,.3);
+                  border-radius:12px;font-size:14px;color:#17375e;background:#fff;outline:none">
+              </div>
+              <div>
+                <label style="font-size:13px;font-weight:700;color:#466789;display:block;margin-bottom:6px">
+                  📅 Départ
+                </label>
+                <input type="date" id="dateFin"
+                  min="${new Date().toISOString().split('T')[0]}"
+                  style="width:100%;padding:10px 14px;border:1.5px solid rgba(121,169,223,.3);
+                  border-radius:12px;font-size:14px;color:#17375e;background:#fff;outline:none">
+              </div>
+            </div>
+            <button onclick="verifierDisponibilite(${h.id})" style="
+              width:100%;padding:12px;border:none;border-radius:14px;
+              background:linear-gradient(135deg,#79a9df,#f3b27d);
+              color:#fff;font-size:14px;font-weight:700;cursor:pointer
+            ">🔍 Vérifier la disponibilité</button>
+            <div id="dispoResult" style="margin-top:12px"></div>
+          </div>
+
+          <!-- Créneaux disponibles -->
+          <h3 style="margin-top:24px;color:#4a68a6">🗓️ Créneaux disponibles</h3>
           <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-top:12px">
           ${h.disponibilites.map(d => {
             const debut  = new Date(d.date_debut).toLocaleDateString('fr-FR', {day:'2-digit',month:'short',year:'numeric'});
@@ -658,9 +694,10 @@ async function renderHebergementDetail() {
             const couleur = dispo <= 2 ? '#e64b5d' : dispo <= 5 ? '#f39b5f' : '#16a34a';
             return `
               <div style="
-                background:#f7fbff;border-radius:14px;padding:14px 16px;
+                background:#fff;border-radius:14px;padding:14px 16px;
                 border-left:4px solid ${couleur};
-              ">
+                box-shadow:0 2px 8px rgba(0,0,0,.06);cursor:pointer
+              " onclick="remplirDates('${d.date_debut}','${d.date_fin}')">
                 <div style="font-weight:700;color:#4a68a6;font-size:14px">
                   📅 ${debut} → ${fin}
                 </div>
@@ -670,6 +707,9 @@ async function renderHebergementDetail() {
                   <span style="color:${couleur};font-weight:700">
                     ${dispo} place${dispo > 1 ? 's' : ''} disponible${dispo > 1 ? 's' : ''}
                   </span>
+                </div>
+                <div style="font-size:12px;color:#8aabb8;margin-top:4px">
+                  Cliquer pour sélectionner ce créneau
                 </div>
               </div>`;
           }).join('')}
@@ -740,3 +780,135 @@ const activitesFallback = [
   { id:0, name:"Dîner marocain",    image:"diner-marocain.png",destination:"Marrakech",category:"Gastronomie", price:40, duration:"Soirée",rating:4.7, reviews:102, vibe:"🍽️ Food • ambiance • partage",    description:"Un dîner marocain convivial avec plats traditionnels, ambiance chaleureuse.",                                         comment1:"Le repas était incroyable.",                                      comment2:"Très bonne ambiance avec musique et déco." },
   { id:0, name:"Croisière sunset",  image:"croisiere-sunset.png",destination:"Ibiza",  category:"Détente",     price:80, duration:"3h",    rating:5.0, reviews:318, vibe:"🌅 Sunset • mer • premium",        description:"Une croisière au coucher du soleil pour finir la journée avec une vraie vibe carte postale.",                         comment1:"Le coucher de soleil était irréel.",                              comment2:"Moment préféré du voyage." },
 ];
+
+// ── GESTION DES DATES ET DISPONIBILITÉS ──────────────────
+
+// Remplir les inputs de date depuis un créneau cliqué
+function remplirDates(dateDebut, dateFin) {
+  const inputDebut = document.getElementById('dateDebut');
+  const inputFin   = document.getElementById('dateFin');
+  if (inputDebut) inputDebut.value = dateDebut;
+  if (inputFin)   inputFin.value   = dateFin;
+
+  // Déclencher la vérification automatiquement
+  const hebId = document.getElementById('hebergementDetailPage')?.dataset.hebId;
+  if (hebId) verifierDisponibilite(parseInt(hebId));
+}
+
+// Vérifier la disponibilité pour les dates saisies
+async function verifierDisponibilite(hebId) {
+  const dateDebut = document.getElementById('dateDebut')?.value;
+  const dateFin   = document.getElementById('dateFin')?.value;
+  const result    = document.getElementById('dispoResult');
+
+  if (!result) return;
+
+  if (!dateDebut || !dateFin) {
+    result.innerHTML = `
+      <div style="padding:12px 16px;background:#fff8e1;border-radius:12px;color:#92400e;font-size:13px;font-weight:700">
+        ⚠️ Sélectionnez une date d'arrivée et de départ.
+      </div>`;
+    return;
+  }
+
+  if (dateFin <= dateDebut) {
+    result.innerHTML = `
+      <div style="padding:12px 16px;background:#fff0f2;border-radius:12px;color:#c0392b;font-size:13px;font-weight:700">
+        ❌ La date de départ doit être après la date d'arrivée.
+      </div>`;
+    return;
+  }
+
+  result.innerHTML = `<div style="padding:12px;color:#466789;font-size:13px">⏳ Vérification en cours...</div>`;
+
+  try {
+    const res  = await fetch(
+      `../backend/api_check_dispo.php?heb_id=${hebId}&date_debut=${dateDebut}&date_fin=${dateFin}`,
+      { credentials: 'include' }
+    );
+    const json = await res.json();
+
+    if (!json.success) {
+      result.innerHTML = `
+        <div style="padding:12px 16px;background:#fff0f2;border-radius:12px;color:#c0392b;font-size:13px;font-weight:700">
+          ❌ ${json.error}
+        </div>`;
+      return;
+    }
+
+    if (json.disponible) {
+      result.innerHTML = `
+        <div style="padding:14px 16px;background:#eafff4;border-radius:12px;border:1.5px solid #b7f0d4">
+          <p style="color:#1e7e50;font-weight:700;margin-bottom:6px">✅ Disponible !</p>
+          <p style="color:#466789;font-size:13px">
+            📅 ${json.nuits} nuit${json.nuits > 1 ? 's' : ''}
+            &nbsp;•&nbsp; 💸 ${json.prix_nuit}€/nuit
+            &nbsp;•&nbsp; 💰 Total : <strong>${json.prix_total.toLocaleString('fr-FR')}€</strong>
+          </p>
+          <p style="color:#466789;font-size:13px;margin-top:4px">
+            👥 ${json.places_dispo} place${json.places_dispo > 1 ? 's' : ''} disponible${json.places_dispo > 1 ? 's' : ''}
+          </p>
+          <button onclick="ajouterAuPanierAvecDates(${hebId}, '${dateDebut}', '${dateFin}', ${json.prix_total})"
+            style="
+              margin-top:12px;width:100%;padding:12px;border:none;border-radius:12px;
+              background:linear-gradient(135deg,#79a9df,#f3b27d);
+              color:#fff;font-size:14px;font-weight:700;cursor:pointer
+            ">
+            🛒 Ajouter au panier — ${json.prix_total.toLocaleString('fr-FR')}€
+          </button>
+        </div>`;
+    } else {
+      result.innerHTML = `
+        <div style="padding:14px 16px;background:#fff0f2;border-radius:12px;border:1.5px solid #f5c6cb">
+          <p style="color:#c0392b;font-weight:700">❌ Pas disponible pour ces dates</p>
+          <p style="color:#466789;font-size:13px;margin-top:4px">
+            Choisissez un créneau dans la liste ci-dessous ou modifiez vos dates.
+          </p>
+        </div>`;
+    }
+
+  } catch(err) {
+    result.innerHTML = `
+      <div style="padding:12px 16px;background:#fff0f2;border-radius:12px;color:#c0392b;font-size:13px">
+        ❌ Erreur réseau. Réessayez.
+      </div>`;
+  }
+}
+
+// Ajouter au panier avec les dates sélectionnées
+async function ajouterAuPanierAvecDates(hebId, dateDebut, dateFin, prixTotal) {
+  try {
+    // 1. Ajouter l'hébergement
+    const bodyHeb = new URLSearchParams({ action: 'set_hebergement', hebergement_id: hebId });
+    await fetch('../backend/panier.php', {
+      method: 'POST', credentials: 'include',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: bodyHeb.toString()
+    });
+
+    // 2. Définir les dates
+    const bodyDates = new URLSearchParams({
+      action: 'set_dates', date_debut: dateDebut, date_fin: dateFin
+    });
+    await fetch('../backend/panier.php', {
+      method: 'POST', credentials: 'include',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: bodyDates.toString()
+    });
+
+    // 3. Toast + redirection
+    const toast = document.createElement('div');
+    toast.style.cssText = `
+      position:fixed;bottom:24px;right:24px;z-index:9999;
+      padding:14px 22px;border-radius:16px;font-weight:700;font-size:15px;
+      background:#eafff4;color:#1e7e50;border:1.5px solid #b7f0d4;
+      box-shadow:0 8px 24px rgba(0,0,0,.12);
+    `;
+    toast.textContent = `✅ Hébergement + dates ajoutés au panier !`;
+    document.body.appendChild(toast);
+    setTimeout(() => { toast.remove(); window.location.href = 'panier.html'; }, 1200);
+
+  } catch(err) {
+    alert('Erreur lors de l\'ajout au panier. Réessayez.');
+  }
+}
