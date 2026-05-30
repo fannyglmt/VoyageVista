@@ -47,21 +47,27 @@ switch ($action) {
 
     // ── Définir la destination ────────────────────────────
     case 'set_destination':
-        $dest_id = (int)($_POST['destination_id'] ?? 0);
-        if (!$dest_id) { echo json_encode(['success'=>false,'error'=>'ID invalide']); break; }
-
-        $stmt = $pdo->prepare("SELECT id, nom, image_url FROM destinations WHERE id=? AND est_active=1 LIMIT 1");
-        $stmt->execute([$dest_id]);
-        $dest = $stmt->fetch();
-
-        if (!$dest) { echo json_encode(['success'=>false,'error'=>'Destination introuvable']); break; }
-
-        $_SESSION['panier']['destination_id']  = $dest['id'];
-        $_SESSION['panier']['destination_nom'] = $dest['nom'];
-        $_SESSION['panier']['destination_img'] = $dest['image_url'];
-        recalculerTotal();
-        echo json_encode(['success' => true, 'panier' => $_SESSION['panier']]);
+    $destination_id = (int)($_POST['destination_id'] ?? 0);
+    if (!$destination_id) {
+        echo json_encode(['error' => 'ID destination manquant']);
         break;
+    }
+
+    $stmt = $pdo->prepare('SELECT id, nom, prix_base FROM destinations WHERE id = ? AND est_active = 1 LIMIT 1');
+    $stmt->execute([$destination_id]);
+    $dest = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$dest) {
+        echo json_encode(['error' => 'Destination introuvable']);
+        break;
+    }
+
+    $_SESSION['panier']['destination_id']  = $dest['id'];
+    $_SESSION['panier']['destination_nom'] = $dest['nom'];
+    $_SESSION['panier']['total']           = (float)$dest['prix_base'];
+    recalculerTotal();
+    echo json_encode(['success' => true, 'panier' => $_SESSION['panier']]);
+    break;
 
     // ── Dates ─────────────────────────────────────────────
     case 'set_dates':
