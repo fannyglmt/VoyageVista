@@ -83,16 +83,39 @@ function afficherPanier(panier) {
 
     // ── Transport ──
     const cardTrans = document.getElementById('cardTransport');
-    if (cardTrans && !panier.transport) {
+    if (cardTrans) {
         const content = cardTrans.querySelector('.panier-item-content');
-        if (content) content.innerHTML = `
-            <div style="text-align:center;padding:20px;color:#8aabb8">
-                <p>Aucun transport sélectionné.</p>
-                <a href="transports.html"
-                   style="color:#4a68a6;font-weight:700;margin-top:8px;display:inline-block">
-                    Choisir un transport →
-                </a>
-            </div>`;
+        if (!panier.transport) {
+            if (content) content.innerHTML = `
+                <div style="text-align:center;padding:20px;color:#8aabb8">
+                    <p>Aucun transport sélectionné.</p>
+                    <a href="transports.html"
+                       style="color:#4a68a6;font-weight:700;margin-top:8px;display:inline-block">
+                        Choisir un transport →
+                    </a>
+                </div>`;
+        } else {
+            const t    = panier.transport;
+            const nom  = t.nom || 'Transport';
+            const dep  = t.depart || '';
+            const arr  = t.arrivee || '';
+            const dur  = t.duree || '—';
+            const prix = (parseFloat(t.prix) || 0) * nb;
+
+            if (content) content.innerHTML = `
+                <div class="item-main">
+                    <div class="item-emoji">✈️</div>
+                    <div class="item-info">
+                        <h3>${esc(nom)}</h3>
+                        <p>${dep ? `📍 ${esc(dep)} → ${esc(arr)}` : ''}</p>
+                        <p>⏱ ${dur} • 👥 ${nb} pers.</p>
+                    </div>
+                </div>
+                <div class="item-prix">
+                    <span class="prix-unit">${formatPrix(parseFloat(t.prix))} <small>/pers.</small></span>
+                    <span class="prix-total">${formatPrix(prix)}</span>
+                </div>`;
+        }
     }
 
     // ── Activités ──
