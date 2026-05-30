@@ -135,19 +135,42 @@
           </div>
 
           <div class="form-options">
-            <div class="form-group">
-            <label for="role">Je suis</label>
-            <div class="input-wrap">
-            <span class="input-icon">🎭</span>
-            <select id="role" name="role" style="
-             width:100%;border:none;background:transparent;
-             font-size:15px;color:#17375e;outline:none;cursor:pointer;
-            font-family:'DM Sans',sans-serif;padding:2px 0;">
-           <option value="utilisateur">👤 Un voyageur</option>
-           <option value="prestataire">🏨 Un prestataire (hôtel, activité...)</option>
-           </select>
-           </div>
-           </div>
+          <div class="form-group">
+          <label>Je suis</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px"><label style="
+          display:flex;align-items:center;gap:12px;
+          background:#f7fbff;border:2px solid rgba(121,169,223,.25);
+          border-radius:18px;padding:14px 16px;cursor:pointer;
+          transition:.2s;font-size:14px;font-weight:600;color:#466789;
+          " class="role-label" id="labelVoyageur">
+          <input type="radio" name="role" value="utilisateur" checked
+          style="display:none" id="roleVoyageur">
+          <span style="
+           width:20px;height:20px;border-radius:50%;
+          border:2px solid #c5defa;flex-shrink:0;
+          transition:.2s;
+          " class="role-dot"></span>
+      <span>👤 Voyageur</span>
+    </label>
+
+    <label style="
+      display:flex;align-items:center;gap:12px;
+      background:#f7fbff;border:2px solid rgba(121,169,223,.25);
+      border-radius:18px;padding:14px 16px;cursor:pointer;
+      transition:.2s;font-size:14px;font-weight:600;color:#466789;
+    " class="role-label" id="labelPrestataire">
+      <input type="radio" name="role" value="prestataire"
+        style="display:none" id="rolePrestataire">
+      <span style="
+        width:20px;height:20px;border-radius:50%;
+        border:2px solid #c5defa;flex-shrink:0;
+        transition:.2s;
+      " class="role-dot"></span>
+      <span>🏨 Prestataire</span>
+    </label>
+
+  </div>
+</div>
             <label class="checkbox-label">
               <input type="checkbox" name="cgu" id="cgu" required>
               <span class="checkbox-custom"></span>
