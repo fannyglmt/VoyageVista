@@ -518,7 +518,7 @@ async function renderActivityDetail() {
     const complet      = nbVoyageurs > capaciteMax;
     const btnPanier    = complet
       ? `<button class="add-cart-btn" disabled style="background:#ccc;cursor:not-allowed;opacity:.6">
-           ⛔ Complet pour ${nbVoyageurs} personnes (max ${capaciteMax})
+           ⛔ Maximum ${capaciteMax} personnes 
          </button>`
       : `<button class="add-cart-btn">Ajouter au panier voyage</button>`;
 
