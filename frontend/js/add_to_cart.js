@@ -116,7 +116,8 @@ async function callPanier(action, data = {}) {
         const res  = await fetch(API_PANIER, {
             method:      'POST',
             credentials: 'include',
-            body,
+            headers:     { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body:        body.toString(),
         });
         return await res.json();
     } catch (e) {

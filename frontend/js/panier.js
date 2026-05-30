@@ -144,42 +144,52 @@ function afficherPanier(panier) {
 
 // ── RÉCAPITULATIF ─────────────────────────────────────────
 function mettreAJourRecap(panier) {
-    const nb   = panier.nb_voyageurs || 1;
-    const total = panier.total || 0;
+    const nb = panier.nb_voyageurs || 1;
 
-    // Destination dans recap
-    const recapDestEl = document.querySelector('.recap-destination strong, .recap-dest-big + div strong');
-    if (recapDestEl && panier.destination_nom) recapDestEl.textContent = panier.destination_nom;
+    // ── Recalcul total côté JS (ne pas dépendre du total PHP) ──
+    let total = 0;
 
     // Transport
     if (panier.transport) {
-        const el = document.getElementById('recapPrixTransport');
-        if (el) el.textContent = formatPrix(panier.transport.prix * nb);
+        const tPrix = (panier.transport.prix || 0) * nb;
+        total += tPrix;
+        const el   = document.getElementById('recapPrixTransport');
         const nbEl = document.getElementById('recapNbPers');
+        if (el)   el.textContent   = formatPrix(tPrix);
         if (nbEl) nbEl.textContent = `(×${nb})`;
     } else {
-        document.getElementById('recapTransport')?.style && (document.getElementById('recapTransport').style.opacity = '.4');
+        const rt = document.getElementById('recapTransport');
+        if (rt) rt.style.opacity = '.4';
     }
 
     // Hébergement
     if (panier.hebergement) {
-        const nuits = panier.date_debut && panier.date_fin
-            ? Math.round((new Date(panier.date_fin) - new Date(panier.date_debut)) / 86400000) : 1;
+        const nuits  = panier.date_debut && panier.date_fin
+            ? Math.round((new Date(panier.date_fin) - new Date(panier.date_debut)) / 86400000)
+            : 1;
+        const hPrix  = (panier.hebergement.prix_nuit || 0) * Math.max(1, nuits);
+        total += hPrix;
         const el = document.getElementById('recapPrixHebergement');
-        if (el) el.textContent = formatPrix(panier.hebergement.prix_nuit * nuits);
+        if (el) el.textContent = formatPrix(hPrix);
     }
 
     // Activités
-    const totalActs = (panier.activites || []).reduce((s,a) => s + a.prix * nb, 0);
+    const acts      = panier.activites || [];
+    const totalActs = acts.reduce((s, a) => s + (a.prix || 0) * nb, 0);
+    total += totalActs;
     const elA = document.getElementById('recapPrixActivites');
     if (elA) elA.textContent = formatPrix(totalActs);
     const elN = document.getElementById('recapNbActivites');
-    if (elN) elN.textContent = `(×${(panier.activites || []).length})`;
+    if (elN) elN.textContent = `(×${acts.length})`;
 
-    // Total
-    const totalEl = document.getElementById('totalGeneral');
-    if (totalEl) totalEl.textContent = formatPrix(total);
+    // Destination dans recap
+    const recapDestEl = document.querySelector('.recap-destination strong');
+    if (recapDestEl && panier.destination_nom) recapDestEl.textContent = panier.destination_nom;
+
+    // Total général
+    const totalEl   = document.getElementById('totalGeneral');
     const parPersEl = document.getElementById('totalParPers');
+    if (totalEl)   totalEl.textContent   = formatPrix(total);
     if (parPersEl) parPersEl.textContent = formatPrix(nb > 0 ? Math.round(total / nb) : 0);
 }
 
@@ -298,7 +308,12 @@ function recalculerStatic() {
 async function callPanier(action, data = {}) {
     try {
         const body = new URLSearchParams({ action, ...data });
-        const res  = await fetch(API_PANIER, { method:'POST', credentials:'include', body });
+        const res  = await fetch(API_PANIER, {
+            method:      'POST',
+            credentials: 'include',
+            headers:     { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body:        body.toString(),
+        });
         return await res.json();
     } catch (e) { return { success: false }; }
 }
