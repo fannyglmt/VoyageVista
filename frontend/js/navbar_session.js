@@ -105,13 +105,60 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
         } else {
-            // Non connecté → 👤 vers login
-            if (userLink) {
-                userLink.href      = 'login.html';
-                userLink.innerHTML = '<span>👤</span>';
-            }
-            // Cloche non cliquable si pas connecté
+    // Non connecté → 👤 vers login
+    if (userLink) {
+        userLink.href      = 'login.html';
+        userLink.innerHTML = '<span>👤</span>';
+    }
+
+    // Cloche → toast + redirect login si pas connecté
+    const bellSpan = Array.from(navIcons.querySelectorAll('span'))
+        .find(s => s.textContent.trim() === '🔔');
+    const bellLink = navIcons.querySelector('a[href*="notification"]');
+
+    const bellEl = bellLink || bellSpan;
+    if (bellEl) {
+        bellEl.style.cursor = 'pointer';
+        bellEl.addEventListener('click', (e) => {
+            e.preventDefault();
+            afficherToastNavbar('Connecte-toi pour accéder aux notifications 🔔');
+            setTimeout(() => window.location.href = 'login.html', 1800);
+        });
+    }
+
+    // Cœur ♥ → toast + redirect login si pas connecté
+    const heartLink = navIcons.querySelector('a[href*="favoris"]');
+    const heartSpan = navIcons.querySelector('.heart-icon');
+
+    const heartEl = heartLink || heartSpan;
+    if (heartEl) {
+        heartEl.style.cursor = 'pointer';
+        heartEl.addEventListener('click', (e) => {
+            e.preventDefault();
+            afficherToastNavbar('Connecte-toi pour accéder à tes favoris ❤️');
+            setTimeout(() => window.location.href = 'login.html', 1800);
+        });
+        
+        function afficherToastNavbar(message) {
+            document.querySelector('.vv-toast-navbar')?.remove();
+            
+            const toast = document.createElement('div');
+            toast.className = 'vv-toast-navbar';
+            toast.style.cssText = `
+                position:fixed;bottom:24px;right:24px;z-index:9999;
+                padding:12px 20px;border-radius:16px;
+                font-size:14px;font-weight:700;
+                background:#fff8e1;color:#92400e;border:1.5px solid #fde68a;
+                box-shadow:0 8px 24px rgba(0,0,0,.12);
+                animation:slideInToast .3s ease;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2000);
         }
+
+    }
+}
 
     } catch (err) {
         console.warn('Session check failed:', err);
