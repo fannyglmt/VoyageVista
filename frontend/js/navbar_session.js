@@ -4,7 +4,7 @@
 // =============================================
 
 const API_SESSION = '../backend/api_session.php';
-const API_NOTIFS  = '../backend/api_notifications.php';
+const API_NOTIFS_NAVBAR = '../backend/api_notifications.php';
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
