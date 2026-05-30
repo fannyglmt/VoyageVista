@@ -51,14 +51,23 @@ document.addEventListener('click', async (e) => {
 
     // ── Sur detail-hebergement.html ───────────────────────
     else if (page.includes('detail-hebergement')) {
+        // Priorité 1 : ?id= dans l'URL
         let hebId = params.get('id');
 
-        // Fallback ancien système : ?hebergement=NomVilla
+        // Priorité 2 : ID stocké par script.js dans la page
+        if (!hebId) {
+            const pageEl = document.getElementById('hebergementDetailPage');
+            if (pageEl && pageEl.dataset.hebId) {
+                hebId = pageEl.dataset.hebId;
+            }
+        }
+
+        // Priorité 3 : recherche par nom (?hebergement=)
         if (!hebId) {
             const nom = params.get('hebergement');
             if (nom) {
                 try {
-                    const res  = await fetch(`${API_PANIER.replace('panier.php', '')}api_hebergements.php?search=${encodeURIComponent(nom)}&limit=1`, { credentials: 'include' });
+                    const res  = await fetch(`../backend/api_hebergements.php?search=${encodeURIComponent(nom)}&limit=1`, { credentials: 'include' });
                     const list = await res.json();
                     if (list.success && list.data.length > 0) {
                         hebId = list.data[0].id;
@@ -67,7 +76,7 @@ document.addEventListener('click', async (e) => {
             }
         }
 
-        if (!hebId) { afficherToast('Hébergement introuvable', 'error'); return; }
+        if (!hebId) { afficherToast('Hébergement introuvable — essaie depuis la liste des hébergements', 'error'); return; }
 
         btn.textContent = '⏳ Ajout en cours...';
         btn.disabled    = true;

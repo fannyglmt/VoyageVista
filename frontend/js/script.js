@@ -580,6 +580,9 @@ async function renderHebergementDetail() {
     const h   = json.data;
     const img = resolveImg(h.image_url, 'hebergement-bg.jpg');
 
+    // Stocker l'ID dans la page pour add_to_cart.js
+    page.dataset.hebId = h.id;
+
     page.innerHTML = `
       <section class="hebergement-detail-hero">
         <img src="${img}" alt="${h.nom}" onerror="this.src='${IMAGES_PATH}hebergement-bg.jpg'">
