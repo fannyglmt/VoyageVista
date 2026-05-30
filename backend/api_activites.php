@@ -7,6 +7,7 @@ header('Access-Control-Allow-Origin: *');
 
 require_once 'configuration.php';
 
+$id        = (int)($_GET['id'] ?? 0);
 $categorie = $_GET['categorie'] ?? null;
 $dest_id   = $_GET['dest_id']   ?? null;
 $search    = trim($_GET['search'] ?? '');
@@ -24,6 +25,12 @@ $query  = "
     WHERE a.est_actif = 1
 ";
 $params = [];
+
+// Filtre par ID unique
+if ($id > 0) {
+    $query   .= " AND a.id = ?";
+    $params[] = $id;
+}
 
 if ($categorie) {
     $query .= " AND a.categorie = ?";

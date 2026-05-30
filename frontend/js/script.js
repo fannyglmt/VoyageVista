@@ -110,7 +110,8 @@ async function chargerDonnees() {
     }
 
     if (jsonA.success && jsonA.data.length > 0) {
-      activities = jsonA.data.map(a => ({
+      // Activités depuis la BDD
+      const activitesBDD = jsonA.data.map(a => ({
         id:          a.id,
         name:        a.nom,
         image:       a.image_url || 'boat.png',
@@ -127,6 +128,14 @@ async function chargerDonnees() {
         date:        '',
         places:      10,
       }));
+
+      // Fusionner BDD + suggestions Sofia (éviter les doublons par nom)
+      const nomsExistants = new Set(activitesBDD.map(a => a.name.toLowerCase()));
+      const suggestionsUniques = activitesFallback.filter(
+        a => !nomsExistants.has(a.name.toLowerCase())
+      );
+
+      activities = [...activitesBDD, ...suggestionsUniques];
     } else {
       activities = activitesFallback;
     }
@@ -455,7 +464,10 @@ function renderActivitiesFeed() {
           <span>💸 ${a.price}€</span>
         </div>
         <div class="activity-actions">
-          <a href="activite-detail.html?id=${a.id}">Voir l'activité</a>
+          ${a.id > 0
+            ? `<a href="activite-detail.html?id=${a.id}">Voir l'activité</a>`
+            : `<a href="activites.html">Voir l'activité</a>`
+          }
           <button>♥</button>
         </div>
       </div>
@@ -666,8 +678,16 @@ const destinationsFallback = [
 ];
 
 const activitesFallback = [
-  { id:0, name:"Balade en bateau", image:"boat.png",           destination:"Ibiza",    category:"Détente",    price:65, duration:"3h",  rating:4.7, reviews:126, vibe:"🛥️ Mer • chill • sunset",       description:"Une sortie en bateau pour profiter de la mer, du soleil et des meilleurs spots photo.", comment1:"Le sunset sur le bateau était incroyable.", comment2:"Activité parfaite pour chill avec le groupe." },
-  { id:0, name:"Croisière sunset", image:"croisiere-sunset.png",destination:"Santorin", category:"Détente",    price:80, duration:"3h",  rating:5.0, reviews:318, vibe:"🌅 Sunset • mer • premium",      description:"Une croisière au coucher du soleil pour finir la journée avec une vraie vibe carte postale.", comment1:"Le coucher de soleil était irréel.", comment2:"Moment préféré du voyage." },
-  { id:0, name:"Food tour",        image:"food-tour.png",       destination:"Tokyo",    category:"Gastronomie",price:55, duration:"2h",  rating:4.9, reviews:214, vibe:"🍜 Food • ville • découverte",   description:"Teste les meilleurs spots food locaux et découvre la ville à travers ses saveurs.", comment1:"On a trop mangé 😭 mais c'était incroyable.", comment2:"Le meilleur moyen de découvrir Tokyo." },
-  { id:0, name:"Dîner marocain",   image:"diner-marocain.png",  destination:"Marrakech",category:"Gastronomie",price:40, duration:"Soirée",rating:4.7,reviews:102, vibe:"🍽️ Food • ambiance • partage",  description:"Un dîner marocain convivial avec plats traditionnels, ambiance chaleureuse.", comment1:"Le repas était incroyable.", comment2:"Très bonne ambiance avec musique et déco." },
+  { id:0, name:"Cours de surf",     image:"surf.png",        destination:"Bali",       category:"Sport",       price:45, duration:"2h",    rating:4.8, reviews:124, vibe:"🌊 Sport • fun • plage",           description:"Apprends à surfer avec ta team sur une plage incroyable. Parfait pour commencer le voyage avec de l'énergie.",       comment1:"Super activité à faire en groupe, l'ambiance était incroyable.", comment2:"Simple à réserver et vraiment un des meilleurs moments du voyage." },
+  { id:0, name:"Balade en bateau",  image:"boat.png",        destination:"Ibiza",      category:"Détente",     price:65, duration:"3h",    rating:4.7, reviews:126, vibe:"🛥️ Mer • chill • sunset",          description:"Une sortie en bateau pour profiter de la mer, du soleil et des meilleurs spots photo.",                               comment1:"Le sunset sur le bateau était incroyable.",                      comment2:"Activité parfaite pour chill avec le groupe." },
+  { id:0, name:"Visite de temple",  image:"temple.png",      destination:"Bali",       category:"Culture",     price:25, duration:"1h30",  rating:4.6, reviews:93,  vibe:"🏛️ Culture • découverte",          description:"Découvre un lieu iconique, calme et magnifique pour ajouter une vraie touche culturelle au séjour.",                 comment1:"Super beau et hyper apaisant.",                                   comment2:"Ça change vraiment des activités classiques." },
+  { id:0, name:"Food tour",         image:"food-tour.png",   destination:"Tokyo",      category:"Gastronomie", price:55, duration:"2h",    rating:4.9, reviews:214, vibe:"🍜 Food • ville • découverte",      description:"Teste les meilleurs spots food locaux et découvre la ville à travers ses saveurs.",                                   comment1:"On a trop mangé 😭 mais c'était incroyable.",                    comment2:"Le meilleur moyen de découvrir Tokyo." },
+  { id:0, name:"Beach party",       image:"beach-party.png", destination:"Ibiza",      category:"Nightlife",   price:70, duration:"Soirée",rating:4.8, reviews:301, vibe:"🎉 Nightlife • plage • musique",    description:"Ambiance festive, musique et coucher de soleil : l'activité parfaite pour une team qui veut kiffer.",               comment1:"Meilleure soirée du voyage clairement.",                          comment2:"L'ambiance était folle du début à la fin." },
+  { id:0, name:"Randonnée nature",  image:"hiking.png",      destination:"Chamonix",   category:"Nature",      price:30, duration:"4h",    rating:4.5, reviews:87,  vibe:"🥾 Nature • aventure",             description:"Un moment en pleine nature pour respirer, marcher et profiter de paysages incroyables.",                             comment1:"Les paysages étaient magnifiques.",                               comment2:"Très bonne activité pour déconnecter un peu." },
+  { id:0, name:"Spa chill",         image:"spa.png",         destination:"Santorin",   category:"Détente",     price:80, duration:"2h",    rating:4.9, reviews:144, vibe:"🧘 Détente • bien-être",           description:"Pause détente obligatoire : spa, calme et recharge totale avant de repartir explorer.",                              comment1:"On voulait plus repartir 😭",                                     comment2:"Le moment le plus relax du séjour." },
+  { id:0, name:"Musée immersif",    image:"museum.png",      destination:"Barcelone",  category:"Culture",     price:20, duration:"1h",    rating:4.4, reviews:68,  vibe:"🎨 Culture • photo • indoor",      description:"Une activité simple, visuelle et sympa à faire entre deux sorties en ville.",                                         comment1:"Très stylé pour les photos.",                                     comment2:"Petit musée mais expérience super sympa." },
+  { id:0, name:"Visite d'Oia",      image:"oia.png",         destination:"Santorin",   category:"Culture",     price:30, duration:"2h",    rating:4.9, reviews:246, vibe:"🏛️ Culture • sunset • photos",    description:"Découvre les ruelles blanches d'Oia, les vues iconiques et les spots parfaits pour les photos.",                      comment1:"On comprend pourquoi tout le monde en parle.",                    comment2:"Les photos là-bas sont incroyables." },
+  { id:0, name:"Rooftop sunset",    image:"rooftop.png",     destination:"Marrakech",  category:"Détente",     price:35, duration:"Soirée",rating:4.8, reviews:173, vibe:"🌅 Sunset • chill • photos",       description:"Un rooftop stylé pour profiter du coucher de soleil et finir la journée en beauté.",                                  comment1:"La vue au coucher du soleil était dingue.",                       comment2:"Hyper bonne vibe pour finir la journée." },
+  { id:0, name:"Dîner marocain",    image:"diner-marocain.png",destination:"Marrakech",category:"Gastronomie", price:40, duration:"Soirée",rating:4.7, reviews:102, vibe:"🍽️ Food • ambiance • partage",    description:"Un dîner marocain convivial avec plats traditionnels, ambiance chaleureuse.",                                         comment1:"Le repas était incroyable.",                                      comment2:"Très bonne ambiance avec musique et déco." },
+  { id:0, name:"Croisière sunset",  image:"croisiere-sunset.png",destination:"Ibiza",  category:"Détente",     price:80, duration:"3h",    rating:5.0, reviews:318, vibe:"🌅 Sunset • mer • premium",        description:"Une croisière au coucher du soleil pour finir la journée avec une vraie vibe carte postale.",                         comment1:"Le coucher de soleil était irréel.",                              comment2:"Moment préféré du voyage." },
 ];
