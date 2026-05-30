@@ -4,8 +4,8 @@
 // =============================================
 
 const API_TRANSPORTS = '../backend/api_transports.php';
-const API_PANIER     = '../backend/panier.php';
-const IMAGES_PATH    = 'assets/images/';
+const TRANSPORT_API_PANIER = '../backend/panier.php';
+const TRANSPORT_IMAGES = 'assets/images/';
 
 const typeIcons = {
     avion:    '✈',
@@ -79,9 +79,9 @@ function afficherTransports(transports) {
 
         return `
         <article class="transport-card" data-type="${t.type}" data-id="${t.id}" data-service-id="${t.service_id || ''}">
-            <img src="${IMAGES_PATH}${t.image_url}"
+            <img src="${TRANSPORT_IMAGES}${t.image_url}"
                  alt="${esc(t.nom)}"
-                 onerror="this.src='${IMAGES_PATH}transport-avion.jpg'">
+                 onerror="this.src='${TRANSPORT_IMAGES}transport-avion.jpg'">
             <div class="transport-content">
                 <span class="transport-type">${icon} ${label}</span>
                 <h3>${esc(t.depart)} → ${esc(t.arrivee)}</h3>
@@ -130,7 +130,7 @@ async function ajouterTransportAuPanier(btn) {
             service_id: serviceId,
         });
 
-        const res  = await fetch(API_PANIER, {
+        const res  = await fetch(TRANSPORT_API_PANIER, {
             method:      'POST',
             credentials: 'include',
             headers:     { 'Content-Type': 'application/x-www-form-urlencoded' },
