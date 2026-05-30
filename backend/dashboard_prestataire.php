@@ -177,35 +177,35 @@ foreach ($services as &$s) {
   <div class="services-grid">
     <?php
     $svcImg = [
-    'Appartement Barceloneta' => '../frontend/assets/images/barcelonevilla.jpg',
-    'Bali Beach Resort'       => '../frontend/assets/images/hotel1.jpg',
-    'Chalet Mont-Blanc'       => '../frontend/assets/images/loftchamonix.jpg',
-    'Eco Lodge Costa Rica'    => '../frontend/assets/images/villacosta.jpg',
-    'Riad Majorelle'          => '../frontend/assets/images/villamarrakech.jpg',
-    'Villa Sunrise Ubud'      => '../frontend/assets/images/villachill.png',
+    1  => '../frontend/assets/images/villachill.png',
+    2  => '../frontend/assets/images/hotel1.jpg',
+    3  => '../frontend/assets/images/barcelonevilla.jpg',
+    4  => '../frontend/assets/images/loftchamonix.jpg',
+    5  => '../frontend/assets/images/villamarrakech.jpg',
+    6  => '../frontend/assets/images/villacosta.jpg',
 
-    'Balade en bateau'        => '../frontend/assets/images/boat.png',
-    'Croisière sunset'        => '../frontend/assets/images/croisiere-sunset.png',
-    'Food tour'               => '../frontend/assets/images/food-tour.png',
-    'Plongée sous-marine'     => '../frontend/assets/images/plongée sous-marine.jpg',
-    'Randonnée volcan Batur'  => '../frontend/assets/images/randonnee-volcan.png',
-    'Retraite yoga et spa'    => '../frontend/assets/images/spa.png',
-    'Zip-line jungle'         => '../frontend/assets/images/tyrolienne-jungle.png',
-    'Dîner marocain'          => '../frontend/assets/images/diner-marocain.png',
+    7  => '../frontend/assets/images/boat.png',
+    8  => '../frontend/assets/images/croisiere-sunset.png',
+    9  => '../frontend/assets/images/food-tour.png',
+    10 => '../frontend/assets/images/diner-marocain.png',
+    11 => '../frontend/assets/images/randonnee-volcan.png',
+    12 => '../frontend/assets/images/plongee-sous-marine.jpg',
+    13 => '../frontend/assets/images/spa.png',
+    14 => '../frontend/assets/images/tyrolienne-jungle.png',
 
-    'Train Paris → Barcelone' => '../frontend/assets/images/transport-train.jpg',
-    'Vol Premium Paris → Bali'=> '../frontend/assets/images/transport-avion.jpg',
-    'Vol Paris → Santorin'     => '../frontend/assets/images/transport-avion.jpg',
-    'Van Road Trip Portugal'  => '../frontend/assets/images/transport-van.jpg',
-    'Ferry Bordeaux → Barcelone' => '../frontend/assets/images/transport-ferry.jpg',
-    'Vélo Chamonix → Barcelone' => '../frontend/assets/images/transport-velo.jpg'
+    15 => '../frontend/assets/images/transport-avion.jpg',
+    16 => '../frontend/assets/images/transport-train.jpg',
+    17 => '../frontend/assets/images/transport-van.jpg',
+    18 => '../frontend/assets/images/transport-avion.jpg',
+    19 => '../frontend/assets/images/transport-ferry.jpg',
+    20 => '../frontend/assets/images/transport-velo.jpg'
 ];
 
     $sc_map=['actif'=>'pill-green','inactif'=>'pill-red','en_attente'=>'pill-amber'];
     $tc_map=['hebergement'=>'pill-teal','activite'=>'pill-purple','transport'=>'pill-amber'];
     foreach($services as $s):
-      $img = $svcImg[$s['nom']]
-      ?? '../frontend/assets/images/default.jpg';
+      $img = $svcImg[$s['id']]
+    ?? '../frontend/assets/images/default.jpg';
       $sc2=$sc_map[$s['statut']??'en_attente']??'pill-amber';
       $tc2=$tc_map[$s['type']??'hebergement']??'pill-teal';
     ?>
